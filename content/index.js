@@ -3,6 +3,7 @@
  * Created on 21.05.2016.
  */
 import angular from 'angular';
+import 'min-jquery';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import uirouter from 'angular-ui-router';

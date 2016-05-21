@@ -52,6 +52,20 @@
 
 	__webpack_require__(3);
 
+	__webpack_require__(60);
+
+	var _angularUiRouter = __webpack_require__(69);
+
+	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
+
+	var _config = __webpack_require__(70);
+
+	var _config2 = _interopRequireDefault(_config);
+
+	var _home = __webpack_require__(71);
+
+	var _home2 = _interopRequireDefault(_home);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
@@ -59,7 +73,8 @@
 	 * Created on 21.05.2016.
 	 */
 
-	var ngModule = _angular2.default.module('app', []);
+
+	var ngModule = _angular2.default.module('app', [_angularUiRouter2.default, _home2.default]).config(_config2.default);
 	console.log(ngModule);
 
 /***/ },
@@ -30947,13 +30962,5329 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* WEBPACK VAR INJECTION */(function(global) {var _ = __webpack_require__(4)
+	var parse = __webpack_require__(15)
+	var find = __webpack_require__(25)
+	var uid = __webpack_require__(26)
+
+	uid.prefix = 'minJQ-'
+	var doc = global.document
+	var is = _.is
+
+	module.exports = exports = $
+
+	function $(val, box) {
+		if (is.fn(val)) return $(doc).ready(val)
+		if (!(this instanceof $)) return new $(val, box)
+
+		this.length = 0
+
+		if (!val) return
+
+		if (is.string(val)) {
+			if (-1 == val.indexOf('<')) {
+				val = find(val, box)
+			} else {
+				val = parse.html(val)
+			}
+		}
+
+		if (!is.arraylike(val)) val = [val]
+
+		var len = val.length
+		for (var i = 0; i < len; i++) {
+			this[i] = val[i]
+		}
+		this.length = len
+	}
+
+	var proto = $.fn = $.prototype
+
+	$.extend = proto.extend = function() {
+		var arr = arguments
+		if (1 == arr.length) {
+			return _.extend(this, arr[0])
+		}
+		return _.extend.apply(_, arr)
+	}
+
+	proto.extend({jquery: true})
+
+	__webpack_require__(27)
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(5)
+
+	/* webpack only
+	if (DEBUG && global.console) {
+		console.debug('debug mode')
+	}
+	*/
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var cou = __webpack_require__(6)
+
+	module.exports = cou.extend(_, cou)
+
+	__webpack_require__(8)
+	__webpack_require__(9)
+	__webpack_require__(10)
+	__webpack_require__(12)
+	__webpack_require__(13)
+	__webpack_require__(14)
+
+	_.mixin(_, _)
+
+	function _(val) {
+		if (!(this instanceof _)) return new _(val)
+		this.__value = val
+		this.__chain = false
+	}
+
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var is = __webpack_require__(7)
+
+	var slice = [].slice
+
+	var _ = exports
+
+	_.is = is
+
+	_.extend = _.assign = extend
+
+	_.each = each
+
+	_.map = function(arr, fn) {
+		var ret = []
+		each(arr, function(item, i, arr) {
+			ret[i] = fn(item, i, arr)
+		})
+		return ret
+	}
+
+	_.filter = function(arr, fn) {
+		var ret = []
+		each(arr, function(item, i, arr) {
+			var val = fn(item, i, arr)
+			if (val) ret.push(item)
+		})
+		return ret
+	}
+
+	_.some = function(arr, fn) {
+		return -1 != findIndex(arr, fn)
+	}
+
+	_.every = function(arr, fn) {
+		return -1 == findIndex(arr, negate(fn))
+	}
+
+	_.reduce = reduce
+
+	_.findIndex = findIndex
+
+	_.find = function(arr, fn) {
+		var index = _.findIndex(arr, fn)
+		if (-1 != index) {
+			return arr[index]
+		}
+	}
+
+	_.indexOf = indexOf
+
+	_.includes = function(val, sub) {
+		return -1 != indexOf(val, sub)
+	}
+
+	_.toArray = toArray
+
+	_.slice = function(arr, start, end) {
+		// support array and string
+		var ret = [] // default return array
+		var len = getLength(arr)
+		if (len >= 0) {
+			start = start || 0
+			end = end || len
+			// raw array and string use self slice
+			if (!is.fn(arr.slice)) {
+				arr = toArray(arr)
+			}
+			ret = arr.slice(start, end)
+		}
+		return ret
+	}
+
+	_.negate = negate
+
+	_.forIn = forIn
+
+	_.keys = keys
+
+	var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g
+
+	_.trim = function(str) {
+		if (null == str) return ''
+		return ('' + str).replace(rtrim, '')
+	}
+
+	_.noop = function() {}
+
+	_.len = getLength
+
+	function getLength(arr) {
+		if (null != arr) return arr.length
+	}
+
+	function each(arr, fn) {
+		var len = getLength(arr)
+		if (len && is.fn(fn)) {
+			for (var i = 0; i < len; i++) {
+				if (false === fn(arr[i], i, arr)) break
+			}
+		}
+		return arr
+	}
+
+	function findIndex(arr, fn) {
+		var ret = -1
+		each(arr, function(item, i, arr) {
+			if (fn(item, i, arr)) {
+				ret = i
+				return false
+			}
+		})
+		return ret
+	}
+
+	function toArray(arr) {
+		var ret = []
+		each(arr, function(item) {
+			ret.push(item)
+		})
+		return ret
+	}
+
+
+	function extend(target) {
+		if (target) {
+			var sources = slice.call(arguments, 1)
+			each(sources, function(src) {
+				forIn(src, function(val, key) {
+					if (!is.undef(val)) {
+						target[key] = val
+					}
+				})
+			})
+		}
+		return target
+	}
+
+	function negate(fn) {
+		return function() {
+			return !fn.apply(this, arguments)
+		}
+	}
+
+	function indexOf(val, sub) {
+		if (is.str(val)) return val.indexOf(sub)
+
+		return findIndex(val, function(item) {
+			// important!
+			return sub === item
+		})
+	}
+
+	function reduce(arr, fn, prev) {
+		each(arr, function(item, i) {
+			prev = fn(prev, item, i, arr)
+		})
+		return prev
+	}
+
+	function forIn(hash, fn) {
+		if (hash) {
+			for (var key in hash) {
+				if (is.owns(hash, key)) {
+					if (false === fn(hash[key], key, hash)) break
+				}
+			}
+		}
+		return hash
+	}
+
+	function keys(hash) {
+		var ret = []
+		forIn(hash, function(val, key) {
+			ret.push(key)
+		})
+		return ret
+	}
+
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {var is = exports
+
+	var obj = Object.prototype
+
+	var navigator = global.navigator
+
+	// reserved words in es3
+	// instanceof null undefined arguments boolean false true function int
+
+	is.browser = (function() {
+		return global.window == global
+	})()
+
+	// simple modern browser detect
+	is.h5 = (function() {
+		if (is.browser && navigator.geolocation) {
+			return true
+		}
+		return false
+	})()
+
+	is.mobile = (function() {
+		if (is.browser && /mobile/i.test(navigator.userAgent)) {
+			return true
+		}
+		return false
+	})()
+
+	function _class(val) {
+		var name = obj.toString.call(val)
+		// [object Class]
+		return name.substring(8, name.length - 1).toLowerCase()
+	}
+
+	function _type(val) {
+		// undefined object boolean number string symbol function
+		return typeof val
+	}
+
+	function owns(owner, key) {
+		return obj.hasOwnProperty.call(owner, key)
+	}
+
+	is._class = _class
+
+	is._type = _type
+
+	is.owns = owns
+
+	// not a number
+	is.nan = function(val) {
+		return val !== val
+	}
+
+	is.bool = function(val) {
+		return 'boolean' == _class(val)
+	}
+
+	is.infinite = function(val) {
+		return val == Infinity || val == -Infinity
+	}
+
+	is.num = is.number = function(num) {
+		return !isNaN(num) && 'number' == _class(num)
+	}
+
+	// integer or decimal
+	is.iod = function(val) {
+		if (is.num(val) && !is.infinite(val)) {
+			return true
+		}
+		return false
+	}
+
+	is.decimal = function(val) {
+		if (is.iod(val)) {
+			return 0 != val % 1
+		}
+		return false
+	}
+
+	is.integer = function(val) {
+		if (is.iod(val)) {
+			return 0 == val % 1
+		}
+		return false
+	}
+
+	// object or function
+	is.oof = function(val) {
+		if (val) {
+			var tp = _type(val)
+			return 'object' == tp || 'function' == tp
+		}
+		return false
+	}
+
+	// regexp should return object
+	is.obj = is.object = function(obj) {
+		return is.oof(obj) && 'function' != _class(obj)
+	}
+
+	is.hash = is.plainObject = function(hash) {
+		if (hash) {
+			if ('object' == _class(hash)) {
+				// old window is object
+				if (hash.nodeType || hash.setInterval) {
+					return false
+				}
+				return true
+			}
+		}
+		return false
+	}
+
+	is.undef = function(val) {
+		return 'undefined' == _type(val)
+	}
+
+	// host function should return function, e.g. alert
+	is.fn = function(fn) {
+		return 'function' == _class(fn)
+	}
+
+	is.str = is.string = function(str) {
+		return 'string' == _class(str)
+	}
+
+	// number or string
+	is.nos = function(val) {
+		return is.iod(val) || is.str(val)
+	}
+
+	is.array = function(arr) {
+		return 'array' == _class(arr)
+	}
+
+	is.arraylike = function(arr) {
+		// window has length for iframe too, but it is not arraylike
+		if (!is.window(arr) && is.obj(arr)) {
+			var len = arr.length
+			if (is.integer(len) && len >= 0) {
+				return true
+			}
+		}
+		return false
+	}
+
+	is.window = function(val) {
+		if (val && val.window == val) {
+			return true
+		}
+		return false
+	}
+
+	is.empty = function(val) {
+		if (is.str(val) || is.arraylike(val)) {
+			return 0 === val.length
+		}
+		if (is.hash(val)) {
+			for (var key in val) {
+				if (owns(val, key)) {
+					return false
+				}
+			}
+		}
+		return true
+	}
+
+	is.element = function(elem) {
+		if (elem && 1 === elem.nodeType) {
+			return true
+		}
+		return false
+	}
+
+	is.regexp = function(val) {
+		return 'regexp' == _class(val)
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(5)
+
+	var each = _.each
+	var includes = _.includes
+	var is = _.is
+	var proto = Array.prototype
+
+	_.reject = function(arr, fn) {
+		return _.filter(arr, function(val, i, arr) {
+			return !fn(val, i, arr)
+		})
+	}
+
+	_.without = function(arr) {
+		var other = _.slice(arguments, 1)
+		return _.difference(arr, other)
+	}
+
+	_.difference = function(arr, other) {
+		var ret = []
+		_.each(arr, function(val) {
+			if (!includes(other, val)) {
+				ret.push(val)
+			}
+		})
+		return ret
+	}
+
+	_.pluck = function(arr, key) {
+		return _.map(arr, function(item) {
+			if (item) return item[key]
+		})
+	}
+
+	_.size = function(arr) {
+		var len = _.len(arr)
+		if (null == len) {
+			len = _.keys(arr).length
+		}
+		return len
+	}
+
+	_.first = function(arr) {
+		if (arr) return arr[0]
+	}
+
+	_.last = function(arr) {
+		var len = _.len(arr)
+		if (len) {
+			return arr[len - 1]
+		}
+	}
+
+	_.asyncMap = function(arr, fn, cb) {
+		// desperate
+		var ret = []
+		var count = 0
+		var hasDone, hasStart
+
+		each(arr, function(arg, i) {
+			hasStart = true
+			fn(arg, function(err, val) {
+				if (hasDone) return
+				count++
+				if (err) {
+					hasDone = true
+					return cb(err)
+				}
+				ret[i] = val
+				if (count == arr.length) {
+					hasDone = true
+					cb(null, ret)
+				}
+			})
+		})
+
+		if (!hasStart) cb(null) // empty
+	}
+
+	_.uniq = function(arr) {
+		var ret = []
+		each(arr, function(item) {
+			if (!includes(ret, item)) ret.push(item)
+		})
+		return ret
+	}
+
+	_.flatten = function(arrs) {
+		var ret = []
+		each(arrs, function(arr) {
+			if (is.arraylike(arr)) {
+				each(arr, function(item) {
+					ret.push(item)
+				})
+			} else ret.push(arr)
+		})
+		return ret
+	}
+
+	_.union = function() {
+		return _.uniq(_.flatten(arguments))
+	}
+
+	_.sample = function(arr, n) {
+		var ret = _.toArray(arr)
+		var len = ret.length
+		var need = Math.min(n || 1, len)
+		for (var i = 0; i < len; i++) {
+			var rand = _.random(i, len - 1)
+			var tmp = ret[rand]
+			ret[rand] = ret[i]
+			ret[i] = tmp
+		}
+		ret.length = need
+		if (null == n) {
+			return ret[0]
+		}
+		return ret
+	}
+
+	_.shuffle = function(arr) {
+		return _.sample(arr, Infinity)
+	}
+
+	_.compact = function(arr) {
+		return _.filter(arr, _.identity)
+	}
+
+	_.rest = function(arr) {
+		return _.slice(arr, 1)
+	}
+
+	_.invoke = function() {
+		var args = arguments
+		var arr = args[0]
+		var fn = args[1]
+		var isFunc = is.fn(fn)
+		args = _.slice(args, 2)
+
+		return _.map(arr, function(item) {
+			if (isFunc) {
+				return fn.apply(item, args)
+			}
+			if (null != item) {
+				var method = item[fn]
+				if (is.fn(method)) {
+					return method.apply(item, args)
+				}
+			}
+		})
+	}
+
+	_.partition = function(arr, fn) {
+		var hash = _.groupBy(arr, function(val, i, arr) {
+			var ret = fn(val, i, arr)
+			if (ret) return 1
+			return 2
+		})
+		return [hash[1] || [], hash[2] || []]
+	}
+
+	_.groupBy = function(arr, fn) {
+		var hash = {}
+		_.each(arr, function(val, i, arr) {
+			var ret = fn(val, i, arr)
+			hash[ret] = hash[ret] || []
+			hash[ret].push(val)
+		})
+		return hash
+	}
+
+	_.range = function() {
+		var args = arguments
+		if (args.length < 2) {
+			return _.range(args[1], args[0])
+		}
+		var start = args[0] || 0
+		var last = args[1] || 0
+		var step = args[2]
+		if (!is.num(step)) {
+			step = 1
+		}
+		var count = last - start
+		if (0 != step) {
+			count = count / step
+		}
+		var ret = []
+		var val = start
+		for (var i = 0; i < count; i++) {
+			ret.push(val)
+			val += step
+		}
+		return ret
+	}
+
+	_.pullAt = function(arr) {
+		// `_.at` but mutate
+		var indexes = _.slice(arguments, 1)
+		return mutateDifference(arr, indexes)
+	}
+
+	function mutateDifference(arr, indexes) {
+		var ret = []
+		var len = _.len(indexes)
+		if (len) {
+			indexes = indexes.sort(function(a, b) {
+				return a - b
+			})
+			while (len--) {
+				var index = indexes[len]
+				ret.push(proto.splice.call(arr, index, 1)[0])
+			}
+		}
+		ret.reverse()
+		return ret
+	}
+
+	_.remove = function(arr, fn) {
+		// `_.filter` but mutate
+		var len = _.len(arr) || 0
+		var indexes = []
+		while (len--) {
+			if (fn(arr[len], len, arr)) {
+				indexes.push(len)
+			}
+		}
+		return mutateDifference(arr, indexes)
+	}
+
+	_.fill = function(val, start, end) {
+		// TODO
+	}
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(5)
+
+	var is = _.is
+	var each = _.each
+	var forIn = _.forIn
+
+	_.only = function(obj, keys) {
+		obj = obj || {}
+		if (is.str(keys)) keys = keys.split(/ +/)
+		return _.reduce(keys, function(ret, key) {
+			if (null != obj[key]) ret[key] = obj[key]
+			return ret
+		}, {})
+	}
+
+	_.values = function(obj) {
+		return _.map(_.keys(obj), function(key) {
+			return obj[key]
+		})
+	}
+
+	_.pick = function(obj, fn) {
+		if (!is.fn(fn)) {
+			return _.pick(obj, function(val, key) {
+				return key == fn
+			})
+		}
+		var ret = {}
+		forIn(obj, function(val, key, obj) {
+			if (fn(val, key, obj)) {
+				ret[key] = val
+			}
+		})
+		return ret
+	}
+
+	_.functions = function(obj) {
+		return _.keys(_.pick(obj, function(val) {
+			return is.fn(val)
+		}))
+	}
+
+	_.mapKeys = function(obj, fn) {
+		var ret = {}
+		forIn(obj, function(val, key, obj) {
+			var newKey = fn(val, key, obj)
+			ret[newKey] = val
+		})
+		return ret
+	}
+
+	_.mapObject = _.mapValues = function(obj, fn) {
+		var ret = {}
+		forIn(obj, function(val, key, obj) {
+			ret[key] = fn(val, key, obj)
+		})
+		return ret
+	}
+
+	// return value when walk through path, otherwise return empty
+	_.get = function(obj, path) {
+		path = toPath(path)
+		if (path.length) {
+			var flag = _.every(path, function(key) {
+				if (null != obj) { // obj can be indexed
+					obj = obj[key]
+					return true
+				}
+			})
+			if (flag) return obj
+		}
+	}
+
+	_.has = function(obj, path) {
+		path = toPath(path)
+		if (path.length) {
+			var flag = _.every(path, function(key) {
+				if (null != obj && is.owns(obj, key)) {
+					obj = obj[key]
+					return true
+				}
+			})
+			if (flag) return true
+		}
+		return false
+	}
+
+	_.set = function(obj, path, val) {
+		path = toPath(path)
+		var cur = obj
+		_.every(path, function(key, i) {
+			if (is.oof(cur)) {
+				if (i + 1 == path.length) {
+					cur[key] = val
+				} else {
+					var item = cur[key]
+					if (null == item) {
+						// fill value with {} or []
+						var item = {}
+						if (~~key == key) {
+							item = []
+						}
+					}
+					cur = cur[key] = item
+					return true
+				}
+			}
+		})
+		return obj
+	}
+
+	_.create = (function() {
+		function Object() {} // so it seems like Object.create
+		return function(proto, property) {
+			// not same as Object.create, Object.create(proto, propertyDescription)
+			if ('object' != typeof proto) {
+				// null is ok
+				proto = null
+			}
+			Object.prototype = proto
+			return _.extend(new Object, property)
+		}
+	})()
+
+	_.defaults = function() {
+		var args = arguments
+		var target = args[0]
+		var sources = _.slice(args, 1)
+		if (target) {
+			_.each(sources, function(src) {
+				_.mapObject(src, function(val, key) {
+					if (is.undef(target[key])) {
+						target[key] = val
+					}
+				})
+			})
+		}
+		return target
+	}
+
+	_.isMatch = function(obj, src) {
+		var ret = true
+		obj = obj || {}
+		forIn(src, function(val, key) {
+			if (val !== obj[key]) {
+				ret = false
+				return false
+			}
+		})
+		return ret
+	}
+
+	_.toPlainObject = function(val) {
+		var ret = {}
+		forIn(val, function(val, key) {
+			ret[key] = val
+		})
+		return ret
+	}
+
+	_.invert = function(obj) {
+		var ret = {}
+		forIn(obj, function(val, key) {
+			ret[val] = key
+		})
+		return ret
+	}
+
+	// topath, copy from lodash
+
+	var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\n\\]|\\.)*?)\2)\]/g
+	var reEscapeChar = /\\(\\)?/g;
+
+	function toPath(val) {
+		if (is.array(val)) return val
+		var ret = []
+		_.tostr(val).replace(rePropName, function(match, number, quote, string) {
+			var item = number || match
+			if (quote) {
+				item = string.replace(reEscapeChar, '$1')
+			}
+			ret.push(item)
+		})
+		return ret
+	}
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(5)
+
+	var is = _.is
+	var slice = _.slice
+
+	_.bind = function(fn, ctx) {
+		if (is.str(ctx)) {
+			var obj = fn
+			fn = obj[ctx]
+			ctx = obj
+		}
+		if (!is.fn(fn)) return fn
+		var args = slice(arguments, 2)
+		ctx = ctx || this
+		return function() {
+			return fn.apply(ctx, _.flatten([args, arguments]))
+		}
+	}
+
+	// from lang.js `Function.prototype.inherits`
+	// so belong to function
+	_.inherits = function(ctor, superCtor) {
+		ctor.super_ = superCtor
+		ctor.prototype = _.create(superCtor.prototype, {
+			constructor: ctor
+		})
+	}
+
+	_.delay = function(fn, wait) {
+		var args = _.slice(arguments, 2)
+		return setTimeout(function() {
+			fn.apply(this, args)
+		}, wait)
+	}
+
+	_.before = function(n, fn) {
+		return function() {
+			if (n > 1) {
+				n--
+				return fn.apply(this, arguments)
+			}
+		}
+	}
+
+	_.once = function(fn) {
+		return _.before(2, fn)
+	}
+
+	_.after = function(n, fn) {
+		return function() {
+			if (n > 1) {
+				n--
+			} else {
+				return fn.apply(this, arguments)
+			}
+		}
+	}
+
+	_.throttle = function(fn, wait, opt) {
+		wait = wait || 0
+		opt = _.extend({
+			leading: true,
+			trailing: true,
+			maxWait: wait
+		}, opt)
+		return _.debounce(fn, wait, opt)
+	}
+
+	_.debounce = function(fn, wait, opt) {
+		wait = wait || 0
+		opt = _.extend({
+			leading: false,
+			trailing: true
+		}, opt)
+		var maxWait = opt.maxWait
+		var lastExec = 0 // wait
+		var lastCall = 0 // just for maxWait
+		var now = _.now()
+		var timer
+
+		if (!opt.leading) {
+			lastExec = now
+		}
+
+		function ifIsCD() {
+			if (now - lastExec > wait) return false
+			if (maxWait && now - lastCall > maxWait) return false
+			return true
+		}
+
+		function exec(fn, ctx, args) {
+			lastExec = _.now() // update last exec
+			return fn.apply(ctx, args)
+		}
+
+		function cancel() {
+			if (timer) {
+				clearTimeout(timer)
+				timer = null
+			}
+		}
+
+		function debounced() {
+			now = _.now() // update now
+			var isCD = ifIsCD()
+			lastCall = now // update last call
+			var me = this
+			var args = arguments
+
+			cancel()
+
+			if (!isCD) {
+				exec(fn, me, args)
+			} else {
+				if (opt.trailing) {
+					timer = _.delay(function() {
+						exec(fn, me, args)
+					}, wait)
+				}
+			}
+		}
+
+		debounced.cancel = cancel
+
+		return debounced
+	}
+
+	function memoize(fn) {
+		var cache = new memoize.Cache
+		function memoized() {
+			var args = arguments
+			var key = args[0]
+			if (!cache.has(key)) {
+				var ret = fn.apply(this, args)
+				cache.set(key, ret)
+			}
+			return cache.get(key)
+		}
+		memoized.cache = cache
+		return memoized
+	}
+
+	memoize.Cache = __webpack_require__(11)
+
+	_.memoize = memoize
+
+	_.wrap = function(val, fn) {
+		return function() {
+			var args = [val]
+			args.push.apply(args, arguments)
+			return fn.apply(this, args)
+		}
+	}
+
+	_.curry = function(fn) {
+		var len = fn.length
+		return setter([])
+
+		function setter(args) {
+			return function() {
+				var arr = args.concat(_.slice(arguments))
+				if (arr.length >= len) {
+					arr.length = len
+					return fn.apply(this, arr)
+				}
+				return setter(arr)
+			}
+		}
+	}
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(5)
+	var is = _.is
+
+	module.exports = Cache
+
+	function Cache() {
+		this.data = {}
+	}
+
+	var proto = Cache.prototype
+
+	proto.has = function(key) {
+		return is.owns(this.data, key)
+	}
+
+	proto.get = function(key) {
+		return this.data[key]
+	}
+
+	proto.set = function(key, val) {
+		this.data[key] = val
+	}
+
+	proto['delete'] = function(key) {
+		delete this.data[key]
+	}
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(5)
+	var is = _.is
+
+	_.now = function() {
+		return +new Date
+	}
+
+	_.constant = function(val) {
+		return function() {
+			return val
+		}
+	}
+
+	_.identity = function(val) {
+		return val
+	}
+
+	_.random = function(min, max) {
+		return min + Math.floor(Math.random() * (max - min + 1))
+	}
+
+	_.mixin = function(dst, src, opt) {
+		var keys = _.functions(src)
+		if (dst) {
+			if (is.fn(dst)) {
+				opt = opt || {}
+				var isChain = !!opt.chain
+				// add to prototype
+				var proto = dst.prototype
+				_.each(keys, function(key) {
+					var fn = src[key]
+					proto[key] = function() {
+						var me = this
+						var args = [me.__value]
+						args.push.apply(args, arguments)
+						var ret = fn.apply(me, args)
+						if (me.__chain) {
+							me.__value = ret
+							return me
+						}
+						return ret
+					}
+				})
+			} else {
+				_.each(keys, function(key) {
+					dst[key] = src[key]
+				})
+			}
+		}
+		return dst
+	}
+
+	_.chain = function(val) {
+		var ret = _(val)
+		ret.__chain = true
+		return ret
+	}
+
+	_.value = function() {
+		this.__chain = false
+		return this.__value
+	}
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(5)
+
+	_.tostr = tostr
+
+	var indexOf = _.indexOf
+
+	_.capitalize = function(str) {
+		str = tostr(str)
+		return str.charAt(0).toUpperCase() + str.substr(1)
+	}
+
+	_.decapitalize = function(str) {
+		str = tostr(str)
+		return str.charAt(0).toLowerCase() + str.substr(1)
+	}
+
+	_.camelCase = function(str) {
+		str = tostr(str)
+		var arr = str.split(/[^\w]|_+/)
+		arr = _.map(arr, function(val) {
+			return _.capitalize(val)
+		})
+		return _.decapitalize(arr.join(''))
+	}
+
+	_.startsWith = function(str, val) {
+		return 0 == indexOf(str, val)
+	}
+
+	_.endsWith = function(str, val) {
+		val += '' // null => 'null'
+		return val == _.slice(str, _.len(str) - _.len(val))
+	}
+
+	_.lower = function(str) {
+		return tostr(str).toLowerCase()
+	}
+
+	_.upper = function(str) {
+		return tostr(str).toUpperCase()
+	}
+
+	_.repeat = function(str, count) {
+		return _.map(_.range(count), function() {
+			return str
+		}).join('')
+	}
+
+	_.padStart = function(str, len, chars) {
+		str = _.tostr(str)
+		len = len || 0
+		var delta = len - str.length
+		return getPadStr(chars, delta) + str
+	}
+
+	_.padEnd = function(str, len, chars) {
+		str = _.tostr(str)
+		len = len || 0
+		var delta = len - str.length
+		return str + getPadStr(chars, delta)
+	}
+
+	function getPadStr(chars, len) {
+		chars = _.tostr(chars) || ' ' // '' will never end
+		var count = Math.floor(len / chars.length) + 1
+		return _.repeat(chars, count).slice(0, len)
+	}
+
+	function tostr(str) {
+		if (str || 0 == str) return str + ''
+		return ''
+	}
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(5)
+
+	_.sum = function(arr) {
+		return _.reduce(arr, function(sum, val) {
+			return sum + val
+		}, 0)
+	}
+
+	_.max = function(arr, fn) {
+		var index = -1
+		var data = -Infinity
+		fn = fn || _.identity
+		_.each(arr, function(val, i) {
+			val = fn(val)
+			if (val > data) {
+				data = val
+				index = i
+			}
+		})
+		if (index > -1) {
+			return arr[index]
+		}
+		return data
+	}
+
+	_.min = function(arr, fn) {
+		var index = -1
+		var data = Infinity
+		fn = fn || _.identity
+		_.each(arr, function(val, i) {
+			val = fn(val)
+			if (val < data) {
+				data = val
+				index = i
+			}
+		})
+		if (index > -1) {
+			return arr[index]
+		}
+		return data
+	}
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {var _ = __webpack_require__(16)
+	var is = __webpack_require__(7)
+
+	exports.html = function(str, box) {
+		// unsafe html, e.g. `<script>`
+		if (is.str(str)) {
+			box = box || document
+			var div = box.createElement('div')
+			div.innerHTML = str + ''
+			return div.childNodes
+		}
+		return []
+	}
+
+	exports.xml = function(str, cb) {
+		// should not throw an error, because api never throw, and still get xml even error
+		// https://developer.mozilla.org/en-US/docs/Web/API/DOMParser
+		// but we give the error info, only first error is returned
+		// https://developer.mozilla.org/en-US/docs/Web/API/DOMParser
+		str = str + ''
+		var xml
+		var error
+		try {
+			if (global.DOMParser) {
+				var parser = new DOMParser()
+				xml = parser.parseFromString(str, 'text/xml')
+			} else {
+				xml = new ActiveXObject('Microsoft.XMLDOM')
+				xml.async = 'false'
+				xml.loadXML(str)
+			}
+		} catch (e) {
+			error = e
+		}
+		if (!error) {
+			if (xml) {
+				if (xml.documentElement) {
+					var parsererror = xml.getElementsByTagName('parsererror')[0]
+					if (parsererror) {
+						var message = parsererror.textContent
+						error = new Error(message)
+					}
+				} else {
+					var parseError = xml.parseError
+					if (parseError) {
+						// old IE
+						// errorCode, reason, line
+						error = new Error('line' + ' ' + parseError.line + ':' + ' ' + parseError.reason)
+					}
+				}
+			} else {
+				error = new Error('parse error')
+			}
+		}
+		if (is.fn(cb)) {
+			cb(error, xml)
+		}
+		return xml
+	}
+
+	var JSON = global.JSON || {}
+
+	exports.json = JSON.parse || evalJSON
+
+	var validJson = /(,)|(\[|{)|(}|])|"(?:[^"\\\r\n]|\\["\\\/bfnrt]|\\u[\da-fA-F]{4})*"\s*:?|true|false|null|-?(?!0\d)\d+(?:\.\d+|)(?:[eE][+-]?\d+|)/g
+
+	function evalJSON(str) {
+		str = _.trim(str + '')
+		var depth, requireNonComma
+		var invalid = str.replace(validJson, function(token, comma, open, close) {
+			if (requireNonComma && comma) depth = 0
+			if (depth = 0) return token
+			requireNonComma = open || comma
+			depth += !close - !open
+			return ''
+		})
+		invalid = _.trim(invalid)
+		if (invalid) throw new Error('Invalid JSON: ' + str)
+		return Function('return ' + str)()
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(17)
+
+	/* webpack only
+	if (DEBUG && global.console) {
+		console.debug('debug mode')
+	}
+	*/
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var cou = __webpack_require__(6)
+
+	module.exports = cou.extend(_, cou)
+
+	__webpack_require__(18)
+	__webpack_require__(19)
+	__webpack_require__(20)
+	__webpack_require__(22)
+	__webpack_require__(23)
+	__webpack_require__(24)
+
+	_.mixin(_, _)
+
+	function _(val) {
+		if (!(this instanceof _)) return new _(val)
+		this.__value = val
+		this.__chain = false
+	}
+
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(17)
+
+	var each = _.each
+	var includes = _.includes
+	var is = _.is
+	var proto = Array.prototype
+
+	_.reject = function(arr, fn) {
+		return _.filter(arr, function(val, i, arr) {
+			return !fn(val, i, arr)
+		})
+	}
+
+	_.without = function(arr) {
+		var other = _.slice(arguments, 1)
+		return _.difference(arr, other)
+	}
+
+	_.difference = function(arr, other) {
+		var ret = []
+		_.each(arr, function(val) {
+			if (!includes(other, val)) {
+				ret.push(val)
+			}
+		})
+		return ret
+	}
+
+	_.pluck = function(arr, key) {
+		return _.map(arr, function(item) {
+			if (item) return item[key]
+		})
+	}
+
+	_.size = function(arr) {
+		var len = _.len(arr)
+		if (null == len) {
+			len = _.keys(arr).length
+		}
+		return len
+	}
+
+	_.first = function(arr) {
+		if (arr) return arr[0]
+	}
+
+	_.last = function(arr) {
+		var len = _.len(arr)
+		if (len) {
+			return arr[len - 1]
+		}
+	}
+
+	_.asyncMap = function(arr, fn, cb) {
+		// desperate
+		var ret = []
+		var count = 0
+		var hasDone, hasStart
+
+		each(arr, function(arg, i) {
+			hasStart = true
+			fn(arg, function(err, val) {
+				if (hasDone) return
+				count++
+				if (err) {
+					hasDone = true
+					return cb(err)
+				}
+				ret[i] = val
+				if (count == arr.length) {
+					hasDone = true
+					cb(null, ret)
+				}
+			})
+		})
+
+		if (!hasStart) cb(null) // empty
+	}
+
+	_.uniq = function(arr) {
+		var ret = []
+		each(arr, function(item) {
+			if (!includes(ret, item)) ret.push(item)
+		})
+		return ret
+	}
+
+	_.flatten = function(arrs) {
+		var ret = []
+		each(arrs, function(arr) {
+			if (is.arraylike(arr)) {
+				each(arr, function(item) {
+					ret.push(item)
+				})
+			} else ret.push(arr)
+		})
+		return ret
+	}
+
+	_.union = function() {
+		return _.uniq(_.flatten(arguments))
+	}
+
+	_.sample = function(arr, n) {
+		var ret = _.toArray(arr)
+		var len = ret.length
+		var need = Math.min(n || 1, len)
+		for (var i = 0; i < len; i++) {
+			var rand = _.random(i, len - 1)
+			var tmp = ret[rand]
+			ret[rand] = ret[i]
+			ret[i] = tmp
+		}
+		ret.length = need
+		if (null == n) {
+			return ret[0]
+		}
+		return ret
+	}
+
+	_.shuffle = function(arr) {
+		return _.sample(arr, Infinity)
+	}
+
+	_.compact = function(arr) {
+		return _.filter(arr, _.identity)
+	}
+
+	_.rest = function(arr) {
+		return _.slice(arr, 1)
+	}
+
+	_.invoke = function() {
+		var args = arguments
+		var arr = args[0]
+		var fn = args[1]
+		var isFunc = is.fn(fn)
+		args = _.slice(args, 2)
+
+		return _.map(arr, function(item) {
+			if (isFunc) {
+				return fn.apply(item, args)
+			}
+			if (null != item) {
+				var method = item[fn]
+				if (is.fn(method)) {
+					return method.apply(item, args)
+				}
+			}
+		})
+	}
+
+	_.partition = function(arr, fn) {
+		var hash = _.groupBy(arr, function(val, i, arr) {
+			var ret = fn(val, i, arr)
+			if (ret) return 1
+			return 2
+		})
+		return [hash[1] || [], hash[2] || []]
+	}
+
+	_.groupBy = function(arr, fn) {
+		var hash = {}
+		_.each(arr, function(val, i, arr) {
+			var ret = fn(val, i, arr)
+			hash[ret] = hash[ret] || []
+			hash[ret].push(val)
+		})
+		return hash
+	}
+
+	_.range = function() {
+		var args = arguments
+		if (args.length < 2) {
+			return _.range(args[1], args[0])
+		}
+		var start = args[0] || 0
+		var last = args[1] || 0
+		var step = args[2]
+		if (!is.num(step)) {
+			step = 1
+		}
+		var count = last - start
+		if (0 != step) {
+			count = count / step
+		}
+		var ret = []
+		var val = start
+		for (var i = 0; i < count; i++) {
+			ret.push(val)
+			val += step
+		}
+		return ret
+	}
+
+	_.pullAt = function(arr) {
+		// `_.at` but mutate
+		var indexes = _.slice(arguments, 1)
+		return mutateDifference(arr, indexes)
+	}
+
+	function mutateDifference(arr, indexes) {
+		var ret = []
+		var len = _.len(indexes)
+		if (len) {
+			indexes = indexes.sort(function(a, b) {
+				return a - b
+			})
+			while (len--) {
+				var index = indexes[len]
+				ret.push(proto.splice.call(arr, index, 1)[0])
+			}
+		}
+		ret.reverse()
+		return ret
+	}
+
+	_.remove = function(arr, fn) {
+		// `_.filter` but mutate
+		var len = _.len(arr) || 0
+		var indexes = []
+		while (len--) {
+			if (fn(arr[len], len, arr)) {
+				indexes.push(len)
+			}
+		}
+		return mutateDifference(arr, indexes)
+	}
+
+	_.fill = function(val, start, end) {
+		// TODO
+	}
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(17)
+
+	var is = _.is
+	var each = _.each
+	var forIn = _.forIn
+
+	_.only = function(obj, keys) {
+		obj = obj || {}
+		if (is.str(keys)) keys = keys.split(/ +/)
+		return _.reduce(keys, function(ret, key) {
+			if (null != obj[key]) ret[key] = obj[key]
+			return ret
+		}, {})
+	}
+
+	_.values = function(obj) {
+		return _.map(_.keys(obj), function(key) {
+			return obj[key]
+		})
+	}
+
+	_.pick = function(obj, fn) {
+		if (!is.fn(fn)) {
+			return _.pick(obj, function(val, key) {
+				return key == fn
+			})
+		}
+		var ret = {}
+		forIn(obj, function(val, key, obj) {
+			if (fn(val, key, obj)) {
+				ret[key] = val
+			}
+		})
+		return ret
+	}
+
+	_.functions = function(obj) {
+		return _.keys(_.pick(obj, function(val) {
+			return is.fn(val)
+		}))
+	}
+
+	_.mapKeys = function(obj, fn) {
+		var ret = {}
+		forIn(obj, function(val, key, obj) {
+			var newKey = fn(val, key, obj)
+			ret[newKey] = val
+		})
+		return ret
+	}
+
+	_.mapObject = _.mapValues = function(obj, fn) {
+		var ret = {}
+		forIn(obj, function(val, key, obj) {
+			ret[key] = fn(val, key, obj)
+		})
+		return ret
+	}
+
+	// return value when walk through path, otherwise return empty
+	_.get = function(obj, path) {
+		path = toPath(path)
+		if (path.length) {
+			var flag = _.every(path, function(key) {
+				if (null != obj) { // obj can be indexed
+					obj = obj[key]
+					return true
+				}
+			})
+			if (flag) return obj
+		}
+	}
+
+	_.has = function(obj, path) {
+		path = toPath(path)
+		if (path.length) {
+			var flag = _.every(path, function(key) {
+				if (null != obj && is.owns(obj, key)) {
+					obj = obj[key]
+					return true
+				}
+			})
+			if (flag) return true
+		}
+		return false
+	}
+
+	_.set = function(obj, path, val) {
+		path = toPath(path)
+		var cur = obj
+		_.every(path, function(key, i) {
+			if (is.oof(cur)) {
+				if (i + 1 == path.length) {
+					cur[key] = val
+				} else {
+					var item = cur[key]
+					if (null == item) {
+						// fill value with {} or []
+						var item = {}
+						if (~~key == key) {
+							item = []
+						}
+					}
+					cur = cur[key] = item
+					return true
+				}
+			}
+		})
+		return obj
+	}
+
+	_.create = (function() {
+		function Object() {} // so it seems like Object.create
+		return function(proto, property) {
+			// not same as Object.create, Object.create(proto, propertyDescription)
+			if ('object' != typeof proto) {
+				// null is ok
+				proto = null
+			}
+			Object.prototype = proto
+			return _.extend(new Object, property)
+		}
+	})()
+
+	_.defaults = function() {
+		var args = arguments
+		var target = args[0]
+		var sources = _.slice(args, 1)
+		if (target) {
+			_.each(sources, function(src) {
+				_.mapObject(src, function(val, key) {
+					if (is.undef(target[key])) {
+						target[key] = val
+					}
+				})
+			})
+		}
+		return target
+	}
+
+	_.isMatch = function(obj, src) {
+		var ret = true
+		obj = obj || {}
+		forIn(src, function(val, key) {
+			if (val !== obj[key]) {
+				ret = false
+				return false
+			}
+		})
+		return ret
+	}
+
+	_.toPlainObject = function(val) {
+		var ret = {}
+		forIn(val, function(val, key) {
+			ret[key] = val
+		})
+		return ret
+	}
+
+	_.invert = function(obj) {
+		var ret = {}
+		forIn(obj, function(val, key) {
+			ret[val] = key
+		})
+		return ret
+	}
+
+	// topath, copy from lodash
+
+	var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\n\\]|\\.)*?)\2)\]/g
+	var reEscapeChar = /\\(\\)?/g;
+
+	function toPath(val) {
+		if (is.array(val)) return val
+		var ret = []
+		_.tostr(val).replace(rePropName, function(match, number, quote, string) {
+			var item = number || match
+			if (quote) {
+				item = string.replace(reEscapeChar, '$1')
+			}
+			ret.push(item)
+		})
+		return ret
+	}
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(17)
+
+	var is = _.is
+	var slice = _.slice
+
+	_.bind = function(fn, ctx) {
+		if (is.str(ctx)) {
+			var obj = fn
+			fn = obj[ctx]
+			ctx = obj
+		}
+		if (!is.fn(fn)) return fn
+		var args = slice(arguments, 2)
+		ctx = ctx || this
+		return function() {
+			return fn.apply(ctx, _.flatten([args, arguments]))
+		}
+	}
+
+	// from lang.js `Function.prototype.inherits`
+	// so belong to function
+	_.inherits = function(ctor, superCtor) {
+		ctor.super_ = superCtor
+		ctor.prototype = _.create(superCtor.prototype, {
+			constructor: ctor
+		})
+	}
+
+	_.delay = function(fn, wait) {
+		var args = _.slice(arguments, 2)
+		return setTimeout(function() {
+			fn.apply(this, args)
+		}, wait)
+	}
+
+	_.before = function(n, fn) {
+		return function() {
+			if (n > 1) {
+				n--
+				return fn.apply(this, arguments)
+			}
+		}
+	}
+
+	_.once = function(fn) {
+		return _.before(2, fn)
+	}
+
+	_.after = function(n, fn) {
+		return function() {
+			if (n > 1) {
+				n--
+			} else {
+				return fn.apply(this, arguments)
+			}
+		}
+	}
+
+	_.throttle = function(fn, wait, opt) {
+		wait = wait || 0
+		opt = _.extend({
+			leading: true,
+			trailing: true,
+			maxWait: wait
+		}, opt)
+		return _.debounce(fn, wait, opt)
+	}
+
+	_.debounce = function(fn, wait, opt) {
+		wait = wait || 0
+		opt = _.extend({
+			leading: false,
+			trailing: true
+		}, opt)
+		var maxWait = opt.maxWait
+		var lastExec = 0 // wait
+		var lastCall = 0 // just for maxWait
+		var now = _.now()
+		var timer
+
+		if (!opt.leading) {
+			lastExec = now
+		}
+
+		function ifIsCD() {
+			if (now - lastExec > wait) return false
+			if (maxWait && now - lastCall > maxWait) return false
+			return true
+		}
+
+		function exec(fn, ctx, args) {
+			lastExec = _.now() // update last exec
+			return fn.apply(ctx, args)
+		}
+
+		function cancel() {
+			if (timer) {
+				clearTimeout(timer)
+				timer = null
+			}
+		}
+
+		function debounced() {
+			now = _.now() // update now
+			var isCD = ifIsCD()
+			lastCall = now // update last call
+			var me = this
+			var args = arguments
+
+			cancel()
+
+			if (!isCD) {
+				exec(fn, me, args)
+			} else {
+				if (opt.trailing) {
+					timer = _.delay(function() {
+						exec(fn, me, args)
+					}, wait)
+				}
+			}
+		}
+
+		debounced.cancel = cancel
+
+		return debounced
+	}
+
+	function memoize(fn) {
+		var cache = new memoize.Cache
+		function memoized() {
+			var args = arguments
+			var key = args[0]
+			if (!cache.has(key)) {
+				var ret = fn.apply(this, args)
+				cache.set(key, ret)
+			}
+			return cache.get(key)
+		}
+		memoized.cache = cache
+		return memoized
+	}
+
+	memoize.Cache = __webpack_require__(21)
+
+	_.memoize = memoize
+
+	_.wrap = function(val, fn) {
+		return function() {
+			var args = [val]
+			args.push.apply(args, arguments)
+			return fn.apply(this, args)
+		}
+	}
+
+	_.curry = function(fn) {
+		var len = fn.length
+		return setter([])
+
+		function setter(args) {
+			return function() {
+				var arr = args.concat(_.slice(arguments))
+				if (arr.length >= len) {
+					arr.length = len
+					return fn.apply(this, arr)
+				}
+				return setter(arr)
+			}
+		}
+	}
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(17)
+	var is = _.is
+
+	module.exports = Cache
+
+	function Cache() {
+		this.data = {}
+	}
+
+	var proto = Cache.prototype
+
+	proto.has = function(key) {
+		return is.owns(this.data, key)
+	}
+
+	proto.get = function(key) {
+		return this.data[key]
+	}
+
+	proto.set = function(key, val) {
+		this.data[key] = val
+	}
+
+	proto['delete'] = function(key) {
+		delete this.data[key]
+	}
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(17)
+	var is = _.is
+
+	_.now = function() {
+		return +new Date
+	}
+
+	_.constant = function(val) {
+		return function() {
+			return val
+		}
+	}
+
+	_.identity = function(val) {
+		return val
+	}
+
+	_.random = function(min, max) {
+		return min + Math.floor(Math.random() * (max - min + 1))
+	}
+
+	_.mixin = function(dst, src, opt) {
+		var keys = _.functions(src)
+		if (dst) {
+			if (is.fn(dst)) {
+				opt = opt || {}
+				var isChain = !!opt.chain
+				// add to prototype
+				var proto = dst.prototype
+				_.each(keys, function(key) {
+					var fn = src[key]
+					proto[key] = function() {
+						var me = this
+						var args = [me.__value]
+						args.push.apply(args, arguments)
+						var ret = fn.apply(me, args)
+						if (me.__chain) {
+							me.__value = ret
+							return me
+						}
+						return ret
+					}
+				})
+			} else {
+				_.each(keys, function(key) {
+					dst[key] = src[key]
+				})
+			}
+		}
+		return dst
+	}
+
+	_.chain = function(val) {
+		var ret = _(val)
+		ret.__chain = true
+		return ret
+	}
+
+	_.value = function() {
+		this.__chain = false
+		return this.__value
+	}
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(17)
+
+	_.tostr = tostr
+
+	var indexOf = _.indexOf
+
+	_.capitalize = function(str) {
+		str = tostr(str)
+		return str.charAt(0).toUpperCase() + str.substr(1)
+	}
+
+	_.decapitalize = function(str) {
+		str = tostr(str)
+		return str.charAt(0).toLowerCase() + str.substr(1)
+	}
+
+	_.camelCase = function(str) {
+		str = tostr(str)
+		var arr = str.split(/[^\w]|_+/)
+		arr = _.map(arr, function(val) {
+			return _.capitalize(val)
+		})
+		return _.decapitalize(arr.join(''))
+	}
+
+	_.startsWith = function(str, val) {
+		return 0 == indexOf(str, val)
+	}
+
+	_.endsWith = function(str, val) {
+		val += '' // null => 'null'
+		return val == _.slice(str, _.len(str) - _.len(val))
+	}
+
+	_.lower = function(str) {
+		return tostr(str).toLowerCase()
+	}
+
+	_.upper = function(str) {
+		return tostr(str).toUpperCase()
+	}
+
+	_.repeat = function(str, count) {
+		return _.map(_.range(count), function() {
+			return str
+		}).join('')
+	}
+
+	_.padLeft = function(str, len, chars) {
+		str = _.tostr(str)
+		len = len || 0
+		var delta = len - str.length
+		return getPadStr(chars, delta) + str
+	}
+
+	_.padRight = function(str, len, chars) {
+		str = _.tostr(str)
+		len = len || 0
+		var delta = len - str.length
+		return str + getPadStr(chars, delta)
+	}
+
+	function getPadStr(chars, len) {
+		chars = _.tostr(chars) || ' ' // '' will never end
+		var count = Math.floor(len / chars.length) + 1
+		return _.repeat(chars, count).slice(0, len)
+	}
+
+	function tostr(str) {
+		if (str || 0 == str) return str + ''
+		return ''
+	}
+
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(17)
+
+	_.sum = function(arr) {
+		return _.reduce(arr, function(sum, val) {
+			return sum + val
+		}, 0)
+	}
+
+	_.max = function(arr, fn) {
+		var index = -1
+		var data = -Infinity
+		fn = fn || _.identity
+		_.each(arr, function(val, i) {
+			val = fn(val)
+			if (val > data) {
+				data = val
+				index = i
+			}
+		})
+		if (index > -1) {
+			return arr[index]
+		}
+		return data
+	}
+
+	_.min = function(arr, fn) {
+		var index = -1
+		var data = Infinity
+		fn = fn || _.identity
+		_.each(arr, function(val, i) {
+			val = fn(val)
+			if (val < data) {
+				data = val
+				index = i
+			}
+		})
+		if (index > -1) {
+			return arr[index]
+		}
+		return data
+	}
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = exports = find
+
+	// id http://www.w3.org/TR/html4/types.html#type-id
+	// http://www.w3.org/TR/html-markup/syntax.html#tag-name
+	// jquery cannot deal with colons (":"), and periods ("."), and we believe most people never use it
+
+	var isValid = /^[-\w]+$/
+
+	var doc = global.document
+
+	// always return array
+	function find(selector, box) {
+		box = box || doc
+		var ret = []
+		var nodes
+		if (selector && box.getElementsByTagName) {
+			selector += ''
+			if (isValid.test(selector)) {
+				// is tag
+				nodes = box.getElementsByTagName(selector)
+			} else {
+				var id = selector.substr(1)
+				if (doc == box && '#' == selector.charAt(0) && isValid.test(id)) {
+					// is id and from document
+					var elem = doc.getElementById(id)
+					if (elem) {
+						return [elem]
+					}
+				} else {
+					// complex css select, not id or tag
+					var fn = exports.custom || query
+					try {
+						nodes = fn(selector, box)
+					} catch (ignore) {}
+				}
+			}
+			if (nodes) {
+				var len = nodes.length || 0
+				for (var i = 0; i < len; i++) {
+					ret.push(nodes[i])
+				}
+			}
+		}
+		return ret
+	}
+
+	function query(selector, box) {
+		// it will also panic with invalid selector like '#1234'
+		return box.querySelectorAll(selector)
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 26 */
+/***/ function(module, exports) {
+
+	module.exports = exports = muid
+
+	exports.prefix = ''
+
+	function muid(len) {
+		len = len || 7
+		var random = Math.random().toString(35).substr(2, len)
+		return exports.prefix + random
+	}
+
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(28)
+	__webpack_require__(29)
+	__webpack_require__(30)
+	__webpack_require__(41)
+	__webpack_require__(42)
+	__webpack_require__(44)
+	__webpack_require__(45)
+	__webpack_require__(46)
+	__webpack_require__(57)
+	__webpack_require__(58)
+	__webpack_require__(59)
+
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {var $ = __webpack_require__(3)
+	var _ = __webpack_require__(4)
+	var parse = __webpack_require__(15)
+
+	var is = _.is
+	var knownTypes = 'boolean number string function array date regexp object error'.split(' ')
+
+	$.extend({
+		  noop: _.noop
+		, toArray: function(arr, ret) {
+			return $.merge(ret, arr)
+		}
+		, each: function(arr, fn) {
+			_.each(arr, function(val, i) {
+				return fn.call(val, i, val, arr)
+			})
+			return arr
+		}
+		, grep: _.filter
+		, inArray: _.includes
+		, isArray: is.arr
+		, isEmptyObject: is.empty
+		, isFunction: is.fn
+		, isNumeric: is.num
+		, isPlainObject: is.hash
+		, isWindow: function(val) {
+			return val == global
+		}
+		, makeArray: _.slice
+		, map: _.map
+		, merge: function(first, second) {
+			first = first || []
+			var len = first.length || 0
+			_.each(second, function(val, i) {
+				first.length++
+				first[len + i] = val
+			})
+			return first
+		}
+		, now: _.now
+		, parseHTML: parse.html
+		, parseJSON: parse.json
+		, parseXML: parse.xml
+		, proxy: _.bind
+		, trim: _.trim
+		, type: function(val) {
+			var ret = is._class(val)
+			if (!_.includes(knownTypes, ret)) ret = 'object'
+			return ret
+		}
+	})
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(3)
+	var _ = __webpack_require__(4)
+	var is = _.is
+
+	var eventNS = 'events'
+
+	// TODO fix ie event to w3c
+	// http://www.brainjar.com/dhtml/events/default3.asp
+
+	$.Event = function(src, props) {
+		if (!(this instanceof $.Event)) {
+			return new $.Event(src, props)
+		}
+		src = src || {}
+		if ('string' == typeof src) {
+			src = {
+				type: src
+			}
+		}
+		this.originalEvent = src
+		this.type = src.type
+		this.target = src.target || src.srcElement
+		if (props) {
+			$.extend(this, props)
+		}
+	}
+
+	$.extend({
+		one: function(elem, type, handler, data, selector) {
+			if (is.fn(handler)) {
+				var wrapper = _.once(function() {
+					$.off(elem, type, wrapper)
+					wrapper = null
+					handler.apply(this, arguments)
+				})
+				return $.on(elem, type, wrapper, data, selector)
+			}
+		},
+		on: function(elem, type, handler, data, selector) {
+			var events = $._data(elem, eventNS)
+			var arr = type.split('.')
+			type = arr[0]
+			var namespace = arr[1]
+			if (!events) {
+				// set data priv
+				events = {}
+				$._data(elem, eventNS, events)
+			}
+
+			var eventHandler = $._data(elem, 'handler')
+			if (!eventHandler) {
+				// one element one handler
+				eventHandler = function(ev) {
+					// we have to save element for old ie
+					$.trigger(elem, $.Event(ev))
+				}
+				$._data(elem, 'handler', eventHandler)
+			}
+
+			if (!events[type]) {
+				events[type] = []
+				bind(elem, type, eventHandler)
+			}
+			var typeEvents = events[type]
+			var ev = {
+				handler: handler,
+				namespace: namespace,
+				selector: selector,
+				type: type
+			}
+			typeEvents.push(ev)
+		},
+		trigger: function(elem, ev) {
+			var events = $._data(elem, eventNS)
+			if ('string' == typeof ev) {
+				// self trigger, ev = type
+				ev = $.Event(ev, {
+					target: elem
+				})
+			}
+			var typeEvents = events[ev.type]
+			if (typeEvents) {
+				typeEvents = typeEvents.slice() // avoid self remove
+				var len = typeEvents.length
+				for (var i = 0; i < len; i++) {
+					var obj = typeEvents[i]
+					var ret = obj.handler.call(elem, ev)
+					if (false === ret) {
+						ev = ev.originalEvent || ev
+						if (ev.preventDefault) {
+							ev.preventDefault()
+						} else {
+							ev.returnValue = false
+						}
+						if (ev.stopPropagation) {
+							ev.stopPropagation()
+						}
+						ev.cancelBubble = true
+					}
+				}
+			}
+		},
+		off: function(elem, ev, handler) {
+			var events = $._data(elem, eventNS)
+			if (!events) return
+
+			ev = ev || ''
+			if (!ev || '.' == ev.charAt(0)) {
+				// namespace
+				for (var key in events) {
+					$.off(elem, key + ev, handler)
+				}
+				return
+			}
+
+			var arr = ev.split('.')
+			var type = arr[0] // always have
+			var namespace = arr[1]
+			var typeEvents = events[type]
+			if (typeEvents) {
+				for (var i = typeEvents.length - 1; i >= 0; i--) {
+					var x = typeEvents[i]
+					var shouldRemove = true
+					if (namespace && namespace != x.namespace) {
+						shouldRemove = false
+					}
+					if (handler && handler != x.handler) {
+						shouldRemove = false
+					}
+					if (shouldRemove) {
+						typeEvents.splice(i, 1)
+					}
+				}
+				if (!events[type].length) {
+					unbind(elem, type, $._data(elem, 'handler'))
+					events[type] = null // remove the array
+				}
+			}
+		}
+	})
+
+	$.fn.extend({
+		eventHandler: function(events, handler, fn) {
+			if (!events) {
+				return this.each(function() {
+					fn(this)
+				})
+			}
+			events = events.split(' ')
+			return this.each(function() {
+				for (var i = 0; i < events.length; i++) {
+					fn(this, events[i], handler)
+				}
+			})
+		},
+		on: function(events, handler) {
+			return this.eventHandler(events, handler, $.on)
+		},
+		one: function(events, handler) {
+			return this.eventHandler(events, handler, $.one)
+		},
+		off: function(events, handler) {
+			return this.eventHandler(events, handler, $.off)
+		},
+		trigger: function(events, handler) {
+			return this.eventHandler(events, handler, $.trigger)
+		}
+	})
+
+
+	function bind(el, type, fn) {
+		if (el.addEventListener) {
+			el.addEventListener(type, fn, false)
+		} else if (el.attachEvent) {
+			el.attachEvent('on' + type, fn)
+		}
+	}
+
+	function unbind(el, type, fn) {
+		if (el.removeEventListener) {
+			el.removeEventListener(type, fn, false)
+		} else if (el.detachEvent) {
+			el.detachEvent('on' + type, fn)
+		}
+	}
+
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {var $ = __webpack_require__(3)
+	var ready = __webpack_require__(31)()
+
+	var docLoad = 'DOMContentLoaded'
+	var winLoad = 'load'
+
+	var doc = global.document
+
+	$.fn.extend({
+		ready: function(fn) {
+			ready.queue(fn)
+			return this
+		}
+	})
+
+	setTimeout(bindEvent) // wait all extend ready
+
+	function bindEvent() {
+		if (doc && 'complete' == doc.readyState) {
+			ready.ctx = $
+			return ready.open()
+		}
+		$(doc).on(docLoad, loaded)
+		$(global).on(winLoad, loaded)
+	}
+
+	function loaded() {
+		$(global).off(docLoad, loaded)
+		$(doc).off(winLoad, loaded)
+		ready.ctx = $
+		ready.open()
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {var _ = __webpack_require__(32)
+	var is = _.is
+
+	var open = 1
+	var close = 0
+
+	module.exports = Ctor
+
+	function Ctor(queueList) {
+		var me = this
+		if (!(me instanceof Ctor)) return new Ctor(queueList)
+		me.queueList = queueList || []
+		me.close()
+	}
+
+	var proto = Ctor.prototype
+
+	proto.queue = function() {
+		var me = this
+		var args = arguments
+		if (me.isOpen) {
+			me.exec(args)
+		} else {
+			me.queueList.push(args)
+		}
+	}
+
+	proto.close = function() {
+		this.isOpen = false
+	}
+
+	proto.open = function() {
+		this.isOpen = true
+		this.execAll()
+	}
+
+	proto.execAll = function() {
+		var me = this
+		var queue = me.queueList
+		_.each(queue, function(args) {
+			me.exec(args)
+		})
+		queue.length = 0
+	}
+
+	proto.exec = function(args) {
+		var func
+		var first = _.first(args)
+		var ctx = this.ctx
+		if (is.fn(first)) {
+			func = first
+		} else {
+			func = _.get(ctx, first)
+		}
+		if (is.fn(func)) {
+			try {
+				func.apply(ctx, _.slice(args, 1))
+			} catch (ignore) {}
+		}
+	}
+
+	proto.overwriteQueue = function(name) {
+		var me = this
+		global[name] = function() {
+			me.queue.apply(me, arguments)
+		}
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(33)
+
+	/* webpack only
+	if (DEBUG && global.console) {
+		console.debug('debug mode')
+	}
+	*/
+
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var cou = __webpack_require__(6)
+
+	module.exports = cou.extend(_, cou)
+
+	__webpack_require__(34)
+	__webpack_require__(35)
+	__webpack_require__(36)
+	__webpack_require__(38)
+	__webpack_require__(39)
+	__webpack_require__(40)
+
+	_.mixin(_, _)
+
+	function _(val) {
+		if (!(this instanceof _)) return new _(val)
+		this.__value = val
+		this.__chain = false
+	}
+
+
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(33)
+
+	var each = _.each
+	var includes = _.includes
+	var is = _.is
+	var proto = Array.prototype
+
+	_.reject = function(arr, fn) {
+		return _.filter(arr, function(val, i, arr) {
+			return !fn(val, i, arr)
+		})
+	}
+
+	_.without = function(arr) {
+		var other = _.slice(arguments, 1)
+		return _.difference(arr, other)
+	}
+
+	_.difference = function(arr, other) {
+		var ret = []
+		_.each(arr, function(val) {
+			if (!includes(other, val)) {
+				ret.push(val)
+			}
+		})
+		return ret
+	}
+
+	_.pluck = function(arr, key) {
+		return _.map(arr, function(item) {
+			if (item) return item[key]
+		})
+	}
+
+	_.size = function(arr) {
+		var len = _.len(arr)
+		if (null == len) {
+			len = _.keys(arr).length
+		}
+		return len
+	}
+
+	_.first = function(arr) {
+		if (arr) return arr[0]
+	}
+
+	_.last = function(arr) {
+		var len = _.len(arr)
+		if (len) {
+			return arr[len - 1]
+		}
+	}
+
+	_.asyncMap = function(arr, fn, cb) {
+		// desperate
+		var ret = []
+		var count = 0
+		var hasDone, hasStart
+
+		each(arr, function(arg, i) {
+			hasStart = true
+			fn(arg, function(err, val) {
+				if (hasDone) return
+				count++
+				if (err) {
+					hasDone = true
+					return cb(err)
+				}
+				ret[i] = val
+				if (count == arr.length) {
+					hasDone = true
+					cb(null, ret)
+				}
+			})
+		})
+
+		if (!hasStart) cb(null) // empty
+	}
+
+	_.uniq = function(arr) {
+		var ret = []
+		each(arr, function(item) {
+			if (!includes(ret, item)) ret.push(item)
+		})
+		return ret
+	}
+
+	_.flatten = function(arrs) {
+		var ret = []
+		each(arrs, function(arr) {
+			if (is.arraylike(arr)) {
+				each(arr, function(item) {
+					ret.push(item)
+				})
+			} else ret.push(arr)
+		})
+		return ret
+	}
+
+	_.union = function() {
+		return _.uniq(_.flatten(arguments))
+	}
+
+	_.sample = function(arr, n) {
+		var ret = _.toArray(arr)
+		var len = ret.length
+		var need = Math.min(n || 1, len)
+		for (var i = 0; i < len; i++) {
+			var rand = _.random(i, len - 1)
+			var tmp = ret[rand]
+			ret[rand] = ret[i]
+			ret[i] = tmp
+		}
+		ret.length = need
+		if (null == n) {
+			return ret[0]
+		}
+		return ret
+	}
+
+	_.shuffle = function(arr) {
+		return _.sample(arr, Infinity)
+	}
+
+	_.compact = function(arr) {
+		return _.filter(arr, _.identity)
+	}
+
+	_.rest = function(arr) {
+		return _.slice(arr, 1)
+	}
+
+	_.invoke = function() {
+		var args = arguments
+		var arr = args[0]
+		var fn = args[1]
+		var isFunc = is.fn(fn)
+		args = _.slice(args, 2)
+
+		return _.map(arr, function(item) {
+			if (isFunc) {
+				return fn.apply(item, args)
+			}
+			if (null != item) {
+				var method = item[fn]
+				if (is.fn(method)) {
+					return method.apply(item, args)
+				}
+			}
+		})
+	}
+
+	_.partition = function(arr, fn) {
+		var hash = _.groupBy(arr, function(val, i, arr) {
+			var ret = fn(val, i, arr)
+			if (ret) return 1
+			return 2
+		})
+		return [hash[1] || [], hash[2] || []]
+	}
+
+	_.groupBy = function(arr, fn) {
+		var hash = {}
+		_.each(arr, function(val, i, arr) {
+			var ret = fn(val, i, arr)
+			hash[ret] = hash[ret] || []
+			hash[ret].push(val)
+		})
+		return hash
+	}
+
+	_.range = function() {
+		var args = arguments
+		if (args.length < 2) {
+			return _.range(args[1], args[0])
+		}
+		var start = args[0] || 0
+		var last = args[1] || 0
+		var step = args[2]
+		if (!is.num(step)) {
+			step = 1
+		}
+		var count = last - start
+		if (0 != step) {
+			count = count / step
+		}
+		var ret = []
+		var val = start
+		for (var i = 0; i < count; i++) {
+			ret.push(val)
+			val += step
+		}
+		return ret
+	}
+
+	_.pullAt = function(arr) {
+		// `_.at` but mutate
+		var indexes = _.slice(arguments, 1)
+		return mutateDifference(arr, indexes)
+	}
+
+	function mutateDifference(arr, indexes) {
+		var ret = []
+		var len = _.len(indexes)
+		if (len) {
+			indexes = indexes.sort(function(a, b) {
+				return a - b
+			})
+			while (len--) {
+				var index = indexes[len]
+				ret.push(proto.splice.call(arr, index, 1)[0])
+			}
+		}
+		ret.reverse()
+		return ret
+	}
+
+	_.remove = function(arr, fn) {
+		// `_.filter` but mutate
+		var len = _.len(arr) || 0
+		var indexes = []
+		while (len--) {
+			if (fn(arr[len], len, arr)) {
+				indexes.push(len)
+			}
+		}
+		return mutateDifference(arr, indexes)
+	}
+
+	_.fill = function(val, start, end) {
+		// TODO
+	}
+
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(33)
+
+	var is = _.is
+	var each = _.each
+	var forIn = _.forIn
+
+	_.only = function(obj, keys) {
+		obj = obj || {}
+		if (is.str(keys)) keys = keys.split(/ +/)
+		return _.reduce(keys, function(ret, key) {
+			if (null != obj[key]) ret[key] = obj[key]
+			return ret
+		}, {})
+	}
+
+	_.values = function(obj) {
+		return _.map(_.keys(obj), function(key) {
+			return obj[key]
+		})
+	}
+
+	_.pick = function(obj, fn) {
+		if (!is.fn(fn)) {
+			return _.pick(obj, function(val, key) {
+				return key == fn
+			})
+		}
+		var ret = {}
+		forIn(obj, function(val, key, obj) {
+			if (fn(val, key, obj)) {
+				ret[key] = val
+			}
+		})
+		return ret
+	}
+
+	_.functions = function(obj) {
+		return _.keys(_.pick(obj, function(val) {
+			return is.fn(val)
+		}))
+	}
+
+	_.mapKeys = function(obj, fn) {
+		var ret = {}
+		forIn(obj, function(val, key, obj) {
+			var newKey = fn(val, key, obj)
+			ret[newKey] = val
+		})
+		return ret
+	}
+
+	_.mapObject = _.mapValues = function(obj, fn) {
+		var ret = {}
+		forIn(obj, function(val, key, obj) {
+			ret[key] = fn(val, key, obj)
+		})
+		return ret
+	}
+
+	// return value when walk through path, otherwise return empty
+	_.get = function(obj, path) {
+		path = toPath(path)
+		if (path.length) {
+			var flag = _.every(path, function(key) {
+				if (null != obj) { // obj can be indexed
+					obj = obj[key]
+					return true
+				}
+			})
+			if (flag) return obj
+		}
+	}
+
+	_.has = function(obj, path) {
+		path = toPath(path)
+		if (path.length) {
+			var flag = _.every(path, function(key) {
+				if (null != obj && is.owns(obj, key)) {
+					obj = obj[key]
+					return true
+				}
+			})
+			if (flag) return true
+		}
+		return false
+	}
+
+	_.set = function(obj, path, val) {
+		path = toPath(path)
+		var cur = obj
+		_.every(path, function(key, i) {
+			if (is.oof(cur)) {
+				if (i + 1 == path.length) {
+					cur[key] = val
+				} else {
+					var item = cur[key]
+					if (null == item) {
+						// fill value with {} or []
+						var item = {}
+						if (~~key == key) {
+							item = []
+						}
+					}
+					cur = cur[key] = item
+					return true
+				}
+			}
+		})
+		return obj
+	}
+
+	_.create = (function() {
+		function Object() {} // so it seems like Object.create
+		return function(proto, property) {
+			// not same as Object.create, Object.create(proto, propertyDescription)
+			if ('object' != typeof proto) {
+				// null is ok
+				proto = null
+			}
+			Object.prototype = proto
+			return _.extend(new Object, property)
+		}
+	})()
+
+	_.defaults = function() {
+		var args = arguments
+		var target = args[0]
+		var sources = _.slice(args, 1)
+		if (target) {
+			_.each(sources, function(src) {
+				_.mapObject(src, function(val, key) {
+					if (is.undef(target[key])) {
+						target[key] = val
+					}
+				})
+			})
+		}
+		return target
+	}
+
+	_.isMatch = function(obj, src) {
+		var ret = true
+		obj = obj || {}
+		forIn(src, function(val, key) {
+			if (val !== obj[key]) {
+				ret = false
+				return false
+			}
+		})
+		return ret
+	}
+
+	_.toPlainObject = function(val) {
+		var ret = {}
+		forIn(val, function(val, key) {
+			ret[key] = val
+		})
+		return ret
+	}
+
+	_.invert = function(obj) {
+		var ret = {}
+		forIn(obj, function(val, key) {
+			ret[val] = key
+		})
+		return ret
+	}
+
+	// topath, copy from lodash
+
+	var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\n\\]|\\.)*?)\2)\]/g
+	var reEscapeChar = /\\(\\)?/g;
+
+	function toPath(val) {
+		if (is.array(val)) return val
+		var ret = []
+		_.tostr(val).replace(rePropName, function(match, number, quote, string) {
+			var item = number || match
+			if (quote) {
+				item = string.replace(reEscapeChar, '$1')
+			}
+			ret.push(item)
+		})
+		return ret
+	}
+
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(33)
+
+	var is = _.is
+	var slice = _.slice
+
+	_.bind = function(fn, ctx) {
+		if (is.str(ctx)) {
+			var obj = fn
+			fn = obj[ctx]
+			ctx = obj
+		}
+		if (!is.fn(fn)) return fn
+		var args = slice(arguments, 2)
+		ctx = ctx || this
+		return function() {
+			return fn.apply(ctx, _.flatten([args, arguments]))
+		}
+	}
+
+	// from lang.js `Function.prototype.inherits`
+	// so belong to function
+	_.inherits = function(ctor, superCtor) {
+		ctor.super_ = superCtor
+		ctor.prototype = _.create(superCtor.prototype, {
+			constructor: ctor
+		})
+	}
+
+	_.delay = function(fn, wait) {
+		var args = _.slice(arguments, 2)
+		return setTimeout(function() {
+			fn.apply(this, args)
+		}, wait)
+	}
+
+	_.before = function(n, fn) {
+		return function() {
+			if (n > 1) {
+				n--
+				return fn.apply(this, arguments)
+			}
+		}
+	}
+
+	_.once = function(fn) {
+		return _.before(2, fn)
+	}
+
+	_.after = function(n, fn) {
+		return function() {
+			if (n > 1) {
+				n--
+			} else {
+				return fn.apply(this, arguments)
+			}
+		}
+	}
+
+	_.throttle = function(fn, wait, opt) {
+		wait = wait || 0
+		opt = _.extend({
+			leading: true,
+			trailing: true,
+			maxWait: wait
+		}, opt)
+		return _.debounce(fn, wait, opt)
+	}
+
+	_.debounce = function(fn, wait, opt) {
+		wait = wait || 0
+		opt = _.extend({
+			leading: false,
+			trailing: true
+		}, opt)
+		var maxWait = opt.maxWait
+		var lastExec = 0 // wait
+		var lastCall = 0 // just for maxWait
+		var now = _.now()
+		var timer
+
+		if (!opt.leading) {
+			lastExec = now
+		}
+
+		function ifIsCD() {
+			if (now - lastExec > wait) return false
+			if (maxWait && now - lastCall > maxWait) return false
+			return true
+		}
+
+		function exec(fn, ctx, args) {
+			lastExec = _.now() // update last exec
+			return fn.apply(ctx, args)
+		}
+
+		function cancel() {
+			if (timer) {
+				clearTimeout(timer)
+				timer = null
+			}
+		}
+
+		function debounced() {
+			now = _.now() // update now
+			var isCD = ifIsCD()
+			lastCall = now // update last call
+			var me = this
+			var args = arguments
+
+			cancel()
+
+			if (!isCD) {
+				exec(fn, me, args)
+			} else {
+				if (opt.trailing) {
+					timer = _.delay(function() {
+						exec(fn, me, args)
+					}, wait)
+				}
+			}
+		}
+
+		debounced.cancel = cancel
+
+		return debounced
+	}
+
+	function memoize(fn) {
+		var cache = new memoize.Cache
+		function memoized() {
+			var args = arguments
+			var key = args[0]
+			if (!cache.has(key)) {
+				var ret = fn.apply(this, args)
+				cache.set(key, ret)
+			}
+			return cache.get(key)
+		}
+		memoized.cache = cache
+		return memoized
+	}
+
+	memoize.Cache = __webpack_require__(37)
+
+	_.memoize = memoize
+
+	_.wrap = function(val, fn) {
+		return function() {
+			var args = [val]
+			args.push.apply(args, arguments)
+			return fn.apply(this, args)
+		}
+	}
+
+	_.curry = function(fn) {
+		var len = fn.length
+		return setter([])
+
+		function setter(args) {
+			return function() {
+				var arr = args.concat(_.slice(arguments))
+				if (arr.length >= len) {
+					arr.length = len
+					return fn.apply(this, arr)
+				}
+				return setter(arr)
+			}
+		}
+	}
+
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(33)
+	var is = _.is
+
+	module.exports = Cache
+
+	function Cache() {
+		this.data = {}
+	}
+
+	var proto = Cache.prototype
+
+	proto.has = function(key) {
+		return is.owns(this.data, key)
+	}
+
+	proto.get = function(key) {
+		return this.data[key]
+	}
+
+	proto.set = function(key, val) {
+		this.data[key] = val
+	}
+
+	proto['delete'] = function(key) {
+		delete this.data[key]
+	}
+
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(33)
+	var is = _.is
+
+	_.now = function() {
+		return +new Date
+	}
+
+	_.constant = function(val) {
+		return function() {
+			return val
+		}
+	}
+
+	_.identity = function(val) {
+		return val
+	}
+
+	_.random = function(min, max) {
+		return min + Math.floor(Math.random() * (max - min + 1))
+	}
+
+	_.mixin = function(dst, src, opt) {
+		var keys = _.functions(src)
+		if (dst) {
+			if (is.fn(dst)) {
+				opt = opt || {}
+				var isChain = !!opt.chain
+				// add to prototype
+				var proto = dst.prototype
+				_.each(keys, function(key) {
+					var fn = src[key]
+					proto[key] = function() {
+						var me = this
+						var args = [me.__value]
+						args.push.apply(args, arguments)
+						var ret = fn.apply(me, args)
+						if (me.__chain) {
+							me.__value = ret
+							return me
+						}
+						return ret
+					}
+				})
+			} else {
+				_.each(keys, function(key) {
+					dst[key] = src[key]
+				})
+			}
+		}
+		return dst
+	}
+
+	_.chain = function(val) {
+		var ret = _(val)
+		ret.__chain = true
+		return ret
+	}
+
+	_.value = function() {
+		this.__chain = false
+		return this.__value
+	}
+
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(33)
+
+	_.tostr = tostr
+
+	var indexOf = _.indexOf
+
+	_.capitalize = function(str) {
+		str = tostr(str)
+		return str.charAt(0).toUpperCase() + str.substr(1)
+	}
+
+	_.decapitalize = function(str) {
+		str = tostr(str)
+		return str.charAt(0).toLowerCase() + str.substr(1)
+	}
+
+	_.camelCase = function(str) {
+		str = tostr(str)
+		var arr = str.split(/[^\w]|_+/)
+		arr = _.map(arr, function(val) {
+			return _.capitalize(val)
+		})
+		return _.decapitalize(arr.join(''))
+	}
+
+	_.startsWith = function(str, val) {
+		return 0 == indexOf(str, val)
+	}
+
+	_.endsWith = function(str, val) {
+		val += '' // null => 'null'
+		return val == _.slice(str, _.len(str) - _.len(val))
+	}
+
+	_.lower = function(str) {
+		return tostr(str).toLowerCase()
+	}
+
+	_.upper = function(str) {
+		return tostr(str).toUpperCase()
+	}
+
+	_.repeat = function(str, count) {
+		return _.map(_.range(count), function() {
+			return str
+		}).join('')
+	}
+
+	_.padLeft = function(str, len, chars) {
+		str = _.tostr(str)
+		len = len || 0
+		var delta = len - str.length
+		return getPadStr(chars, delta) + str
+	}
+
+	_.padRight = function(str, len, chars) {
+		str = _.tostr(str)
+		len = len || 0
+		var delta = len - str.length
+		return str + getPadStr(chars, delta)
+	}
+
+	function getPadStr(chars, len) {
+		chars = _.tostr(chars) || ' ' // '' will never end
+		var count = Math.floor(len / chars.length) + 1
+		return _.repeat(chars, count).slice(0, len)
+	}
+
+	function tostr(str) {
+		if (str || 0 == str) return str + ''
+		return ''
+	}
+
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(33)
+
+	_.sum = function(arr) {
+		return _.reduce(arr, function(sum, val) {
+			return sum + val
+		}, 0)
+	}
+
+	_.max = function(arr, fn) {
+		var index = -1
+		var data = -Infinity
+		fn = fn || _.identity
+		_.each(arr, function(val, i) {
+			val = fn(val)
+			if (val > data) {
+				data = val
+				index = i
+			}
+		})
+		if (index > -1) {
+			return arr[index]
+		}
+		return data
+	}
+
+	_.min = function(arr, fn) {
+		var index = -1
+		var data = Infinity
+		fn = fn || _.identity
+		_.each(arr, function(val, i) {
+			val = fn(val)
+			if (val < data) {
+				data = val
+				index = i
+			}
+		})
+		if (index > -1) {
+			return arr[index]
+		}
+		return data
+	}
+
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(3)
+	var _ = __webpack_require__(4)
+
+	var is = _.is
+
+	$.fn.extend({
+		  toArray: function() {
+			return $.toArray(this)
+		}
+		, pushStack: function(nodes) {
+			var ret = $(nodes)
+			ret.prevObject = this
+			ret.context = this.context
+			return ret
+		}
+		, get: function(i) {
+			if (!is.num(i)) return this.toArray()
+			if (i > 0) {
+				return this[i]
+			}
+			return this.get(i + this.length)
+		}
+		, each: function(fn) {
+			_.each(this, function(val, i) {
+				return fn.call(val, i, val, this)
+			})
+			return this
+		}
+		, map: function(fn) {
+			var arr = _.map(this, function(val, i) {
+				return fn.call(val, i, val, this)
+			})
+			return this.pushStack(arr)
+		}
+		, filter: function(fn) {
+			var arr = _.filter(this, function(val, i) {
+				return fn.call(val, i, val, this)
+			})
+			return this.pushStack(arr)
+		}
+		, end: function() {
+			return this.prevObject || $()
+		}
+		, eq: function(i) {
+			if (i < 0) return this.eq(i + this.length)
+			return this.pushStack([this[i]])
+		}
+		, first: function() {
+			return this.eq(0)
+		}
+		, last: function() {
+			return this.eq(-1)
+		}
+		, slice: function(start, end) {
+			var arr = _.slice(this, start, end)
+			return this.pushStack(arr)
+		}
+		, find: function(str) {
+			var arr = _.map(this, function(box) {
+				return $(str, box)
+			})
+			return this.pushStack(_.union.apply(_, arr))
+		}
+	})
+
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {var _ = __webpack_require__(4)
+	var $ = __webpack_require__(3)
+	var Data = __webpack_require__(43)
+	var uid = __webpack_require__(26)
+
+	var is = _.is
+	var data_user = new Data
+	var data_priv = new Data
+
+	var getComputedStyle = global.getComputedStyle || function(el) {
+		if (el && el.currentStyle) {
+			return el.currentStyle
+		}
+		return {}
+	}
+
+	$.extend({
+		expando: data_priv.expando,
+		access: function(elems, fn, key, val, isChain) {
+			var i = 0
+			if (key && 'object' === typeof key) {
+	   			// set multi k, v
+	   			for (i in key) {
+	   				$.access(elems, fn, i, key[i], true)
+	   			}
+	   		} else if (undefined === val) {
+	   			// get value
+	   			var ret
+	   			if (elems[0]) { // TODO text, html should be ''
+	   				ret = fn(elems[0], key)
+	   			}
+	   			if (!isChain) {
+	   				return ret
+	   			}
+	   		} else {
+	   			// set one k, v
+	   			for (i = 0; i < elems.length; i++) {
+	   				fn(elems[i], key, val)
+	   			}
+	   		}
+	   		return elems
+	   	},
+	    attr: function(elem, key, val) {
+	        if (undefined === val) {
+	            return elem.getAttribute(key)
+	        } else if (null === val) {
+	            return elem.removeAttribute(key)
+	        }
+	        elem.setAttribute(key, '' + val)
+	    },
+	    text: function(elem, key, val) {
+	        if (undefined !== val) return elem.textContent = '' + val
+	        var nodeType = elem.nodeType
+	        if (3 == nodeType || 4 == nodeType) {
+	            return elem.nodeValue
+	        }
+	        if ('string' == typeof elem.textContent) {
+	            return elem.textContent
+	        }
+	        var ret = ''
+	        for (elem = elem.firstChild; elem; elem = elem.nextSibling) {
+	            ret += $.text(elem)
+	        }
+	        return ret
+	    },
+	    html: function(elem, key, val) {
+	        if (undefined === val) {
+	            return elem.innerHTML
+	        }
+	        elem.innerHTML = '' + val
+	    },
+	    prop: function(elem, key, val) {
+	        if (undefined === val) {
+	            return elem[key]
+	        }
+	        elem[key] = val
+	    },
+	    css: function(elem, key, val) {
+	        var style = elem.style || {}
+	        if (undefined === val) {
+	            var ret = style[key]
+	            if (ret) return ret
+	            //if (window.getComputedStyle) {
+	            //    return getComputedStyle(elem, null)[key]
+	            //}
+				return getComputedStyle(elem, null)[key]
+	        } else {
+	            style[key] = val
+	        }
+	    },
+	    data: function(elem, key, val) {
+	        if (undefined !== val) {
+	            // set val
+	            data_user.set(elem, key, val)
+	        } else {
+	            if (key && 'object' == typeof key) {
+	                // set multi
+	                for (var k in key) {
+	                    $.data(elem, k, key[k])
+	                }
+	            } else {
+	                // get
+					if (key) {
+		                return data_user.get(elem, key)
+					}
+					// get or set data, always return object
+					return data_user.getData(elem, true)
+	            }
+	        }
+	    },
+	    _data: function(elem, key, val) {
+	        if (undefined !== val) {
+	            // set val
+	            data_priv.set(elem, key, val)
+	        } else {
+	            if (key && 'object' == typeof key) {
+	                // set multi
+	                for (var k in key) {
+	                    $._data(elem, k, key[k])
+	                }
+	            } else {
+	                // get
+	                return data_priv.get(elem, key)
+	            }
+	        }
+	    },
+	    removeData: function(elem, key) {
+	        data_user.remove(elem, key)
+	    }
+	})
+
+	$.fn.extend({
+	      text: function(val) {
+	        return $.access(this, $.text, null, val)
+	    }
+	    , html: function(val) {
+	        return $.access(this, $.html, null, val)
+	    }
+	    , attr: function(key, val) {
+	        return $.access(this, $.attr, key, val)
+	    }
+	    , prop: function(key, val) {
+	        return $.access(this, $.prop, key, val)
+	    }
+	    , css: function(key, val) {
+	        return $.access(this, $.css, key, val)
+	    }
+	    , data: function(key, val) {
+	        return $.access(this, $.data, key, val)
+	    }
+	    , _data: function(key, val) {
+	        return $.access(this, $.data, key, val)
+	    }
+	    , removeData: function(key) {
+	        return $.access(this, $.removeData, key, undefined, true)
+	    }
+	})
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var uid = __webpack_require__(26)
+
+	module.exports = Data
+
+	function Data() {
+		this.expando = uid()
+		this.cache = [null]
+	}
+
+	var proto = Data.prototype
+
+	proto.get = function(owner, key) {
+		var data = this.getData(owner)
+		if (null == key) {
+			return data
+		}
+		return data[key]
+	}
+
+	proto.set = function(owner, key, value) {
+		var data = this.getData(owner, true)
+		data[key] = value
+		return owner
+	}
+
+	proto.remove = function(owner, key) {
+		if (undefined === key) {
+			this.discard(owner)
+		} else {
+			var data = this.getData(owner)
+			delete data[key]
+		}
+		return owner
+	}
+
+	proto.getData = function(owner, shouldCreate) {
+		var data = {}
+		if (owner) {
+			var count = owner[this.expando]
+			var cache = this.cache
+			if (count) {
+				return cache[count]
+			}
+			if (shouldCreate) {
+				owner[this.expando] = cache.length
+				cache.push(data)
+			}
+		}
+		return data
+	}
+
+	proto.discard = function(owner) {
+		if (owner && owner[this.expando]) {
+			// old IE will crash on element `delete`
+			owner[this.expando] = undefined
+		}
+	}
+
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(4)
+	var $ = __webpack_require__(3)
+
+	$.buildFragment = function(elems, context) {
+		context = context || document
+		var fragment = context.createDocumentFragment()
+		for (var i = 0, elem; elem = elems[i++];) {
+			var nodes = []
+			if ('string' == typeof elem) {
+				if (elem.indexOf('<') == -1) {
+					nodes.push(context.createTextNode(elem))
+				} else {
+					var div = document.createElement('div')
+					div.innerHTML = elem
+					$.toArray(div.childNodes, nodes)
+				}
+			} else if ('object' == typeof elem) {
+				if (elem.nodeType) {
+					nodes.push(elem)
+				} else {
+					$.toArray(elem, nodes)
+				}
+
+			}
+		}
+		for (var i = 0, node; node = nodes[i++];) {
+			fragment.appendChild(node)
+		}
+		return fragment
+	}
+
+
+	$.fn.extend({
+	      domManip: function(args, fn) {
+	        return this.each(function() {
+	            var node = $.buildFragment(args)
+	            // always build to one node(fragment)
+	            fn.call(this, node)
+	        })
+	    }
+	    , remove: function() {
+	        return this.domManip(arguments, function() {
+	            if (this.parentNode) {
+	                this.parentNode.removeChild(this)
+	            }
+	        })
+	    }
+	    , before: function() {
+	        return this.domManip(arguments, function(elem) {
+	            if (elem.parentNode) {
+	                elem.parentNode.insertBefore(elem, this)
+	            }
+	        })
+	    }
+	    , after: function() {
+	        return this.domManip(arguments, function(elem) {
+	            if (elem.parentNode) {
+	                elem.parentNode.insertBefore(elem, this.nextSibling)
+	            }
+	        })
+	    }
+	    , append: function() {
+	        return this.domManip(arguments, function(elem) {
+	            this.appendChild(elem)
+	        })
+	    }
+	})
+
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(3)
+	var _ = __webpack_require__(4)
+
+	var display = 'display'
+
+	_.each('show hide toggle'.split(' '), function(key) {
+		$.fn[key] = function() {
+	        return this.each(function(i, el) {
+	            var act = key
+	            var old = $.css(el, display)
+	            var isHiden = 'none' == old
+	            if ('toggle' == key) {
+	                act = 'hide'
+	                if (isHiden) {
+	                    act = 'show'
+	                }
+	            }
+	            if ('show' == act && isHiden) {
+	                var css = $._data(el, display) || '' // '' clear display value
+	                $.css(el, display, css)
+	            } else if ('hide' == act && !isHiden) {
+	                $._data(el, display, old)
+	                $.css(el, display, 'none')
+	            }
+	        })
+	    }
+	})
+
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {var querystring = __webpack_require__(47)
+	var $ = __webpack_require__(3)
+	var uid = __webpack_require__(26)
+
+	var cors = 'withCredentials'
+
+	var support = {}
+
+	$.support = support
+
+	var ajaxSetting = {
+	    xhr: function() {
+	        try {
+	            if (window.XMLHttpRequest) {
+	                return new XMLHttpRequest()
+	            }
+	            return new ActiveXObject('Microsoft.XMLHTTP')
+	        } catch (e) {}
+	    },
+	    jsonp: 'callback'
+	}
+
+	$.ajaxSetting = ajaxSetting
+
+	function getScript(url, opt, cb) {
+	    var head = $('head')[0]
+	    var script = document.createElement('script')
+
+	    function finish(err) {
+	        if (script) {
+	            if (cb) {
+	                // fake xhr
+	                var xhr = {
+	                    status: 200
+	                }
+	                if (err) {
+	                    xhr = {
+	                        status: 0
+	                    }
+	                }
+	                cb(err, xhr)
+	            }
+	            script.onload = script.onerror = script.onreadystatechange = null
+	            head.removeChild(script)
+	            script = null
+	        }
+	    }
+
+	    function send() {
+	        script.async = true
+	        script.src = url
+	        script.onload = script.onerror = script.onreadystatechange = function(ev) {
+	            var state = script.readyState
+	            if (ev && 'error' == ev.type) { // old browser has no onerror
+	                finish('error')
+	            } else if (!state || /loaded|complete/.test(state)) { // new browser has no state
+	                finish(null)
+	            }
+	        }
+	        head.appendChild(script)
+	    }
+
+	    return {
+	        abort: function() {
+	            cb = null
+	            finish()
+	        },
+	        send: send
+	    }
+	}
+
+	function request(url, opt, cb) {
+
+	    // cb can only be called once
+	    if ('function' == typeof opt) {
+	        cb = opt
+	        opt = {}
+	    }
+
+	    var hasCalled = false
+	    var callback = function(err, res, body) {
+	        if (hasCalled) return
+	        cb = cb || $.noop
+	        hasCalled = true
+	        cb(err, res, body)
+	    }
+
+	    var dataType = opt.dataType || 'text' // html, script, jsonp, text
+
+	    var req
+	    var isJsonp = false
+	    if ('jsonp' == dataType) {
+	        isJsonp = true
+	        var jsonp = opt.jsonp || ajaxSetting.jsonp
+	        var jsonpCallback = opt.jsonpCallback || [$.expando, $.now(), Math.random()].join('_')
+	        jsonpCallback = jsonpCallback.replace(/[^\w|$]/g, '')
+	        var keyTmpl = jsonp + '=?'
+	        var query = $.extend({}, opt.data)
+	        if (url.indexOf(keyTmpl) != -1) {
+	            url.replace(keyTmpl, jsonp + '=' + jsonpCallback)
+	        } else {
+	            query[jsonp] = jsonpCallback
+	        }
+	        if (!opt.cache) {
+	            query._ = $.now()
+	        }
+	        url = bindQuery2url(url, query)
+
+	        dataType = 'script'
+	        global[jsonpCallback] = function(ret) { // only get first one
+	            callback(null, {
+	                status: 200
+	            }, ret)
+	            global[jsonpCallback] = null
+	        }
+	    }
+	    if ('script' == dataType) {
+	        req = getScript(url, opt, isJsonp ? null : callback)
+	    } else if (/html|text/.test(dataType)) {
+	        req = getXhr(url, opt, callback)
+	    }
+	    req.send()
+
+	    if (opt.timeout) {
+	        setTimeout(function() {
+	            req.abort() // should never call callback, because user know he abort it
+	            callback('timeout', {
+	                status: 0,
+	                readyState: 0,
+	                statusText: 'timeout'
+	            })
+	            if (isJsonp) {
+	                window[jsonpCallback] = $.noop
+	            }
+	        }, opt.timeout)
+	    }
+	}
+
+	$.ajax = function(opt) {
+	    // TODO fuck the status, statusText, even for jsonp
+		// we use `$.ajax(opt)` instead of `$.ajax(url, opt)`
+		// because zepto only support `$.ajax(opt)`, jquery support both
+		// http://zeptojs.com/#$.ajax
+	    var ret = {}
+		opt = opt || {}
+	    request(opt.url, opt, function(err, xhr, body) {
+	        xhr = xhr || {}
+	        var jqxhr = {
+	            status: xhr.status,
+	            statusText: xhr.statusText,
+	            readyState: xhr.readyState
+	        }
+	        $.extend(ret, jqxhr)
+	        // success, timeout, error
+	        var resText = 'success'
+	        if (err || 200 != ret.status) {
+	            resText = 'error'
+	            if ('timeout' == err) {
+	                resText = 'timeout'
+	            }
+	            opt.error && opt.error(ret, resText, xhr.statusText)
+	        } else {
+	            opt.success && opt.success(body || xhr.responseText, resText, ret)
+	        }
+	        opt.complete && opt.complete(ret, resText)
+	    })
+	    return ret
+	}
+
+	$.each(['get', 'post'], function(i, method) {
+	    $[method] = function(url, data, callback, dataType) {
+	        if ('function' == typeof data) {
+	            dataType = callback
+	            callback = data
+	            data = undefined
+	        }
+	        $.ajax({
+				url: url,
+	            type: method,
+	            dataType: dataType,
+	            data: data,
+	            success: callback
+	        })
+	    }
+	})
+
+	function getXhr(url, opt, cb) {
+
+	    var xhr = ajaxSetting.xhr()
+
+	    function send() {
+	        if (!xhr) return
+	        var type = opt.type || 'GET'
+
+	        url = bindQuery2url(url, opt.data)
+
+	        xhr.open(type, url, !cb.async)
+
+	        if (cors in xhr) {
+	            support.cors = true
+	            xhr[cors] = true // should after open
+	        }
+
+	        var headers = opt.headers
+	        if (headers) {
+	            for (var key in headers) {
+	                xhr.setRequestHeader(key, headers[key])
+	            }
+	        }
+
+	        xhr.send(opt.data || null)
+
+	        var handler = function() {
+	            if (handler &&  4 === xhr.readyState) {
+	                handler = undefined
+	                cb && cb(null, xhr, xhr.responseText)
+	            }
+	        }
+
+	        if (false === opt.async) {
+	            handler()
+	        } else if (4 === xhr.readyState) {
+	            setTimeout(handler)
+	        } else {
+	            xhr.onreadystatechange = handler
+	        }
+	    }
+
+	    function abort() {
+	        if (!xhr) return
+	        cb = null
+	        xhr.abort()
+	    }
+
+	    return {
+	        send: send,
+	        abort: abort
+	    }
+
+	}
+
+	function bindQuery2url(url, query) {
+	    if (-1 == url.indexOf('?')) {
+	        url += '?'
+	    }
+	    var last = url.charAt(url.length - 1)
+	    if ('&' != last && '?' != last) {
+	        url += '&'
+	    }
+	    return url + querystring.stringify(query)
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(48)
+	var is = _.is
+
+	var defaultOption = {
+		sep: '&',
+		eq: '=',
+		encode: encodeURIComponent,
+		decode: decodeURIComponent,
+		keepRaw: false,
+		sort: null,
+		ignoreValues: [undefined]
+	}
+
+	exports.parse = function(qs, sep, eq, opt) {
+		qs += ''
+		opt = getOpt(sep, eq, opt)
+		var decode = opt.decode
+		// var ret = {}
+		qs = qs.split(opt.sep)
+
+		return _.reduce(qs, function(ret, arr) {
+			arr = arr.split(opt.eq)
+			if (2 == arr.length) {
+				var k = arr[0]
+				var v = arr[1]
+				if (!opt.keepRaw) {
+					try {
+						k = decode(k)
+						v = decode(v)
+					} catch (ignore) {}
+				}
+				ret[k] = v
+			}
+			return ret
+		}, {})
+	}
+
+	exports.stringify = function(obj, sep, eq, opt) {
+		opt = getOpt(sep, eq, opt)
+
+		var keys = _.keys(obj)
+
+		var sort = opt.sort
+		if (sort) {
+			if (is.fn(sort)) {
+				keys.sort(sort)
+			} else {
+				keys.sort()
+			}
+		}
+
+		var encode = opt.encode
+
+		var arr = []
+		_.each(keys, function(key) {
+			var val = obj[key]
+			if (!_.includes(opt.ignoreValues, val)) {
+				if (is.nan(val) || null == val) {
+					val = ''
+				}
+				if (!opt.keepRaw) {
+					key = encode(key)
+					val = encode(val)
+				}
+				arr.push(key + opt.eq + val)
+			}
+		})
+		return arr.join(opt.sep)
+	}
+
+	function getOpt(sep, eq, opt) {
+		// can be
+		// _
+		// opt
+		// sep, opt
+		// sep, eq, opt
+		opt = _.find(arguments, function(val) {
+			return is.obj(val)
+		})
+		sep = is.nos(sep) ? sep : undefined
+		eq = is.nos(eq) ? eq : undefined
+		opt = _.extend({}, defaultOption, opt, {sep: sep, eq: eq})
+		return opt
+	}
+
+
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(49)
+
+	/* webpack only
+	if (DEBUG && global.console) {
+		console.debug('debug mode')
+	}
+	*/
+
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var cou = __webpack_require__(6)
+
+	module.exports = cou.extend(_, cou)
+
+	__webpack_require__(50)
+	__webpack_require__(51)
+	__webpack_require__(52)
+	__webpack_require__(54)
+	__webpack_require__(55)
+	__webpack_require__(56)
+
+	_.mixin(_, _)
+
+	function _(val) {
+		if (!(this instanceof _)) return new _(val)
+		this.__value = val
+		this.__chain = false
+	}
+
+
+
+/***/ },
+/* 50 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(49)
+
+	var each = _.each
+	var includes = _.includes
+	var is = _.is
+	var proto = Array.prototype
+
+	_.reject = function(arr, fn) {
+		return _.filter(arr, function(val, i, arr) {
+			return !fn(val, i, arr)
+		})
+	}
+
+	_.without = function(arr) {
+		var other = _.slice(arguments, 1)
+		return _.difference(arr, other)
+	}
+
+	_.difference = function(arr, other) {
+		var ret = []
+		_.each(arr, function(val) {
+			if (!includes(other, val)) {
+				ret.push(val)
+			}
+		})
+		return ret
+	}
+
+	_.pluck = function(arr, key) {
+		return _.map(arr, function(item) {
+			if (item) return item[key]
+		})
+	}
+
+	_.size = function(arr) {
+		var len = _.len(arr)
+		if (null == len) {
+			len = _.keys(arr).length
+		}
+		return len
+	}
+
+	_.first = function(arr) {
+		if (arr) return arr[0]
+	}
+
+	_.last = function(arr) {
+		var len = _.len(arr)
+		if (len) {
+			return arr[len - 1]
+		}
+	}
+
+	_.asyncMap = function(arr, fn, cb) {
+		// desperate
+		var ret = []
+		var count = 0
+		var hasDone, hasStart
+
+		each(arr, function(arg, i) {
+			hasStart = true
+			fn(arg, function(err, val) {
+				if (hasDone) return
+				count++
+				if (err) {
+					hasDone = true
+					return cb(err)
+				}
+				ret[i] = val
+				if (count == arr.length) {
+					hasDone = true
+					cb(null, ret)
+				}
+			})
+		})
+
+		if (!hasStart) cb(null) // empty
+	}
+
+	_.uniq = function(arr) {
+		var ret = []
+		each(arr, function(item) {
+			if (!includes(ret, item)) ret.push(item)
+		})
+		return ret
+	}
+
+	_.flatten = function(arrs) {
+		var ret = []
+		each(arrs, function(arr) {
+			if (is.arraylike(arr)) {
+				each(arr, function(item) {
+					ret.push(item)
+				})
+			} else ret.push(arr)
+		})
+		return ret
+	}
+
+	_.union = function() {
+		return _.uniq(_.flatten(arguments))
+	}
+
+	_.sample = function(arr, n) {
+		var ret = _.toArray(arr)
+		var len = ret.length
+		var need = Math.min(n || 1, len)
+		for (var i = 0; i < len; i++) {
+			var rand = _.random(i, len - 1)
+			var tmp = ret[rand]
+			ret[rand] = ret[i]
+			ret[i] = tmp
+		}
+		ret.length = need
+		if (null == n) {
+			return ret[0]
+		}
+		return ret
+	}
+
+	_.shuffle = function(arr) {
+		return _.sample(arr, Infinity)
+	}
+
+	_.compact = function(arr) {
+		return _.filter(arr, _.identity)
+	}
+
+	_.rest = function(arr) {
+		return _.slice(arr, 1)
+	}
+
+	_.invoke = function() {
+		var args = arguments
+		var arr = args[0]
+		var fn = args[1]
+		var isFunc = is.fn(fn)
+		args = _.slice(args, 2)
+
+		return _.map(arr, function(item) {
+			if (isFunc) {
+				return fn.apply(item, args)
+			}
+			if (null != item) {
+				var method = item[fn]
+				if (is.fn(method)) {
+					return method.apply(item, args)
+				}
+			}
+		})
+	}
+
+	_.partition = function(arr, fn) {
+		var hash = _.groupBy(arr, function(val, i, arr) {
+			var ret = fn(val, i, arr)
+			if (ret) return 1
+			return 2
+		})
+		return [hash[1] || [], hash[2] || []]
+	}
+
+	_.groupBy = function(arr, fn) {
+		var hash = {}
+		_.each(arr, function(val, i, arr) {
+			var ret = fn(val, i, arr)
+			hash[ret] = hash[ret] || []
+			hash[ret].push(val)
+		})
+		return hash
+	}
+
+	_.range = function() {
+		var args = arguments
+		if (args.length < 2) {
+			return _.range(args[1], args[0])
+		}
+		var start = args[0] || 0
+		var last = args[1] || 0
+		var step = args[2]
+		if (!is.num(step)) {
+			step = 1
+		}
+		var count = last - start
+		if (0 != step) {
+			count = count / step
+		}
+		var ret = []
+		var val = start
+		for (var i = 0; i < count; i++) {
+			ret.push(val)
+			val += step
+		}
+		return ret
+	}
+
+	_.pullAt = function(arr) {
+		// `_.at` but mutate
+		var indexes = _.slice(arguments, 1)
+		return mutateDifference(arr, indexes)
+	}
+
+	function mutateDifference(arr, indexes) {
+		var ret = []
+		var len = _.len(indexes)
+		if (len) {
+			indexes = indexes.sort(function(a, b) {
+				return a - b
+			})
+			while (len--) {
+				var index = indexes[len]
+				ret.push(proto.splice.call(arr, index, 1)[0])
+			}
+		}
+		ret.reverse()
+		return ret
+	}
+
+	_.remove = function(arr, fn) {
+		// `_.filter` but mutate
+		var len = _.len(arr) || 0
+		var indexes = []
+		while (len--) {
+			if (fn(arr[len], len, arr)) {
+				indexes.push(len)
+			}
+		}
+		return mutateDifference(arr, indexes)
+	}
+
+	_.fill = function(val, start, end) {
+		// TODO
+	}
+
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(49)
+
+	var is = _.is
+	var each = _.each
+	var forIn = _.forIn
+
+	_.only = function(obj, keys) {
+		obj = obj || {}
+		if (is.str(keys)) keys = keys.split(/ +/)
+		return _.reduce(keys, function(ret, key) {
+			if (null != obj[key]) ret[key] = obj[key]
+			return ret
+		}, {})
+	}
+
+	_.values = function(obj) {
+		return _.map(_.keys(obj), function(key) {
+			return obj[key]
+		})
+	}
+
+	_.pick = function(obj, fn) {
+		if (!is.fn(fn)) {
+			return _.pick(obj, function(val, key) {
+				return key == fn
+			})
+		}
+		var ret = {}
+		forIn(obj, function(val, key, obj) {
+			if (fn(val, key, obj)) {
+				ret[key] = val
+			}
+		})
+		return ret
+	}
+
+	_.functions = function(obj) {
+		return _.keys(_.pick(obj, function(val) {
+			return is.fn(val)
+		}))
+	}
+
+	_.mapKeys = function(obj, fn) {
+		var ret = {}
+		forIn(obj, function(val, key, obj) {
+			var newKey = fn(val, key, obj)
+			ret[newKey] = val
+		})
+		return ret
+	}
+
+	_.mapObject = _.mapValues = function(obj, fn) {
+		var ret = {}
+		forIn(obj, function(val, key, obj) {
+			ret[key] = fn(val, key, obj)
+		})
+		return ret
+	}
+
+	// return value when walk through path, otherwise return empty
+	_.get = function(obj, path) {
+		path = toPath(path)
+		if (path.length) {
+			var flag = _.every(path, function(key) {
+				if (null != obj) { // obj can be indexed
+					obj = obj[key]
+					return true
+				}
+			})
+			if (flag) return obj
+		}
+	}
+
+	_.has = function(obj, path) {
+		path = toPath(path)
+		if (path.length) {
+			var flag = _.every(path, function(key) {
+				if (null != obj && is.owns(obj, key)) {
+					obj = obj[key]
+					return true
+				}
+			})
+			if (flag) return true
+		}
+		return false
+	}
+
+	_.set = function(obj, path, val) {
+		path = toPath(path)
+		var cur = obj
+		_.every(path, function(key, i) {
+			if (is.oof(cur)) {
+				if (i + 1 == path.length) {
+					cur[key] = val
+				} else {
+					var item = cur[key]
+					if (null == item) {
+						// fill value with {} or []
+						var item = {}
+						if (~~key == key) {
+							item = []
+						}
+					}
+					cur = cur[key] = item
+					return true
+				}
+			}
+		})
+		return obj
+	}
+
+	_.create = (function() {
+		function Object() {} // so it seems like Object.create
+		return function(proto, property) {
+			// not same as Object.create, Object.create(proto, propertyDescription)
+			if ('object' != typeof proto) {
+				// null is ok
+				proto = null
+			}
+			Object.prototype = proto
+			return _.extend(new Object, property)
+		}
+	})()
+
+	_.defaults = function() {
+		var args = arguments
+		var target = args[0]
+		var sources = _.slice(args, 1)
+		if (target) {
+			_.each(sources, function(src) {
+				_.mapObject(src, function(val, key) {
+					if (is.undef(target[key])) {
+						target[key] = val
+					}
+				})
+			})
+		}
+		return target
+	}
+
+	_.isMatch = function(obj, src) {
+		var ret = true
+		obj = obj || {}
+		forIn(src, function(val, key) {
+			if (val !== obj[key]) {
+				ret = false
+				return false
+			}
+		})
+		return ret
+	}
+
+	_.toPlainObject = function(val) {
+		var ret = {}
+		forIn(val, function(val, key) {
+			ret[key] = val
+		})
+		return ret
+	}
+
+	_.invert = function(obj) {
+		var ret = {}
+		forIn(obj, function(val, key) {
+			ret[val] = key
+		})
+		return ret
+	}
+
+	// topath, copy from lodash
+
+	var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\n\\]|\\.)*?)\2)\]/g
+	var reEscapeChar = /\\(\\)?/g;
+
+	function toPath(val) {
+		if (is.array(val)) return val
+		var ret = []
+		_.tostr(val).replace(rePropName, function(match, number, quote, string) {
+			var item = number || match
+			if (quote) {
+				item = string.replace(reEscapeChar, '$1')
+			}
+			ret.push(item)
+		})
+		return ret
+	}
+
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(49)
+
+	var is = _.is
+	var slice = _.slice
+
+	_.bind = function(fn, ctx) {
+		if (is.str(ctx)) {
+			var obj = fn
+			fn = obj[ctx]
+			ctx = obj
+		}
+		if (!is.fn(fn)) return fn
+		var args = slice(arguments, 2)
+		ctx = ctx || this
+		return function() {
+			return fn.apply(ctx, _.flatten([args, arguments]))
+		}
+	}
+
+	// from lang.js `Function.prototype.inherits`
+	// so belong to function
+	_.inherits = function(ctor, superCtor) {
+		ctor.super_ = superCtor
+		ctor.prototype = _.create(superCtor.prototype, {
+			constructor: ctor
+		})
+	}
+
+	_.delay = function(fn, wait) {
+		var args = _.slice(arguments, 2)
+		return setTimeout(function() {
+			fn.apply(this, args)
+		}, wait)
+	}
+
+	_.before = function(n, fn) {
+		return function() {
+			if (n > 1) {
+				n--
+				return fn.apply(this, arguments)
+			}
+		}
+	}
+
+	_.once = function(fn) {
+		return _.before(2, fn)
+	}
+
+	_.after = function(n, fn) {
+		return function() {
+			if (n > 1) {
+				n--
+			} else {
+				return fn.apply(this, arguments)
+			}
+		}
+	}
+
+	_.throttle = function(fn, wait, opt) {
+		wait = wait || 0
+		opt = _.extend({
+			leading: true,
+			trailing: true,
+			maxWait: wait
+		}, opt)
+		return _.debounce(fn, wait, opt)
+	}
+
+	_.debounce = function(fn, wait, opt) {
+		wait = wait || 0
+		opt = _.extend({
+			leading: false,
+			trailing: true
+		}, opt)
+		var maxWait = opt.maxWait
+		var lastExec = 0 // wait
+		var lastCall = 0 // just for maxWait
+		var now = _.now()
+		var timer
+
+		if (!opt.leading) {
+			lastExec = now
+		}
+
+		function ifIsCD() {
+			if (now - lastExec > wait) return false
+			if (maxWait && now - lastCall > maxWait) return false
+			return true
+		}
+
+		function exec(fn, ctx, args) {
+			lastExec = _.now() // update last exec
+			return fn.apply(ctx, args)
+		}
+
+		function cancel() {
+			if (timer) {
+				clearTimeout(timer)
+				timer = null
+			}
+		}
+
+		function debounced() {
+			now = _.now() // update now
+			var isCD = ifIsCD()
+			lastCall = now // update last call
+			var me = this
+			var args = arguments
+
+			cancel()
+
+			if (!isCD) {
+				exec(fn, me, args)
+			} else {
+				if (opt.trailing) {
+					timer = _.delay(function() {
+						exec(fn, me, args)
+					}, wait)
+				}
+			}
+		}
+
+		debounced.cancel = cancel
+
+		return debounced
+	}
+
+	function memoize(fn) {
+		var cache = new memoize.Cache
+		function memoized() {
+			var args = arguments
+			var key = args[0]
+			if (!cache.has(key)) {
+				var ret = fn.apply(this, args)
+				cache.set(key, ret)
+			}
+			return cache.get(key)
+		}
+		memoized.cache = cache
+		return memoized
+	}
+
+	memoize.Cache = __webpack_require__(53)
+
+	_.memoize = memoize
+
+	_.wrap = function(val, fn) {
+		return function() {
+			var args = [val]
+			args.push.apply(args, arguments)
+			return fn.apply(this, args)
+		}
+	}
+
+	_.curry = function(fn) {
+		var len = fn.length
+		return setter([])
+
+		function setter(args) {
+			return function() {
+				var arr = args.concat(_.slice(arguments))
+				if (arr.length >= len) {
+					arr.length = len
+					return fn.apply(this, arr)
+				}
+				return setter(arr)
+			}
+		}
+	}
+
+
+/***/ },
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(49)
+	var is = _.is
+
+	module.exports = Cache
+
+	function Cache() {
+		this.data = {}
+	}
+
+	var proto = Cache.prototype
+
+	proto.has = function(key) {
+		return is.owns(this.data, key)
+	}
+
+	proto.get = function(key) {
+		return this.data[key]
+	}
+
+	proto.set = function(key, val) {
+		this.data[key] = val
+	}
+
+	proto['delete'] = function(key) {
+		delete this.data[key]
+	}
+
+
+/***/ },
+/* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(49)
+	var is = _.is
+
+	_.now = function() {
+		return +new Date
+	}
+
+	_.constant = function(val) {
+		return function() {
+			return val
+		}
+	}
+
+	_.identity = function(val) {
+		return val
+	}
+
+	_.random = function(min, max) {
+		return min + Math.floor(Math.random() * (max - min + 1))
+	}
+
+	_.mixin = function(dst, src, opt) {
+		var keys = _.functions(src)
+		if (dst) {
+			if (is.fn(dst)) {
+				opt = opt || {}
+				var isChain = !!opt.chain
+				// add to prototype
+				var proto = dst.prototype
+				_.each(keys, function(key) {
+					var fn = src[key]
+					proto[key] = function() {
+						var me = this
+						var args = [me.__value]
+						args.push.apply(args, arguments)
+						var ret = fn.apply(me, args)
+						if (me.__chain) {
+							me.__value = ret
+							return me
+						}
+						return ret
+					}
+				})
+			} else {
+				_.each(keys, function(key) {
+					dst[key] = src[key]
+				})
+			}
+		}
+		return dst
+	}
+
+	_.chain = function(val) {
+		var ret = _(val)
+		ret.__chain = true
+		return ret
+	}
+
+	_.value = function() {
+		this.__chain = false
+		return this.__value
+	}
+
+
+/***/ },
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(49)
+
+	_.tostr = tostr
+
+	var indexOf = _.indexOf
+
+	_.capitalize = function(str) {
+		str = tostr(str)
+		return str.charAt(0).toUpperCase() + str.substr(1)
+	}
+
+	_.decapitalize = function(str) {
+		str = tostr(str)
+		return str.charAt(0).toLowerCase() + str.substr(1)
+	}
+
+	_.camelCase = function(str) {
+		str = tostr(str)
+		var arr = str.split(/[^\w]|_+/)
+		arr = _.map(arr, function(val) {
+			return _.capitalize(val)
+		})
+		return _.decapitalize(arr.join(''))
+	}
+
+	_.startsWith = function(str, val) {
+		return 0 == indexOf(str, val)
+	}
+
+	_.endsWith = function(str, val) {
+		val += '' // null => 'null'
+		return val == _.slice(str, _.len(str) - _.len(val))
+	}
+
+	_.lower = function(str) {
+		return tostr(str).toLowerCase()
+	}
+
+	_.upper = function(str) {
+		return tostr(str).toUpperCase()
+	}
+
+	_.repeat = function(str, count) {
+		return _.map(_.range(count), function() {
+			return str
+		}).join('')
+	}
+
+	_.padLeft = function(str, len, chars) {
+		str = _.tostr(str)
+		len = len || 0
+		var delta = len - str.length
+		return getPadStr(chars, delta) + str
+	}
+
+	_.padRight = function(str, len, chars) {
+		str = _.tostr(str)
+		len = len || 0
+		var delta = len - str.length
+		return str + getPadStr(chars, delta)
+	}
+
+	function getPadStr(chars, len) {
+		chars = _.tostr(chars) || ' ' // '' will never end
+		var count = Math.floor(len / chars.length) + 1
+		return _.repeat(chars, count).slice(0, len)
+	}
+
+	function tostr(str) {
+		if (str || 0 == str) return str + ''
+		return ''
+	}
+
+
+/***/ },
+/* 56 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = module.exports = __webpack_require__(49)
+
+	_.sum = function(arr) {
+		return _.reduce(arr, function(sum, val) {
+			return sum + val
+		}, 0)
+	}
+
+	_.max = function(arr, fn) {
+		var index = -1
+		var data = -Infinity
+		fn = fn || _.identity
+		_.each(arr, function(val, i) {
+			val = fn(val)
+			if (val > data) {
+				data = val
+				index = i
+			}
+		})
+		if (index > -1) {
+			return arr[index]
+		}
+		return data
+	}
+
+	_.min = function(arr, fn) {
+		var index = -1
+		var data = Infinity
+		fn = fn || _.identity
+		_.each(arr, function(val, i) {
+			val = fn(val)
+			if (val < data) {
+				data = val
+				index = i
+			}
+		})
+		if (index > -1) {
+			return arr[index]
+		}
+		return data
+	}
+
+
+/***/ },
+/* 57 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(3)
+	var _ = __webpack_require__(4)
+
+	_.each('width height'.split(' '), function(type) {
+		_.each(['inner', 'outer', ''], function(opt) {
+
+			var funcName = type
+			var upper = type.charAt(0).toUpperCase() + type.substr(1)
+			if (opt) {
+				funcName = opt + upper
+			}
+
+			$.fn[funcName] = function() {
+				var el = this[0]
+				if (!el) return
+				var ret = 0
+				if ('outer' == opt) {
+					ret = el['offset' + upper]
+				} else {
+					// TODO too complex!
+					ret = el['offset' + upper]
+				}
+				return parseFloat(ret) || 0
+			}
+
+		})
+	})
+
+	$.fn.offset = function() {
+		var el = this[0]
+		if (!el) return
+		var offset = el.getBoundingClientRect()
+		return _.only(offset, 'left top')
+	}
+
+
+/***/ },
+/* 58 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(4)
+	var $ = __webpack_require__(3)
+
+	// https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
+	function ClassList(elem) {}
+
+	var proto = ClassList.prototype
+
+	_.extend(proto, {
+		add: function() {
+			var classes = classListGetter(this)
+			this.className = _.union(classes, arguments).join(' ')
+		},
+		remove: function() {
+			var classes = classListGetter(this)
+			this.className = _.difference(classes, arguments).join(' ')
+		},
+		contains: function(name) {
+			return _.includes(classListGetter(this), name)
+		},
+		toggle: function(name, force) {
+			var has = proto.contains.call(this, name)
+			var method = 'add'
+			if (true != force) {
+				if (has || false == force) {
+					method = 'remove'
+				}
+			}
+			proto[method].call(this, name)
+		}
+	})
+
+	function classListGetter(el) {
+		return _.trim(el.className).split(/\s+/)
+	}
+
+	_.each('add remove toggle'.split(' '), function(key) {
+		$.fn[key + 'Class'] = function() {
+			var args = arguments
+			return this.each(function() {
+				proto[key].apply(this, args)
+			})
+		}
+	})
+
+	$.fn.hasClass = function(name) {
+		return _.every(this, function(el) {
+			return proto.contains.call(el, name)
+		})
+	}
+
+
+/***/ },
+/* 59 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(4)
+	var $ = __webpack_require__(3)
+
+	function merge(arr) {
+		return _.union.apply(null, arr)
+	}
+
+	var one = {
+		children: function(node) {
+			var ret = []
+			var son = node.firstChild
+			for (; son; son = son.nextSibling) {
+				if (1 == son.nodeType) {
+					ret.push(son)
+				}
+			}
+			return ret
+		},
+		parent: function(node) {
+			return node.parentNode
+		}
+	}
+
+	_.each('children parent'.split(' '), function(key) {
+		$.fn[key] = function() {
+			return merge(_.map(this, function(node) {
+				return one[key].apply(null, arguments)
+			}))
+		}
+	})
+
+
+/***/ },
+/* 60 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(4);
+	var content = __webpack_require__(61);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(11)(content, {});
+	var update = __webpack_require__(68)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -30970,21 +36301,21 @@
 	}
 
 /***/ },
-/* 4 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(5)();
+	exports = module.exports = __webpack_require__(62)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "/*!\n * Bootstrap v3.3.6 (http://getbootstrap.com)\n * Copyright 2011-2015 Twitter, Inc.\n * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)\n */\n/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */\nhtml {\n  font-family: sans-serif;\n  -webkit-text-size-adjust: 100%;\n      -ms-text-size-adjust: 100%;\n}\nbody {\n  margin: 0;\n}\narticle,\naside,\ndetails,\nfigcaption,\nfigure,\nfooter,\nheader,\nhgroup,\nmain,\nmenu,\nnav,\nsection,\nsummary {\n  display: block;\n}\naudio,\ncanvas,\nprogress,\nvideo {\n  display: inline-block;\n  vertical-align: baseline;\n}\naudio:not([controls]) {\n  display: none;\n  height: 0;\n}\n[hidden],\ntemplate {\n  display: none;\n}\na {\n  background-color: transparent;\n}\na:active,\na:hover {\n  outline: 0;\n}\nabbr[title] {\n  border-bottom: 1px dotted;\n}\nb,\nstrong {\n  font-weight: bold;\n}\ndfn {\n  font-style: italic;\n}\nh1 {\n  margin: .67em 0;\n  font-size: 2em;\n}\nmark {\n  color: #000;\n  background: #ff0;\n}\nsmall {\n  font-size: 80%;\n}\nsub,\nsup {\n  position: relative;\n  font-size: 75%;\n  line-height: 0;\n  vertical-align: baseline;\n}\nsup {\n  top: -.5em;\n}\nsub {\n  bottom: -.25em;\n}\nimg {\n  border: 0;\n}\nsvg:not(:root) {\n  overflow: hidden;\n}\nfigure {\n  margin: 1em 40px;\n}\nhr {\n  height: 0;\n  -webkit-box-sizing: content-box;\n     -moz-box-sizing: content-box;\n          box-sizing: content-box;\n}\npre {\n  overflow: auto;\n}\ncode,\nkbd,\npre,\nsamp {\n  font-family: monospace, monospace;\n  font-size: 1em;\n}\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  margin: 0;\n  font: inherit;\n  color: inherit;\n}\nbutton {\n  overflow: visible;\n}\nbutton,\nselect {\n  text-transform: none;\n}\nbutton,\nhtml input[type=\"button\"],\ninput[type=\"reset\"],\ninput[type=\"submit\"] {\n  -webkit-appearance: button;\n  cursor: pointer;\n}\nbutton[disabled],\nhtml input[disabled] {\n  cursor: default;\n}\nbutton::-moz-focus-inner,\ninput::-moz-focus-inner {\n  padding: 0;\n  border: 0;\n}\ninput {\n  line-height: normal;\n}\ninput[type=\"checkbox\"],\ninput[type=\"radio\"] {\n  -webkit-box-sizing: border-box;\n     -moz-box-sizing: border-box;\n          box-sizing: border-box;\n  padding: 0;\n}\ninput[type=\"number\"]::-webkit-inner-spin-button,\ninput[type=\"number\"]::-webkit-outer-spin-button {\n  height: auto;\n}\ninput[type=\"search\"] {\n  -webkit-box-sizing: content-box;\n     -moz-box-sizing: content-box;\n          box-sizing: content-box;\n  -webkit-appearance: textfield;\n}\ninput[type=\"search\"]::-webkit-search-cancel-button,\ninput[type=\"search\"]::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\nfieldset {\n  padding: .35em .625em .75em;\n  margin: 0 2px;\n  border: 1px solid #c0c0c0;\n}\nlegend {\n  padding: 0;\n  border: 0;\n}\ntextarea {\n  overflow: auto;\n}\noptgroup {\n  font-weight: bold;\n}\ntable {\n  border-spacing: 0;\n  border-collapse: collapse;\n}\ntd,\nth {\n  padding: 0;\n}\n/*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */\n@media print {\n  *,\n  *:before,\n  *:after {\n    color: #000 !important;\n    text-shadow: none !important;\n    background: transparent !important;\n    -webkit-box-shadow: none !important;\n            box-shadow: none !important;\n  }\n  a,\n  a:visited {\n    text-decoration: underline;\n  }\n  a[href]:after {\n    content: \" (\" attr(href) \")\";\n  }\n  abbr[title]:after {\n    content: \" (\" attr(title) \")\";\n  }\n  a[href^=\"#\"]:after,\n  a[href^=\"javascript:\"]:after {\n    content: \"\";\n  }\n  pre,\n  blockquote {\n    border: 1px solid #999;\n\n    page-break-inside: avoid;\n  }\n  thead {\n    display: table-header-group;\n  }\n  tr,\n  img {\n    page-break-inside: avoid;\n  }\n  img {\n    max-width: 100% !important;\n  }\n  p,\n  h2,\n  h3 {\n    orphans: 3;\n    widows: 3;\n  }\n  h2,\n  h3 {\n    page-break-after: avoid;\n  }\n  .navbar {\n    display: none;\n  }\n  .btn > .caret,\n  .dropup > .btn > .caret {\n    border-top-color: #000 !important;\n  }\n  .label {\n    border: 1px solid #000;\n  }\n  .table {\n    border-collapse: collapse !important;\n  }\n  .table td,\n  .table th {\n    background-color: #fff !important;\n  }\n  .table-bordered th,\n  .table-bordered td {\n    border: 1px solid #ddd !important;\n  }\n}\n@font-face {\n  font-family: 'Glyphicons Halflings';\n\n  src: url(" + __webpack_require__(6) + ");\n  src: url(" + __webpack_require__(6) + "?#iefix) format('embedded-opentype'), url(" + __webpack_require__(7) + ") format('woff2'), url(" + __webpack_require__(8) + ") format('woff'), url(" + __webpack_require__(9) + ") format('truetype'), url(" + __webpack_require__(10) + "#glyphicons_halflingsregular) format('svg');\n}\n.glyphicon {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  font-family: 'Glyphicons Halflings';\n  font-style: normal;\n  font-weight: normal;\n  line-height: 1;\n\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n.glyphicon-asterisk:before {\n  content: \"*\";\n}\n.glyphicon-plus:before {\n  content: \"+\";\n}\n.glyphicon-euro:before,\n.glyphicon-eur:before {\n  content: \"\\20AC\";\n}\n.glyphicon-minus:before {\n  content: \"\\2212\";\n}\n.glyphicon-cloud:before {\n  content: \"\\2601\";\n}\n.glyphicon-envelope:before {\n  content: \"\\2709\";\n}\n.glyphicon-pencil:before {\n  content: \"\\270F\";\n}\n.glyphicon-glass:before {\n  content: \"\\E001\";\n}\n.glyphicon-music:before {\n  content: \"\\E002\";\n}\n.glyphicon-search:before {\n  content: \"\\E003\";\n}\n.glyphicon-heart:before {\n  content: \"\\E005\";\n}\n.glyphicon-star:before {\n  content: \"\\E006\";\n}\n.glyphicon-star-empty:before {\n  content: \"\\E007\";\n}\n.glyphicon-user:before {\n  content: \"\\E008\";\n}\n.glyphicon-film:before {\n  content: \"\\E009\";\n}\n.glyphicon-th-large:before {\n  content: \"\\E010\";\n}\n.glyphicon-th:before {\n  content: \"\\E011\";\n}\n.glyphicon-th-list:before {\n  content: \"\\E012\";\n}\n.glyphicon-ok:before {\n  content: \"\\E013\";\n}\n.glyphicon-remove:before {\n  content: \"\\E014\";\n}\n.glyphicon-zoom-in:before {\n  content: \"\\E015\";\n}\n.glyphicon-zoom-out:before {\n  content: \"\\E016\";\n}\n.glyphicon-off:before {\n  content: \"\\E017\";\n}\n.glyphicon-signal:before {\n  content: \"\\E018\";\n}\n.glyphicon-cog:before {\n  content: \"\\E019\";\n}\n.glyphicon-trash:before {\n  content: \"\\E020\";\n}\n.glyphicon-home:before {\n  content: \"\\E021\";\n}\n.glyphicon-file:before {\n  content: \"\\E022\";\n}\n.glyphicon-time:before {\n  content: \"\\E023\";\n}\n.glyphicon-road:before {\n  content: \"\\E024\";\n}\n.glyphicon-download-alt:before {\n  content: \"\\E025\";\n}\n.glyphicon-download:before {\n  content: \"\\E026\";\n}\n.glyphicon-upload:before {\n  content: \"\\E027\";\n}\n.glyphicon-inbox:before {\n  content: \"\\E028\";\n}\n.glyphicon-play-circle:before {\n  content: \"\\E029\";\n}\n.glyphicon-repeat:before {\n  content: \"\\E030\";\n}\n.glyphicon-refresh:before {\n  content: \"\\E031\";\n}\n.glyphicon-list-alt:before {\n  content: \"\\E032\";\n}\n.glyphicon-lock:before {\n  content: \"\\E033\";\n}\n.glyphicon-flag:before {\n  content: \"\\E034\";\n}\n.glyphicon-headphones:before {\n  content: \"\\E035\";\n}\n.glyphicon-volume-off:before {\n  content: \"\\E036\";\n}\n.glyphicon-volume-down:before {\n  content: \"\\E037\";\n}\n.glyphicon-volume-up:before {\n  content: \"\\E038\";\n}\n.glyphicon-qrcode:before {\n  content: \"\\E039\";\n}\n.glyphicon-barcode:before {\n  content: \"\\E040\";\n}\n.glyphicon-tag:before {\n  content: \"\\E041\";\n}\n.glyphicon-tags:before {\n  content: \"\\E042\";\n}\n.glyphicon-book:before {\n  content: \"\\E043\";\n}\n.glyphicon-bookmark:before {\n  content: \"\\E044\";\n}\n.glyphicon-print:before {\n  content: \"\\E045\";\n}\n.glyphicon-camera:before {\n  content: \"\\E046\";\n}\n.glyphicon-font:before {\n  content: \"\\E047\";\n}\n.glyphicon-bold:before {\n  content: \"\\E048\";\n}\n.glyphicon-italic:before {\n  content: \"\\E049\";\n}\n.glyphicon-text-height:before {\n  content: \"\\E050\";\n}\n.glyphicon-text-width:before {\n  content: \"\\E051\";\n}\n.glyphicon-align-left:before {\n  content: \"\\E052\";\n}\n.glyphicon-align-center:before {\n  content: \"\\E053\";\n}\n.glyphicon-align-right:before {\n  content: \"\\E054\";\n}\n.glyphicon-align-justify:before {\n  content: \"\\E055\";\n}\n.glyphicon-list:before {\n  content: \"\\E056\";\n}\n.glyphicon-indent-left:before {\n  content: \"\\E057\";\n}\n.glyphicon-indent-right:before {\n  content: \"\\E058\";\n}\n.glyphicon-facetime-video:before {\n  content: \"\\E059\";\n}\n.glyphicon-picture:before {\n  content: \"\\E060\";\n}\n.glyphicon-map-marker:before {\n  content: \"\\E062\";\n}\n.glyphicon-adjust:before {\n  content: \"\\E063\";\n}\n.glyphicon-tint:before {\n  content: \"\\E064\";\n}\n.glyphicon-edit:before {\n  content: \"\\E065\";\n}\n.glyphicon-share:before {\n  content: \"\\E066\";\n}\n.glyphicon-check:before {\n  content: \"\\E067\";\n}\n.glyphicon-move:before {\n  content: \"\\E068\";\n}\n.glyphicon-step-backward:before {\n  content: \"\\E069\";\n}\n.glyphicon-fast-backward:before {\n  content: \"\\E070\";\n}\n.glyphicon-backward:before {\n  content: \"\\E071\";\n}\n.glyphicon-play:before {\n  content: \"\\E072\";\n}\n.glyphicon-pause:before {\n  content: \"\\E073\";\n}\n.glyphicon-stop:before {\n  content: \"\\E074\";\n}\n.glyphicon-forward:before {\n  content: \"\\E075\";\n}\n.glyphicon-fast-forward:before {\n  content: \"\\E076\";\n}\n.glyphicon-step-forward:before {\n  content: \"\\E077\";\n}\n.glyphicon-eject:before {\n  content: \"\\E078\";\n}\n.glyphicon-chevron-left:before {\n  content: \"\\E079\";\n}\n.glyphicon-chevron-right:before {\n  content: \"\\E080\";\n}\n.glyphicon-plus-sign:before {\n  content: \"\\E081\";\n}\n.glyphicon-minus-sign:before {\n  content: \"\\E082\";\n}\n.glyphicon-remove-sign:before {\n  content: \"\\E083\";\n}\n.glyphicon-ok-sign:before {\n  content: \"\\E084\";\n}\n.glyphicon-question-sign:before {\n  content: \"\\E085\";\n}\n.glyphicon-info-sign:before {\n  content: \"\\E086\";\n}\n.glyphicon-screenshot:before {\n  content: \"\\E087\";\n}\n.glyphicon-remove-circle:before {\n  content: \"\\E088\";\n}\n.glyphicon-ok-circle:before {\n  content: \"\\E089\";\n}\n.glyphicon-ban-circle:before {\n  content: \"\\E090\";\n}\n.glyphicon-arrow-left:before {\n  content: \"\\E091\";\n}\n.glyphicon-arrow-right:before {\n  content: \"\\E092\";\n}\n.glyphicon-arrow-up:before {\n  content: \"\\E093\";\n}\n.glyphicon-arrow-down:before {\n  content: \"\\E094\";\n}\n.glyphicon-share-alt:before {\n  content: \"\\E095\";\n}\n.glyphicon-resize-full:before {\n  content: \"\\E096\";\n}\n.glyphicon-resize-small:before {\n  content: \"\\E097\";\n}\n.glyphicon-exclamation-sign:before {\n  content: \"\\E101\";\n}\n.glyphicon-gift:before {\n  content: \"\\E102\";\n}\n.glyphicon-leaf:before {\n  content: \"\\E103\";\n}\n.glyphicon-fire:before {\n  content: \"\\E104\";\n}\n.glyphicon-eye-open:before {\n  content: \"\\E105\";\n}\n.glyphicon-eye-close:before {\n  content: \"\\E106\";\n}\n.glyphicon-warning-sign:before {\n  content: \"\\E107\";\n}\n.glyphicon-plane:before {\n  content: \"\\E108\";\n}\n.glyphicon-calendar:before {\n  content: \"\\E109\";\n}\n.glyphicon-random:before {\n  content: \"\\E110\";\n}\n.glyphicon-comment:before {\n  content: \"\\E111\";\n}\n.glyphicon-magnet:before {\n  content: \"\\E112\";\n}\n.glyphicon-chevron-up:before {\n  content: \"\\E113\";\n}\n.glyphicon-chevron-down:before {\n  content: \"\\E114\";\n}\n.glyphicon-retweet:before {\n  content: \"\\E115\";\n}\n.glyphicon-shopping-cart:before {\n  content: \"\\E116\";\n}\n.glyphicon-folder-close:before {\n  content: \"\\E117\";\n}\n.glyphicon-folder-open:before {\n  content: \"\\E118\";\n}\n.glyphicon-resize-vertical:before {\n  content: \"\\E119\";\n}\n.glyphicon-resize-horizontal:before {\n  content: \"\\E120\";\n}\n.glyphicon-hdd:before {\n  content: \"\\E121\";\n}\n.glyphicon-bullhorn:before {\n  content: \"\\E122\";\n}\n.glyphicon-bell:before {\n  content: \"\\E123\";\n}\n.glyphicon-certificate:before {\n  content: \"\\E124\";\n}\n.glyphicon-thumbs-up:before {\n  content: \"\\E125\";\n}\n.glyphicon-thumbs-down:before {\n  content: \"\\E126\";\n}\n.glyphicon-hand-right:before {\n  content: \"\\E127\";\n}\n.glyphicon-hand-left:before {\n  content: \"\\E128\";\n}\n.glyphicon-hand-up:before {\n  content: \"\\E129\";\n}\n.glyphicon-hand-down:before {\n  content: \"\\E130\";\n}\n.glyphicon-circle-arrow-right:before {\n  content: \"\\E131\";\n}\n.glyphicon-circle-arrow-left:before {\n  content: \"\\E132\";\n}\n.glyphicon-circle-arrow-up:before {\n  content: \"\\E133\";\n}\n.glyphicon-circle-arrow-down:before {\n  content: \"\\E134\";\n}\n.glyphicon-globe:before {\n  content: \"\\E135\";\n}\n.glyphicon-wrench:before {\n  content: \"\\E136\";\n}\n.glyphicon-tasks:before {\n  content: \"\\E137\";\n}\n.glyphicon-filter:before {\n  content: \"\\E138\";\n}\n.glyphicon-briefcase:before {\n  content: \"\\E139\";\n}\n.glyphicon-fullscreen:before {\n  content: \"\\E140\";\n}\n.glyphicon-dashboard:before {\n  content: \"\\E141\";\n}\n.glyphicon-paperclip:before {\n  content: \"\\E142\";\n}\n.glyphicon-heart-empty:before {\n  content: \"\\E143\";\n}\n.glyphicon-link:before {\n  content: \"\\E144\";\n}\n.glyphicon-phone:before {\n  content: \"\\E145\";\n}\n.glyphicon-pushpin:before {\n  content: \"\\E146\";\n}\n.glyphicon-usd:before {\n  content: \"\\E148\";\n}\n.glyphicon-gbp:before {\n  content: \"\\E149\";\n}\n.glyphicon-sort:before {\n  content: \"\\E150\";\n}\n.glyphicon-sort-by-alphabet:before {\n  content: \"\\E151\";\n}\n.glyphicon-sort-by-alphabet-alt:before {\n  content: \"\\E152\";\n}\n.glyphicon-sort-by-order:before {\n  content: \"\\E153\";\n}\n.glyphicon-sort-by-order-alt:before {\n  content: \"\\E154\";\n}\n.glyphicon-sort-by-attributes:before {\n  content: \"\\E155\";\n}\n.glyphicon-sort-by-attributes-alt:before {\n  content: \"\\E156\";\n}\n.glyphicon-unchecked:before {\n  content: \"\\E157\";\n}\n.glyphicon-expand:before {\n  content: \"\\E158\";\n}\n.glyphicon-collapse-down:before {\n  content: \"\\E159\";\n}\n.glyphicon-collapse-up:before {\n  content: \"\\E160\";\n}\n.glyphicon-log-in:before {\n  content: \"\\E161\";\n}\n.glyphicon-flash:before {\n  content: \"\\E162\";\n}\n.glyphicon-log-out:before {\n  content: \"\\E163\";\n}\n.glyphicon-new-window:before {\n  content: \"\\E164\";\n}\n.glyphicon-record:before {\n  content: \"\\E165\";\n}\n.glyphicon-save:before {\n  content: \"\\E166\";\n}\n.glyphicon-open:before {\n  content: \"\\E167\";\n}\n.glyphicon-saved:before {\n  content: \"\\E168\";\n}\n.glyphicon-import:before {\n  content: \"\\E169\";\n}\n.glyphicon-export:before {\n  content: \"\\E170\";\n}\n.glyphicon-send:before {\n  content: \"\\E171\";\n}\n.glyphicon-floppy-disk:before {\n  content: \"\\E172\";\n}\n.glyphicon-floppy-saved:before {\n  content: \"\\E173\";\n}\n.glyphicon-floppy-remove:before {\n  content: \"\\E174\";\n}\n.glyphicon-floppy-save:before {\n  content: \"\\E175\";\n}\n.glyphicon-floppy-open:before {\n  content: \"\\E176\";\n}\n.glyphicon-credit-card:before {\n  content: \"\\E177\";\n}\n.glyphicon-transfer:before {\n  content: \"\\E178\";\n}\n.glyphicon-cutlery:before {\n  content: \"\\E179\";\n}\n.glyphicon-header:before {\n  content: \"\\E180\";\n}\n.glyphicon-compressed:before {\n  content: \"\\E181\";\n}\n.glyphicon-earphone:before {\n  content: \"\\E182\";\n}\n.glyphicon-phone-alt:before {\n  content: \"\\E183\";\n}\n.glyphicon-tower:before {\n  content: \"\\E184\";\n}\n.glyphicon-stats:before {\n  content: \"\\E185\";\n}\n.glyphicon-sd-video:before {\n  content: \"\\E186\";\n}\n.glyphicon-hd-video:before {\n  content: \"\\E187\";\n}\n.glyphicon-subtitles:before {\n  content: \"\\E188\";\n}\n.glyphicon-sound-stereo:before {\n  content: \"\\E189\";\n}\n.glyphicon-sound-dolby:before {\n  content: \"\\E190\";\n}\n.glyphicon-sound-5-1:before {\n  content: \"\\E191\";\n}\n.glyphicon-sound-6-1:before {\n  content: \"\\E192\";\n}\n.glyphicon-sound-7-1:before {\n  content: \"\\E193\";\n}\n.glyphicon-copyright-mark:before {\n  content: \"\\E194\";\n}\n.glyphicon-registration-mark:before {\n  content: \"\\E195\";\n}\n.glyphicon-cloud-download:before {\n  content: \"\\E197\";\n}\n.glyphicon-cloud-upload:before {\n  content: \"\\E198\";\n}\n.glyphicon-tree-conifer:before {\n  content: \"\\E199\";\n}\n.glyphicon-tree-deciduous:before {\n  content: \"\\E200\";\n}\n.glyphicon-cd:before {\n  content: \"\\E201\";\n}\n.glyphicon-save-file:before {\n  content: \"\\E202\";\n}\n.glyphicon-open-file:before {\n  content: \"\\E203\";\n}\n.glyphicon-level-up:before {\n  content: \"\\E204\";\n}\n.glyphicon-copy:before {\n  content: \"\\E205\";\n}\n.glyphicon-paste:before {\n  content: \"\\E206\";\n}\n.glyphicon-alert:before {\n  content: \"\\E209\";\n}\n.glyphicon-equalizer:before {\n  content: \"\\E210\";\n}\n.glyphicon-king:before {\n  content: \"\\E211\";\n}\n.glyphicon-queen:before {\n  content: \"\\E212\";\n}\n.glyphicon-pawn:before {\n  content: \"\\E213\";\n}\n.glyphicon-bishop:before {\n  content: \"\\E214\";\n}\n.glyphicon-knight:before {\n  content: \"\\E215\";\n}\n.glyphicon-baby-formula:before {\n  content: \"\\E216\";\n}\n.glyphicon-tent:before {\n  content: \"\\26FA\";\n}\n.glyphicon-blackboard:before {\n  content: \"\\E218\";\n}\n.glyphicon-bed:before {\n  content: \"\\E219\";\n}\n.glyphicon-apple:before {\n  content: \"\\F8FF\";\n}\n.glyphicon-erase:before {\n  content: \"\\E221\";\n}\n.glyphicon-hourglass:before {\n  content: \"\\231B\";\n}\n.glyphicon-lamp:before {\n  content: \"\\E223\";\n}\n.glyphicon-duplicate:before {\n  content: \"\\E224\";\n}\n.glyphicon-piggy-bank:before {\n  content: \"\\E225\";\n}\n.glyphicon-scissors:before {\n  content: \"\\E226\";\n}\n.glyphicon-bitcoin:before {\n  content: \"\\E227\";\n}\n.glyphicon-btc:before {\n  content: \"\\E227\";\n}\n.glyphicon-xbt:before {\n  content: \"\\E227\";\n}\n.glyphicon-yen:before {\n  content: \"\\A5\";\n}\n.glyphicon-jpy:before {\n  content: \"\\A5\";\n}\n.glyphicon-ruble:before {\n  content: \"\\20BD\";\n}\n.glyphicon-rub:before {\n  content: \"\\20BD\";\n}\n.glyphicon-scale:before {\n  content: \"\\E230\";\n}\n.glyphicon-ice-lolly:before {\n  content: \"\\E231\";\n}\n.glyphicon-ice-lolly-tasted:before {\n  content: \"\\E232\";\n}\n.glyphicon-education:before {\n  content: \"\\E233\";\n}\n.glyphicon-option-horizontal:before {\n  content: \"\\E234\";\n}\n.glyphicon-option-vertical:before {\n  content: \"\\E235\";\n}\n.glyphicon-menu-hamburger:before {\n  content: \"\\E236\";\n}\n.glyphicon-modal-window:before {\n  content: \"\\E237\";\n}\n.glyphicon-oil:before {\n  content: \"\\E238\";\n}\n.glyphicon-grain:before {\n  content: \"\\E239\";\n}\n.glyphicon-sunglasses:before {\n  content: \"\\E240\";\n}\n.glyphicon-text-size:before {\n  content: \"\\E241\";\n}\n.glyphicon-text-color:before {\n  content: \"\\E242\";\n}\n.glyphicon-text-background:before {\n  content: \"\\E243\";\n}\n.glyphicon-object-align-top:before {\n  content: \"\\E244\";\n}\n.glyphicon-object-align-bottom:before {\n  content: \"\\E245\";\n}\n.glyphicon-object-align-horizontal:before {\n  content: \"\\E246\";\n}\n.glyphicon-object-align-left:before {\n  content: \"\\E247\";\n}\n.glyphicon-object-align-vertical:before {\n  content: \"\\E248\";\n}\n.glyphicon-object-align-right:before {\n  content: \"\\E249\";\n}\n.glyphicon-triangle-right:before {\n  content: \"\\E250\";\n}\n.glyphicon-triangle-left:before {\n  content: \"\\E251\";\n}\n.glyphicon-triangle-bottom:before {\n  content: \"\\E252\";\n}\n.glyphicon-triangle-top:before {\n  content: \"\\E253\";\n}\n.glyphicon-console:before {\n  content: \"\\E254\";\n}\n.glyphicon-superscript:before {\n  content: \"\\E255\";\n}\n.glyphicon-subscript:before {\n  content: \"\\E256\";\n}\n.glyphicon-menu-left:before {\n  content: \"\\E257\";\n}\n.glyphicon-menu-right:before {\n  content: \"\\E258\";\n}\n.glyphicon-menu-down:before {\n  content: \"\\E259\";\n}\n.glyphicon-menu-up:before {\n  content: \"\\E260\";\n}\n* {\n  -webkit-box-sizing: border-box;\n     -moz-box-sizing: border-box;\n          box-sizing: border-box;\n}\n*:before,\n*:after {\n  -webkit-box-sizing: border-box;\n     -moz-box-sizing: border-box;\n          box-sizing: border-box;\n}\nhtml {\n  font-size: 10px;\n\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n}\nbody {\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 14px;\n  line-height: 1.42857143;\n  color: #333;\n  background-color: #fff;\n}\ninput,\nbutton,\nselect,\ntextarea {\n  font-family: inherit;\n  font-size: inherit;\n  line-height: inherit;\n}\na {\n  color: #337ab7;\n  text-decoration: none;\n}\na:hover,\na:focus {\n  color: #23527c;\n  text-decoration: underline;\n}\na:focus {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px;\n}\nfigure {\n  margin: 0;\n}\nimg {\n  vertical-align: middle;\n}\n.img-responsive,\n.thumbnail > img,\n.thumbnail a > img,\n.carousel-inner > .item > img,\n.carousel-inner > .item > a > img {\n  display: block;\n  max-width: 100%;\n  height: auto;\n}\n.img-rounded {\n  border-radius: 6px;\n}\n.img-thumbnail {\n  display: inline-block;\n  max-width: 100%;\n  height: auto;\n  padding: 4px;\n  line-height: 1.42857143;\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  -webkit-transition: all .2s ease-in-out;\n       -o-transition: all .2s ease-in-out;\n          transition: all .2s ease-in-out;\n}\n.img-circle {\n  border-radius: 50%;\n}\nhr {\n  margin-top: 20px;\n  margin-bottom: 20px;\n  border: 0;\n  border-top: 1px solid #eee;\n}\n.sr-only {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  padding: 0;\n  margin: -1px;\n  overflow: hidden;\n  clip: rect(0, 0, 0, 0);\n  border: 0;\n}\n.sr-only-focusable:active,\n.sr-only-focusable:focus {\n  position: static;\n  width: auto;\n  height: auto;\n  margin: 0;\n  overflow: visible;\n  clip: auto;\n}\n[role=\"button\"] {\n  cursor: pointer;\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\n.h1,\n.h2,\n.h3,\n.h4,\n.h5,\n.h6 {\n  font-family: inherit;\n  font-weight: 500;\n  line-height: 1.1;\n  color: inherit;\n}\nh1 small,\nh2 small,\nh3 small,\nh4 small,\nh5 small,\nh6 small,\n.h1 small,\n.h2 small,\n.h3 small,\n.h4 small,\n.h5 small,\n.h6 small,\nh1 .small,\nh2 .small,\nh3 .small,\nh4 .small,\nh5 .small,\nh6 .small,\n.h1 .small,\n.h2 .small,\n.h3 .small,\n.h4 .small,\n.h5 .small,\n.h6 .small {\n  font-weight: normal;\n  line-height: 1;\n  color: #777;\n}\nh1,\n.h1,\nh2,\n.h2,\nh3,\n.h3 {\n  margin-top: 20px;\n  margin-bottom: 10px;\n}\nh1 small,\n.h1 small,\nh2 small,\n.h2 small,\nh3 small,\n.h3 small,\nh1 .small,\n.h1 .small,\nh2 .small,\n.h2 .small,\nh3 .small,\n.h3 .small {\n  font-size: 65%;\n}\nh4,\n.h4,\nh5,\n.h5,\nh6,\n.h6 {\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\nh4 small,\n.h4 small,\nh5 small,\n.h5 small,\nh6 small,\n.h6 small,\nh4 .small,\n.h4 .small,\nh5 .small,\n.h5 .small,\nh6 .small,\n.h6 .small {\n  font-size: 75%;\n}\nh1,\n.h1 {\n  font-size: 36px;\n}\nh2,\n.h2 {\n  font-size: 30px;\n}\nh3,\n.h3 {\n  font-size: 24px;\n}\nh4,\n.h4 {\n  font-size: 18px;\n}\nh5,\n.h5 {\n  font-size: 14px;\n}\nh6,\n.h6 {\n  font-size: 12px;\n}\np {\n  margin: 0 0 10px;\n}\n.lead {\n  margin-bottom: 20px;\n  font-size: 16px;\n  font-weight: 300;\n  line-height: 1.4;\n}\n@media (min-width: 768px) {\n  .lead {\n    font-size: 21px;\n  }\n}\nsmall,\n.small {\n  font-size: 85%;\n}\nmark,\n.mark {\n  padding: .2em;\n  background-color: #fcf8e3;\n}\n.text-left {\n  text-align: left;\n}\n.text-right {\n  text-align: right;\n}\n.text-center {\n  text-align: center;\n}\n.text-justify {\n  text-align: justify;\n}\n.text-nowrap {\n  white-space: nowrap;\n}\n.text-lowercase {\n  text-transform: lowercase;\n}\n.text-uppercase {\n  text-transform: uppercase;\n}\n.text-capitalize {\n  text-transform: capitalize;\n}\n.text-muted {\n  color: #777;\n}\n.text-primary {\n  color: #337ab7;\n}\na.text-primary:hover,\na.text-primary:focus {\n  color: #286090;\n}\n.text-success {\n  color: #3c763d;\n}\na.text-success:hover,\na.text-success:focus {\n  color: #2b542c;\n}\n.text-info {\n  color: #31708f;\n}\na.text-info:hover,\na.text-info:focus {\n  color: #245269;\n}\n.text-warning {\n  color: #8a6d3b;\n}\na.text-warning:hover,\na.text-warning:focus {\n  color: #66512c;\n}\n.text-danger {\n  color: #a94442;\n}\na.text-danger:hover,\na.text-danger:focus {\n  color: #843534;\n}\n.bg-primary {\n  color: #fff;\n  background-color: #337ab7;\n}\na.bg-primary:hover,\na.bg-primary:focus {\n  background-color: #286090;\n}\n.bg-success {\n  background-color: #dff0d8;\n}\na.bg-success:hover,\na.bg-success:focus {\n  background-color: #c1e2b3;\n}\n.bg-info {\n  background-color: #d9edf7;\n}\na.bg-info:hover,\na.bg-info:focus {\n  background-color: #afd9ee;\n}\n.bg-warning {\n  background-color: #fcf8e3;\n}\na.bg-warning:hover,\na.bg-warning:focus {\n  background-color: #f7ecb5;\n}\n.bg-danger {\n  background-color: #f2dede;\n}\na.bg-danger:hover,\na.bg-danger:focus {\n  background-color: #e4b9b9;\n}\n.page-header {\n  padding-bottom: 9px;\n  margin: 40px 0 20px;\n  border-bottom: 1px solid #eee;\n}\nul,\nol {\n  margin-top: 0;\n  margin-bottom: 10px;\n}\nul ul,\nol ul,\nul ol,\nol ol {\n  margin-bottom: 0;\n}\n.list-unstyled {\n  padding-left: 0;\n  list-style: none;\n}\n.list-inline {\n  padding-left: 0;\n  margin-left: -5px;\n  list-style: none;\n}\n.list-inline > li {\n  display: inline-block;\n  padding-right: 5px;\n  padding-left: 5px;\n}\ndl {\n  margin-top: 0;\n  margin-bottom: 20px;\n}\ndt,\ndd {\n  line-height: 1.42857143;\n}\ndt {\n  font-weight: bold;\n}\ndd {\n  margin-left: 0;\n}\n@media (min-width: 768px) {\n  .dl-horizontal dt {\n    float: left;\n    width: 160px;\n    overflow: hidden;\n    clear: left;\n    text-align: right;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n  }\n  .dl-horizontal dd {\n    margin-left: 180px;\n  }\n}\nabbr[title],\nabbr[data-original-title] {\n  cursor: help;\n  border-bottom: 1px dotted #777;\n}\n.initialism {\n  font-size: 90%;\n  text-transform: uppercase;\n}\nblockquote {\n  padding: 10px 20px;\n  margin: 0 0 20px;\n  font-size: 17.5px;\n  border-left: 5px solid #eee;\n}\nblockquote p:last-child,\nblockquote ul:last-child,\nblockquote ol:last-child {\n  margin-bottom: 0;\n}\nblockquote footer,\nblockquote small,\nblockquote .small {\n  display: block;\n  font-size: 80%;\n  line-height: 1.42857143;\n  color: #777;\n}\nblockquote footer:before,\nblockquote small:before,\nblockquote .small:before {\n  content: '\\2014   \\A0';\n}\n.blockquote-reverse,\nblockquote.pull-right {\n  padding-right: 15px;\n  padding-left: 0;\n  text-align: right;\n  border-right: 5px solid #eee;\n  border-left: 0;\n}\n.blockquote-reverse footer:before,\nblockquote.pull-right footer:before,\n.blockquote-reverse small:before,\nblockquote.pull-right small:before,\n.blockquote-reverse .small:before,\nblockquote.pull-right .small:before {\n  content: '';\n}\n.blockquote-reverse footer:after,\nblockquote.pull-right footer:after,\n.blockquote-reverse small:after,\nblockquote.pull-right small:after,\n.blockquote-reverse .small:after,\nblockquote.pull-right .small:after {\n  content: '\\A0   \\2014';\n}\naddress {\n  margin-bottom: 20px;\n  font-style: normal;\n  line-height: 1.42857143;\n}\ncode,\nkbd,\npre,\nsamp {\n  font-family: Menlo, Monaco, Consolas, \"Courier New\", monospace;\n}\ncode {\n  padding: 2px 4px;\n  font-size: 90%;\n  color: #c7254e;\n  background-color: #f9f2f4;\n  border-radius: 4px;\n}\nkbd {\n  padding: 2px 4px;\n  font-size: 90%;\n  color: #fff;\n  background-color: #333;\n  border-radius: 3px;\n  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .25);\n          box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .25);\n}\nkbd kbd {\n  padding: 0;\n  font-size: 100%;\n  font-weight: bold;\n  -webkit-box-shadow: none;\n          box-shadow: none;\n}\npre {\n  display: block;\n  padding: 9.5px;\n  margin: 0 0 10px;\n  font-size: 13px;\n  line-height: 1.42857143;\n  color: #333;\n  word-break: break-all;\n  word-wrap: break-word;\n  background-color: #f5f5f5;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n}\npre code {\n  padding: 0;\n  font-size: inherit;\n  color: inherit;\n  white-space: pre-wrap;\n  background-color: transparent;\n  border-radius: 0;\n}\n.pre-scrollable {\n  max-height: 340px;\n  overflow-y: scroll;\n}\n.container {\n  padding-right: 15px;\n  padding-left: 15px;\n  margin-right: auto;\n  margin-left: auto;\n}\n@media (min-width: 768px) {\n  .container {\n    width: 750px;\n  }\n}\n@media (min-width: 992px) {\n  .container {\n    width: 970px;\n  }\n}\n@media (min-width: 1200px) {\n  .container {\n    width: 1170px;\n  }\n}\n.container-fluid {\n  padding-right: 15px;\n  padding-left: 15px;\n  margin-right: auto;\n  margin-left: auto;\n}\n.row {\n  margin-right: -15px;\n  margin-left: -15px;\n}\n.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {\n  position: relative;\n  min-height: 1px;\n  padding-right: 15px;\n  padding-left: 15px;\n}\n.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {\n  float: left;\n}\n.col-xs-12 {\n  width: 100%;\n}\n.col-xs-11 {\n  width: 91.66666667%;\n}\n.col-xs-10 {\n  width: 83.33333333%;\n}\n.col-xs-9 {\n  width: 75%;\n}\n.col-xs-8 {\n  width: 66.66666667%;\n}\n.col-xs-7 {\n  width: 58.33333333%;\n}\n.col-xs-6 {\n  width: 50%;\n}\n.col-xs-5 {\n  width: 41.66666667%;\n}\n.col-xs-4 {\n  width: 33.33333333%;\n}\n.col-xs-3 {\n  width: 25%;\n}\n.col-xs-2 {\n  width: 16.66666667%;\n}\n.col-xs-1 {\n  width: 8.33333333%;\n}\n.col-xs-pull-12 {\n  right: 100%;\n}\n.col-xs-pull-11 {\n  right: 91.66666667%;\n}\n.col-xs-pull-10 {\n  right: 83.33333333%;\n}\n.col-xs-pull-9 {\n  right: 75%;\n}\n.col-xs-pull-8 {\n  right: 66.66666667%;\n}\n.col-xs-pull-7 {\n  right: 58.33333333%;\n}\n.col-xs-pull-6 {\n  right: 50%;\n}\n.col-xs-pull-5 {\n  right: 41.66666667%;\n}\n.col-xs-pull-4 {\n  right: 33.33333333%;\n}\n.col-xs-pull-3 {\n  right: 25%;\n}\n.col-xs-pull-2 {\n  right: 16.66666667%;\n}\n.col-xs-pull-1 {\n  right: 8.33333333%;\n}\n.col-xs-pull-0 {\n  right: auto;\n}\n.col-xs-push-12 {\n  left: 100%;\n}\n.col-xs-push-11 {\n  left: 91.66666667%;\n}\n.col-xs-push-10 {\n  left: 83.33333333%;\n}\n.col-xs-push-9 {\n  left: 75%;\n}\n.col-xs-push-8 {\n  left: 66.66666667%;\n}\n.col-xs-push-7 {\n  left: 58.33333333%;\n}\n.col-xs-push-6 {\n  left: 50%;\n}\n.col-xs-push-5 {\n  left: 41.66666667%;\n}\n.col-xs-push-4 {\n  left: 33.33333333%;\n}\n.col-xs-push-3 {\n  left: 25%;\n}\n.col-xs-push-2 {\n  left: 16.66666667%;\n}\n.col-xs-push-1 {\n  left: 8.33333333%;\n}\n.col-xs-push-0 {\n  left: auto;\n}\n.col-xs-offset-12 {\n  margin-left: 100%;\n}\n.col-xs-offset-11 {\n  margin-left: 91.66666667%;\n}\n.col-xs-offset-10 {\n  margin-left: 83.33333333%;\n}\n.col-xs-offset-9 {\n  margin-left: 75%;\n}\n.col-xs-offset-8 {\n  margin-left: 66.66666667%;\n}\n.col-xs-offset-7 {\n  margin-left: 58.33333333%;\n}\n.col-xs-offset-6 {\n  margin-left: 50%;\n}\n.col-xs-offset-5 {\n  margin-left: 41.66666667%;\n}\n.col-xs-offset-4 {\n  margin-left: 33.33333333%;\n}\n.col-xs-offset-3 {\n  margin-left: 25%;\n}\n.col-xs-offset-2 {\n  margin-left: 16.66666667%;\n}\n.col-xs-offset-1 {\n  margin-left: 8.33333333%;\n}\n.col-xs-offset-0 {\n  margin-left: 0;\n}\n@media (min-width: 768px) {\n  .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {\n    float: left;\n  }\n  .col-sm-12 {\n    width: 100%;\n  }\n  .col-sm-11 {\n    width: 91.66666667%;\n  }\n  .col-sm-10 {\n    width: 83.33333333%;\n  }\n  .col-sm-9 {\n    width: 75%;\n  }\n  .col-sm-8 {\n    width: 66.66666667%;\n  }\n  .col-sm-7 {\n    width: 58.33333333%;\n  }\n  .col-sm-6 {\n    width: 50%;\n  }\n  .col-sm-5 {\n    width: 41.66666667%;\n  }\n  .col-sm-4 {\n    width: 33.33333333%;\n  }\n  .col-sm-3 {\n    width: 25%;\n  }\n  .col-sm-2 {\n    width: 16.66666667%;\n  }\n  .col-sm-1 {\n    width: 8.33333333%;\n  }\n  .col-sm-pull-12 {\n    right: 100%;\n  }\n  .col-sm-pull-11 {\n    right: 91.66666667%;\n  }\n  .col-sm-pull-10 {\n    right: 83.33333333%;\n  }\n  .col-sm-pull-9 {\n    right: 75%;\n  }\n  .col-sm-pull-8 {\n    right: 66.66666667%;\n  }\n  .col-sm-pull-7 {\n    right: 58.33333333%;\n  }\n  .col-sm-pull-6 {\n    right: 50%;\n  }\n  .col-sm-pull-5 {\n    right: 41.66666667%;\n  }\n  .col-sm-pull-4 {\n    right: 33.33333333%;\n  }\n  .col-sm-pull-3 {\n    right: 25%;\n  }\n  .col-sm-pull-2 {\n    right: 16.66666667%;\n  }\n  .col-sm-pull-1 {\n    right: 8.33333333%;\n  }\n  .col-sm-pull-0 {\n    right: auto;\n  }\n  .col-sm-push-12 {\n    left: 100%;\n  }\n  .col-sm-push-11 {\n    left: 91.66666667%;\n  }\n  .col-sm-push-10 {\n    left: 83.33333333%;\n  }\n  .col-sm-push-9 {\n    left: 75%;\n  }\n  .col-sm-push-8 {\n    left: 66.66666667%;\n  }\n  .col-sm-push-7 {\n    left: 58.33333333%;\n  }\n  .col-sm-push-6 {\n    left: 50%;\n  }\n  .col-sm-push-5 {\n    left: 41.66666667%;\n  }\n  .col-sm-push-4 {\n    left: 33.33333333%;\n  }\n  .col-sm-push-3 {\n    left: 25%;\n  }\n  .col-sm-push-2 {\n    left: 16.66666667%;\n  }\n  .col-sm-push-1 {\n    left: 8.33333333%;\n  }\n  .col-sm-push-0 {\n    left: auto;\n  }\n  .col-sm-offset-12 {\n    margin-left: 100%;\n  }\n  .col-sm-offset-11 {\n    margin-left: 91.66666667%;\n  }\n  .col-sm-offset-10 {\n    margin-left: 83.33333333%;\n  }\n  .col-sm-offset-9 {\n    margin-left: 75%;\n  }\n  .col-sm-offset-8 {\n    margin-left: 66.66666667%;\n  }\n  .col-sm-offset-7 {\n    margin-left: 58.33333333%;\n  }\n  .col-sm-offset-6 {\n    margin-left: 50%;\n  }\n  .col-sm-offset-5 {\n    margin-left: 41.66666667%;\n  }\n  .col-sm-offset-4 {\n    margin-left: 33.33333333%;\n  }\n  .col-sm-offset-3 {\n    margin-left: 25%;\n  }\n  .col-sm-offset-2 {\n    margin-left: 16.66666667%;\n  }\n  .col-sm-offset-1 {\n    margin-left: 8.33333333%;\n  }\n  .col-sm-offset-0 {\n    margin-left: 0;\n  }\n}\n@media (min-width: 992px) {\n  .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {\n    float: left;\n  }\n  .col-md-12 {\n    width: 100%;\n  }\n  .col-md-11 {\n    width: 91.66666667%;\n  }\n  .col-md-10 {\n    width: 83.33333333%;\n  }\n  .col-md-9 {\n    width: 75%;\n  }\n  .col-md-8 {\n    width: 66.66666667%;\n  }\n  .col-md-7 {\n    width: 58.33333333%;\n  }\n  .col-md-6 {\n    width: 50%;\n  }\n  .col-md-5 {\n    width: 41.66666667%;\n  }\n  .col-md-4 {\n    width: 33.33333333%;\n  }\n  .col-md-3 {\n    width: 25%;\n  }\n  .col-md-2 {\n    width: 16.66666667%;\n  }\n  .col-md-1 {\n    width: 8.33333333%;\n  }\n  .col-md-pull-12 {\n    right: 100%;\n  }\n  .col-md-pull-11 {\n    right: 91.66666667%;\n  }\n  .col-md-pull-10 {\n    right: 83.33333333%;\n  }\n  .col-md-pull-9 {\n    right: 75%;\n  }\n  .col-md-pull-8 {\n    right: 66.66666667%;\n  }\n  .col-md-pull-7 {\n    right: 58.33333333%;\n  }\n  .col-md-pull-6 {\n    right: 50%;\n  }\n  .col-md-pull-5 {\n    right: 41.66666667%;\n  }\n  .col-md-pull-4 {\n    right: 33.33333333%;\n  }\n  .col-md-pull-3 {\n    right: 25%;\n  }\n  .col-md-pull-2 {\n    right: 16.66666667%;\n  }\n  .col-md-pull-1 {\n    right: 8.33333333%;\n  }\n  .col-md-pull-0 {\n    right: auto;\n  }\n  .col-md-push-12 {\n    left: 100%;\n  }\n  .col-md-push-11 {\n    left: 91.66666667%;\n  }\n  .col-md-push-10 {\n    left: 83.33333333%;\n  }\n  .col-md-push-9 {\n    left: 75%;\n  }\n  .col-md-push-8 {\n    left: 66.66666667%;\n  }\n  .col-md-push-7 {\n    left: 58.33333333%;\n  }\n  .col-md-push-6 {\n    left: 50%;\n  }\n  .col-md-push-5 {\n    left: 41.66666667%;\n  }\n  .col-md-push-4 {\n    left: 33.33333333%;\n  }\n  .col-md-push-3 {\n    left: 25%;\n  }\n  .col-md-push-2 {\n    left: 16.66666667%;\n  }\n  .col-md-push-1 {\n    left: 8.33333333%;\n  }\n  .col-md-push-0 {\n    left: auto;\n  }\n  .col-md-offset-12 {\n    margin-left: 100%;\n  }\n  .col-md-offset-11 {\n    margin-left: 91.66666667%;\n  }\n  .col-md-offset-10 {\n    margin-left: 83.33333333%;\n  }\n  .col-md-offset-9 {\n    margin-left: 75%;\n  }\n  .col-md-offset-8 {\n    margin-left: 66.66666667%;\n  }\n  .col-md-offset-7 {\n    margin-left: 58.33333333%;\n  }\n  .col-md-offset-6 {\n    margin-left: 50%;\n  }\n  .col-md-offset-5 {\n    margin-left: 41.66666667%;\n  }\n  .col-md-offset-4 {\n    margin-left: 33.33333333%;\n  }\n  .col-md-offset-3 {\n    margin-left: 25%;\n  }\n  .col-md-offset-2 {\n    margin-left: 16.66666667%;\n  }\n  .col-md-offset-1 {\n    margin-left: 8.33333333%;\n  }\n  .col-md-offset-0 {\n    margin-left: 0;\n  }\n}\n@media (min-width: 1200px) {\n  .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {\n    float: left;\n  }\n  .col-lg-12 {\n    width: 100%;\n  }\n  .col-lg-11 {\n    width: 91.66666667%;\n  }\n  .col-lg-10 {\n    width: 83.33333333%;\n  }\n  .col-lg-9 {\n    width: 75%;\n  }\n  .col-lg-8 {\n    width: 66.66666667%;\n  }\n  .col-lg-7 {\n    width: 58.33333333%;\n  }\n  .col-lg-6 {\n    width: 50%;\n  }\n  .col-lg-5 {\n    width: 41.66666667%;\n  }\n  .col-lg-4 {\n    width: 33.33333333%;\n  }\n  .col-lg-3 {\n    width: 25%;\n  }\n  .col-lg-2 {\n    width: 16.66666667%;\n  }\n  .col-lg-1 {\n    width: 8.33333333%;\n  }\n  .col-lg-pull-12 {\n    right: 100%;\n  }\n  .col-lg-pull-11 {\n    right: 91.66666667%;\n  }\n  .col-lg-pull-10 {\n    right: 83.33333333%;\n  }\n  .col-lg-pull-9 {\n    right: 75%;\n  }\n  .col-lg-pull-8 {\n    right: 66.66666667%;\n  }\n  .col-lg-pull-7 {\n    right: 58.33333333%;\n  }\n  .col-lg-pull-6 {\n    right: 50%;\n  }\n  .col-lg-pull-5 {\n    right: 41.66666667%;\n  }\n  .col-lg-pull-4 {\n    right: 33.33333333%;\n  }\n  .col-lg-pull-3 {\n    right: 25%;\n  }\n  .col-lg-pull-2 {\n    right: 16.66666667%;\n  }\n  .col-lg-pull-1 {\n    right: 8.33333333%;\n  }\n  .col-lg-pull-0 {\n    right: auto;\n  }\n  .col-lg-push-12 {\n    left: 100%;\n  }\n  .col-lg-push-11 {\n    left: 91.66666667%;\n  }\n  .col-lg-push-10 {\n    left: 83.33333333%;\n  }\n  .col-lg-push-9 {\n    left: 75%;\n  }\n  .col-lg-push-8 {\n    left: 66.66666667%;\n  }\n  .col-lg-push-7 {\n    left: 58.33333333%;\n  }\n  .col-lg-push-6 {\n    left: 50%;\n  }\n  .col-lg-push-5 {\n    left: 41.66666667%;\n  }\n  .col-lg-push-4 {\n    left: 33.33333333%;\n  }\n  .col-lg-push-3 {\n    left: 25%;\n  }\n  .col-lg-push-2 {\n    left: 16.66666667%;\n  }\n  .col-lg-push-1 {\n    left: 8.33333333%;\n  }\n  .col-lg-push-0 {\n    left: auto;\n  }\n  .col-lg-offset-12 {\n    margin-left: 100%;\n  }\n  .col-lg-offset-11 {\n    margin-left: 91.66666667%;\n  }\n  .col-lg-offset-10 {\n    margin-left: 83.33333333%;\n  }\n  .col-lg-offset-9 {\n    margin-left: 75%;\n  }\n  .col-lg-offset-8 {\n    margin-left: 66.66666667%;\n  }\n  .col-lg-offset-7 {\n    margin-left: 58.33333333%;\n  }\n  .col-lg-offset-6 {\n    margin-left: 50%;\n  }\n  .col-lg-offset-5 {\n    margin-left: 41.66666667%;\n  }\n  .col-lg-offset-4 {\n    margin-left: 33.33333333%;\n  }\n  .col-lg-offset-3 {\n    margin-left: 25%;\n  }\n  .col-lg-offset-2 {\n    margin-left: 16.66666667%;\n  }\n  .col-lg-offset-1 {\n    margin-left: 8.33333333%;\n  }\n  .col-lg-offset-0 {\n    margin-left: 0;\n  }\n}\ntable {\n  background-color: transparent;\n}\ncaption {\n  padding-top: 8px;\n  padding-bottom: 8px;\n  color: #777;\n  text-align: left;\n}\nth {\n  text-align: left;\n}\n.table {\n  width: 100%;\n  max-width: 100%;\n  margin-bottom: 20px;\n}\n.table > thead > tr > th,\n.table > tbody > tr > th,\n.table > tfoot > tr > th,\n.table > thead > tr > td,\n.table > tbody > tr > td,\n.table > tfoot > tr > td {\n  padding: 8px;\n  line-height: 1.42857143;\n  vertical-align: top;\n  border-top: 1px solid #ddd;\n}\n.table > thead > tr > th {\n  vertical-align: bottom;\n  border-bottom: 2px solid #ddd;\n}\n.table > caption + thead > tr:first-child > th,\n.table > colgroup + thead > tr:first-child > th,\n.table > thead:first-child > tr:first-child > th,\n.table > caption + thead > tr:first-child > td,\n.table > colgroup + thead > tr:first-child > td,\n.table > thead:first-child > tr:first-child > td {\n  border-top: 0;\n}\n.table > tbody + tbody {\n  border-top: 2px solid #ddd;\n}\n.table .table {\n  background-color: #fff;\n}\n.table-condensed > thead > tr > th,\n.table-condensed > tbody > tr > th,\n.table-condensed > tfoot > tr > th,\n.table-condensed > thead > tr > td,\n.table-condensed > tbody > tr > td,\n.table-condensed > tfoot > tr > td {\n  padding: 5px;\n}\n.table-bordered {\n  border: 1px solid #ddd;\n}\n.table-bordered > thead > tr > th,\n.table-bordered > tbody > tr > th,\n.table-bordered > tfoot > tr > th,\n.table-bordered > thead > tr > td,\n.table-bordered > tbody > tr > td,\n.table-bordered > tfoot > tr > td {\n  border: 1px solid #ddd;\n}\n.table-bordered > thead > tr > th,\n.table-bordered > thead > tr > td {\n  border-bottom-width: 2px;\n}\n.table-striped > tbody > tr:nth-of-type(odd) {\n  background-color: #f9f9f9;\n}\n.table-hover > tbody > tr:hover {\n  background-color: #f5f5f5;\n}\ntable col[class*=\"col-\"] {\n  position: static;\n  display: table-column;\n  float: none;\n}\ntable td[class*=\"col-\"],\ntable th[class*=\"col-\"] {\n  position: static;\n  display: table-cell;\n  float: none;\n}\n.table > thead > tr > td.active,\n.table > tbody > tr > td.active,\n.table > tfoot > tr > td.active,\n.table > thead > tr > th.active,\n.table > tbody > tr > th.active,\n.table > tfoot > tr > th.active,\n.table > thead > tr.active > td,\n.table > tbody > tr.active > td,\n.table > tfoot > tr.active > td,\n.table > thead > tr.active > th,\n.table > tbody > tr.active > th,\n.table > tfoot > tr.active > th {\n  background-color: #f5f5f5;\n}\n.table-hover > tbody > tr > td.active:hover,\n.table-hover > tbody > tr > th.active:hover,\n.table-hover > tbody > tr.active:hover > td,\n.table-hover > tbody > tr:hover > .active,\n.table-hover > tbody > tr.active:hover > th {\n  background-color: #e8e8e8;\n}\n.table > thead > tr > td.success,\n.table > tbody > tr > td.success,\n.table > tfoot > tr > td.success,\n.table > thead > tr > th.success,\n.table > tbody > tr > th.success,\n.table > tfoot > tr > th.success,\n.table > thead > tr.success > td,\n.table > tbody > tr.success > td,\n.table > tfoot > tr.success > td,\n.table > thead > tr.success > th,\n.table > tbody > tr.success > th,\n.table > tfoot > tr.success > th {\n  background-color: #dff0d8;\n}\n.table-hover > tbody > tr > td.success:hover,\n.table-hover > tbody > tr > th.success:hover,\n.table-hover > tbody > tr.success:hover > td,\n.table-hover > tbody > tr:hover > .success,\n.table-hover > tbody > tr.success:hover > th {\n  background-color: #d0e9c6;\n}\n.table > thead > tr > td.info,\n.table > tbody > tr > td.info,\n.table > tfoot > tr > td.info,\n.table > thead > tr > th.info,\n.table > tbody > tr > th.info,\n.table > tfoot > tr > th.info,\n.table > thead > tr.info > td,\n.table > tbody > tr.info > td,\n.table > tfoot > tr.info > td,\n.table > thead > tr.info > th,\n.table > tbody > tr.info > th,\n.table > tfoot > tr.info > th {\n  background-color: #d9edf7;\n}\n.table-hover > tbody > tr > td.info:hover,\n.table-hover > tbody > tr > th.info:hover,\n.table-hover > tbody > tr.info:hover > td,\n.table-hover > tbody > tr:hover > .info,\n.table-hover > tbody > tr.info:hover > th {\n  background-color: #c4e3f3;\n}\n.table > thead > tr > td.warning,\n.table > tbody > tr > td.warning,\n.table > tfoot > tr > td.warning,\n.table > thead > tr > th.warning,\n.table > tbody > tr > th.warning,\n.table > tfoot > tr > th.warning,\n.table > thead > tr.warning > td,\n.table > tbody > tr.warning > td,\n.table > tfoot > tr.warning > td,\n.table > thead > tr.warning > th,\n.table > tbody > tr.warning > th,\n.table > tfoot > tr.warning > th {\n  background-color: #fcf8e3;\n}\n.table-hover > tbody > tr > td.warning:hover,\n.table-hover > tbody > tr > th.warning:hover,\n.table-hover > tbody > tr.warning:hover > td,\n.table-hover > tbody > tr:hover > .warning,\n.table-hover > tbody > tr.warning:hover > th {\n  background-color: #faf2cc;\n}\n.table > thead > tr > td.danger,\n.table > tbody > tr > td.danger,\n.table > tfoot > tr > td.danger,\n.table > thead > tr > th.danger,\n.table > tbody > tr > th.danger,\n.table > tfoot > tr > th.danger,\n.table > thead > tr.danger > td,\n.table > tbody > tr.danger > td,\n.table > tfoot > tr.danger > td,\n.table > thead > tr.danger > th,\n.table > tbody > tr.danger > th,\n.table > tfoot > tr.danger > th {\n  background-color: #f2dede;\n}\n.table-hover > tbody > tr > td.danger:hover,\n.table-hover > tbody > tr > th.danger:hover,\n.table-hover > tbody > tr.danger:hover > td,\n.table-hover > tbody > tr:hover > .danger,\n.table-hover > tbody > tr.danger:hover > th {\n  background-color: #ebcccc;\n}\n.table-responsive {\n  min-height: .01%;\n  overflow-x: auto;\n}\n@media screen and (max-width: 767px) {\n  .table-responsive {\n    width: 100%;\n    margin-bottom: 15px;\n    overflow-y: hidden;\n    -ms-overflow-style: -ms-autohiding-scrollbar;\n    border: 1px solid #ddd;\n  }\n  .table-responsive > .table {\n    margin-bottom: 0;\n  }\n  .table-responsive > .table > thead > tr > th,\n  .table-responsive > .table > tbody > tr > th,\n  .table-responsive > .table > tfoot > tr > th,\n  .table-responsive > .table > thead > tr > td,\n  .table-responsive > .table > tbody > tr > td,\n  .table-responsive > .table > tfoot > tr > td {\n    white-space: nowrap;\n  }\n  .table-responsive > .table-bordered {\n    border: 0;\n  }\n  .table-responsive > .table-bordered > thead > tr > th:first-child,\n  .table-responsive > .table-bordered > tbody > tr > th:first-child,\n  .table-responsive > .table-bordered > tfoot > tr > th:first-child,\n  .table-responsive > .table-bordered > thead > tr > td:first-child,\n  .table-responsive > .table-bordered > tbody > tr > td:first-child,\n  .table-responsive > .table-bordered > tfoot > tr > td:first-child {\n    border-left: 0;\n  }\n  .table-responsive > .table-bordered > thead > tr > th:last-child,\n  .table-responsive > .table-bordered > tbody > tr > th:last-child,\n  .table-responsive > .table-bordered > tfoot > tr > th:last-child,\n  .table-responsive > .table-bordered > thead > tr > td:last-child,\n  .table-responsive > .table-bordered > tbody > tr > td:last-child,\n  .table-responsive > .table-bordered > tfoot > tr > td:last-child {\n    border-right: 0;\n  }\n  .table-responsive > .table-bordered > tbody > tr:last-child > th,\n  .table-responsive > .table-bordered > tfoot > tr:last-child > th,\n  .table-responsive > .table-bordered > tbody > tr:last-child > td,\n  .table-responsive > .table-bordered > tfoot > tr:last-child > td {\n    border-bottom: 0;\n  }\n}\nfieldset {\n  min-width: 0;\n  padding: 0;\n  margin: 0;\n  border: 0;\n}\nlegend {\n  display: block;\n  width: 100%;\n  padding: 0;\n  margin-bottom: 20px;\n  font-size: 21px;\n  line-height: inherit;\n  color: #333;\n  border: 0;\n  border-bottom: 1px solid #e5e5e5;\n}\nlabel {\n  display: inline-block;\n  max-width: 100%;\n  margin-bottom: 5px;\n  font-weight: bold;\n}\ninput[type=\"search\"] {\n  -webkit-box-sizing: border-box;\n     -moz-box-sizing: border-box;\n          box-sizing: border-box;\n}\ninput[type=\"radio\"],\ninput[type=\"checkbox\"] {\n  margin: 4px 0 0;\n  margin-top: 1px \\9;\n  line-height: normal;\n}\ninput[type=\"file\"] {\n  display: block;\n}\ninput[type=\"range\"] {\n  display: block;\n  width: 100%;\n}\nselect[multiple],\nselect[size] {\n  height: auto;\n}\ninput[type=\"file\"]:focus,\ninput[type=\"radio\"]:focus,\ninput[type=\"checkbox\"]:focus {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px;\n}\noutput {\n  display: block;\n  padding-top: 7px;\n  font-size: 14px;\n  line-height: 1.42857143;\n  color: #555;\n}\n.form-control {\n  display: block;\n  width: 100%;\n  height: 34px;\n  padding: 6px 12px;\n  font-size: 14px;\n  line-height: 1.42857143;\n  color: #555;\n  background-color: #fff;\n  background-image: none;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;\n       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;\n          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;\n}\n.form-control:focus {\n  border-color: #66afe9;\n  outline: 0;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);\n          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);\n}\n.form-control::-moz-placeholder {\n  color: #999;\n  opacity: 1;\n}\n.form-control:-ms-input-placeholder {\n  color: #999;\n}\n.form-control::-webkit-input-placeholder {\n  color: #999;\n}\n.form-control::-ms-expand {\n  background-color: transparent;\n  border: 0;\n}\n.form-control[disabled],\n.form-control[readonly],\nfieldset[disabled] .form-control {\n  background-color: #eee;\n  opacity: 1;\n}\n.form-control[disabled],\nfieldset[disabled] .form-control {\n  cursor: not-allowed;\n}\ntextarea.form-control {\n  height: auto;\n}\ninput[type=\"search\"] {\n  -webkit-appearance: none;\n}\n@media screen and (-webkit-min-device-pixel-ratio: 0) {\n  input[type=\"date\"].form-control,\n  input[type=\"time\"].form-control,\n  input[type=\"datetime-local\"].form-control,\n  input[type=\"month\"].form-control {\n    line-height: 34px;\n  }\n  input[type=\"date\"].input-sm,\n  input[type=\"time\"].input-sm,\n  input[type=\"datetime-local\"].input-sm,\n  input[type=\"month\"].input-sm,\n  .input-group-sm input[type=\"date\"],\n  .input-group-sm input[type=\"time\"],\n  .input-group-sm input[type=\"datetime-local\"],\n  .input-group-sm input[type=\"month\"] {\n    line-height: 30px;\n  }\n  input[type=\"date\"].input-lg,\n  input[type=\"time\"].input-lg,\n  input[type=\"datetime-local\"].input-lg,\n  input[type=\"month\"].input-lg,\n  .input-group-lg input[type=\"date\"],\n  .input-group-lg input[type=\"time\"],\n  .input-group-lg input[type=\"datetime-local\"],\n  .input-group-lg input[type=\"month\"] {\n    line-height: 46px;\n  }\n}\n.form-group {\n  margin-bottom: 15px;\n}\n.radio,\n.checkbox {\n  position: relative;\n  display: block;\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\n.radio label,\n.checkbox label {\n  min-height: 20px;\n  padding-left: 20px;\n  margin-bottom: 0;\n  font-weight: normal;\n  cursor: pointer;\n}\n.radio input[type=\"radio\"],\n.radio-inline input[type=\"radio\"],\n.checkbox input[type=\"checkbox\"],\n.checkbox-inline input[type=\"checkbox\"] {\n  position: absolute;\n  margin-top: 4px \\9;\n  margin-left: -20px;\n}\n.radio + .radio,\n.checkbox + .checkbox {\n  margin-top: -5px;\n}\n.radio-inline,\n.checkbox-inline {\n  position: relative;\n  display: inline-block;\n  padding-left: 20px;\n  margin-bottom: 0;\n  font-weight: normal;\n  vertical-align: middle;\n  cursor: pointer;\n}\n.radio-inline + .radio-inline,\n.checkbox-inline + .checkbox-inline {\n  margin-top: 0;\n  margin-left: 10px;\n}\ninput[type=\"radio\"][disabled],\ninput[type=\"checkbox\"][disabled],\ninput[type=\"radio\"].disabled,\ninput[type=\"checkbox\"].disabled,\nfieldset[disabled] input[type=\"radio\"],\nfieldset[disabled] input[type=\"checkbox\"] {\n  cursor: not-allowed;\n}\n.radio-inline.disabled,\n.checkbox-inline.disabled,\nfieldset[disabled] .radio-inline,\nfieldset[disabled] .checkbox-inline {\n  cursor: not-allowed;\n}\n.radio.disabled label,\n.checkbox.disabled label,\nfieldset[disabled] .radio label,\nfieldset[disabled] .checkbox label {\n  cursor: not-allowed;\n}\n.form-control-static {\n  min-height: 34px;\n  padding-top: 7px;\n  padding-bottom: 7px;\n  margin-bottom: 0;\n}\n.form-control-static.input-lg,\n.form-control-static.input-sm {\n  padding-right: 0;\n  padding-left: 0;\n}\n.input-sm {\n  height: 30px;\n  padding: 5px 10px;\n  font-size: 12px;\n  line-height: 1.5;\n  border-radius: 3px;\n}\nselect.input-sm {\n  height: 30px;\n  line-height: 30px;\n}\ntextarea.input-sm,\nselect[multiple].input-sm {\n  height: auto;\n}\n.form-group-sm .form-control {\n  height: 30px;\n  padding: 5px 10px;\n  font-size: 12px;\n  line-height: 1.5;\n  border-radius: 3px;\n}\n.form-group-sm select.form-control {\n  height: 30px;\n  line-height: 30px;\n}\n.form-group-sm textarea.form-control,\n.form-group-sm select[multiple].form-control {\n  height: auto;\n}\n.form-group-sm .form-control-static {\n  height: 30px;\n  min-height: 32px;\n  padding: 6px 10px;\n  font-size: 12px;\n  line-height: 1.5;\n}\n.input-lg {\n  height: 46px;\n  padding: 10px 16px;\n  font-size: 18px;\n  line-height: 1.3333333;\n  border-radius: 6px;\n}\nselect.input-lg {\n  height: 46px;\n  line-height: 46px;\n}\ntextarea.input-lg,\nselect[multiple].input-lg {\n  height: auto;\n}\n.form-group-lg .form-control {\n  height: 46px;\n  padding: 10px 16px;\n  font-size: 18px;\n  line-height: 1.3333333;\n  border-radius: 6px;\n}\n.form-group-lg select.form-control {\n  height: 46px;\n  line-height: 46px;\n}\n.form-group-lg textarea.form-control,\n.form-group-lg select[multiple].form-control {\n  height: auto;\n}\n.form-group-lg .form-control-static {\n  height: 46px;\n  min-height: 38px;\n  padding: 11px 16px;\n  font-size: 18px;\n  line-height: 1.3333333;\n}\n.has-feedback {\n  position: relative;\n}\n.has-feedback .form-control {\n  padding-right: 42.5px;\n}\n.form-control-feedback {\n  position: absolute;\n  top: 0;\n  right: 0;\n  z-index: 2;\n  display: block;\n  width: 34px;\n  height: 34px;\n  line-height: 34px;\n  text-align: center;\n  pointer-events: none;\n}\n.input-lg + .form-control-feedback,\n.input-group-lg + .form-control-feedback,\n.form-group-lg .form-control + .form-control-feedback {\n  width: 46px;\n  height: 46px;\n  line-height: 46px;\n}\n.input-sm + .form-control-feedback,\n.input-group-sm + .form-control-feedback,\n.form-group-sm .form-control + .form-control-feedback {\n  width: 30px;\n  height: 30px;\n  line-height: 30px;\n}\n.has-success .help-block,\n.has-success .control-label,\n.has-success .radio,\n.has-success .checkbox,\n.has-success .radio-inline,\n.has-success .checkbox-inline,\n.has-success.radio label,\n.has-success.checkbox label,\n.has-success.radio-inline label,\n.has-success.checkbox-inline label {\n  color: #3c763d;\n}\n.has-success .form-control {\n  border-color: #3c763d;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n}\n.has-success .form-control:focus {\n  border-color: #2b542c;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #67b168;\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #67b168;\n}\n.has-success .input-group-addon {\n  color: #3c763d;\n  background-color: #dff0d8;\n  border-color: #3c763d;\n}\n.has-success .form-control-feedback {\n  color: #3c763d;\n}\n.has-warning .help-block,\n.has-warning .control-label,\n.has-warning .radio,\n.has-warning .checkbox,\n.has-warning .radio-inline,\n.has-warning .checkbox-inline,\n.has-warning.radio label,\n.has-warning.checkbox label,\n.has-warning.radio-inline label,\n.has-warning.checkbox-inline label {\n  color: #8a6d3b;\n}\n.has-warning .form-control {\n  border-color: #8a6d3b;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n}\n.has-warning .form-control:focus {\n  border-color: #66512c;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #c0a16b;\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #c0a16b;\n}\n.has-warning .input-group-addon {\n  color: #8a6d3b;\n  background-color: #fcf8e3;\n  border-color: #8a6d3b;\n}\n.has-warning .form-control-feedback {\n  color: #8a6d3b;\n}\n.has-error .help-block,\n.has-error .control-label,\n.has-error .radio,\n.has-error .checkbox,\n.has-error .radio-inline,\n.has-error .checkbox-inline,\n.has-error.radio label,\n.has-error.checkbox label,\n.has-error.radio-inline label,\n.has-error.checkbox-inline label {\n  color: #a94442;\n}\n.has-error .form-control {\n  border-color: #a94442;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n}\n.has-error .form-control:focus {\n  border-color: #843534;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;\n}\n.has-error .input-group-addon {\n  color: #a94442;\n  background-color: #f2dede;\n  border-color: #a94442;\n}\n.has-error .form-control-feedback {\n  color: #a94442;\n}\n.has-feedback label ~ .form-control-feedback {\n  top: 25px;\n}\n.has-feedback label.sr-only ~ .form-control-feedback {\n  top: 0;\n}\n.help-block {\n  display: block;\n  margin-top: 5px;\n  margin-bottom: 10px;\n  color: #737373;\n}\n@media (min-width: 768px) {\n  .form-inline .form-group {\n    display: inline-block;\n    margin-bottom: 0;\n    vertical-align: middle;\n  }\n  .form-inline .form-control {\n    display: inline-block;\n    width: auto;\n    vertical-align: middle;\n  }\n  .form-inline .form-control-static {\n    display: inline-block;\n  }\n  .form-inline .input-group {\n    display: inline-table;\n    vertical-align: middle;\n  }\n  .form-inline .input-group .input-group-addon,\n  .form-inline .input-group .input-group-btn,\n  .form-inline .input-group .form-control {\n    width: auto;\n  }\n  .form-inline .input-group > .form-control {\n    width: 100%;\n  }\n  .form-inline .control-label {\n    margin-bottom: 0;\n    vertical-align: middle;\n  }\n  .form-inline .radio,\n  .form-inline .checkbox {\n    display: inline-block;\n    margin-top: 0;\n    margin-bottom: 0;\n    vertical-align: middle;\n  }\n  .form-inline .radio label,\n  .form-inline .checkbox label {\n    padding-left: 0;\n  }\n  .form-inline .radio input[type=\"radio\"],\n  .form-inline .checkbox input[type=\"checkbox\"] {\n    position: relative;\n    margin-left: 0;\n  }\n  .form-inline .has-feedback .form-control-feedback {\n    top: 0;\n  }\n}\n.form-horizontal .radio,\n.form-horizontal .checkbox,\n.form-horizontal .radio-inline,\n.form-horizontal .checkbox-inline {\n  padding-top: 7px;\n  margin-top: 0;\n  margin-bottom: 0;\n}\n.form-horizontal .radio,\n.form-horizontal .checkbox {\n  min-height: 27px;\n}\n.form-horizontal .form-group {\n  margin-right: -15px;\n  margin-left: -15px;\n}\n@media (min-width: 768px) {\n  .form-horizontal .control-label {\n    padding-top: 7px;\n    margin-bottom: 0;\n    text-align: right;\n  }\n}\n.form-horizontal .has-feedback .form-control-feedback {\n  right: 15px;\n}\n@media (min-width: 768px) {\n  .form-horizontal .form-group-lg .control-label {\n    padding-top: 11px;\n    font-size: 18px;\n  }\n}\n@media (min-width: 768px) {\n  .form-horizontal .form-group-sm .control-label {\n    padding-top: 6px;\n    font-size: 12px;\n  }\n}\n.btn {\n  display: inline-block;\n  padding: 6px 12px;\n  margin-bottom: 0;\n  font-size: 14px;\n  font-weight: normal;\n  line-height: 1.42857143;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: middle;\n  -ms-touch-action: manipulation;\n      touch-action: manipulation;\n  cursor: pointer;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  background-image: none;\n  border: 1px solid transparent;\n  border-radius: 4px;\n}\n.btn:focus,\n.btn:active:focus,\n.btn.active:focus,\n.btn.focus,\n.btn:active.focus,\n.btn.active.focus {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px;\n}\n.btn:hover,\n.btn:focus,\n.btn.focus {\n  color: #333;\n  text-decoration: none;\n}\n.btn:active,\n.btn.active {\n  background-image: none;\n  outline: 0;\n  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);\n          box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);\n}\n.btn.disabled,\n.btn[disabled],\nfieldset[disabled] .btn {\n  cursor: not-allowed;\n  filter: alpha(opacity=65);\n  -webkit-box-shadow: none;\n          box-shadow: none;\n  opacity: .65;\n}\na.btn.disabled,\nfieldset[disabled] a.btn {\n  pointer-events: none;\n}\n.btn-default {\n  color: #333;\n  background-color: #fff;\n  border-color: #ccc;\n}\n.btn-default:focus,\n.btn-default.focus {\n  color: #333;\n  background-color: #e6e6e6;\n  border-color: #8c8c8c;\n}\n.btn-default:hover {\n  color: #333;\n  background-color: #e6e6e6;\n  border-color: #adadad;\n}\n.btn-default:active,\n.btn-default.active,\n.open > .dropdown-toggle.btn-default {\n  color: #333;\n  background-color: #e6e6e6;\n  border-color: #adadad;\n}\n.btn-default:active:hover,\n.btn-default.active:hover,\n.open > .dropdown-toggle.btn-default:hover,\n.btn-default:active:focus,\n.btn-default.active:focus,\n.open > .dropdown-toggle.btn-default:focus,\n.btn-default:active.focus,\n.btn-default.active.focus,\n.open > .dropdown-toggle.btn-default.focus {\n  color: #333;\n  background-color: #d4d4d4;\n  border-color: #8c8c8c;\n}\n.btn-default:active,\n.btn-default.active,\n.open > .dropdown-toggle.btn-default {\n  background-image: none;\n}\n.btn-default.disabled:hover,\n.btn-default[disabled]:hover,\nfieldset[disabled] .btn-default:hover,\n.btn-default.disabled:focus,\n.btn-default[disabled]:focus,\nfieldset[disabled] .btn-default:focus,\n.btn-default.disabled.focus,\n.btn-default[disabled].focus,\nfieldset[disabled] .btn-default.focus {\n  background-color: #fff;\n  border-color: #ccc;\n}\n.btn-default .badge {\n  color: #fff;\n  background-color: #333;\n}\n.btn-primary {\n  color: #fff;\n  background-color: #337ab7;\n  border-color: #2e6da4;\n}\n.btn-primary:focus,\n.btn-primary.focus {\n  color: #fff;\n  background-color: #286090;\n  border-color: #122b40;\n}\n.btn-primary:hover {\n  color: #fff;\n  background-color: #286090;\n  border-color: #204d74;\n}\n.btn-primary:active,\n.btn-primary.active,\n.open > .dropdown-toggle.btn-primary {\n  color: #fff;\n  background-color: #286090;\n  border-color: #204d74;\n}\n.btn-primary:active:hover,\n.btn-primary.active:hover,\n.open > .dropdown-toggle.btn-primary:hover,\n.btn-primary:active:focus,\n.btn-primary.active:focus,\n.open > .dropdown-toggle.btn-primary:focus,\n.btn-primary:active.focus,\n.btn-primary.active.focus,\n.open > .dropdown-toggle.btn-primary.focus {\n  color: #fff;\n  background-color: #204d74;\n  border-color: #122b40;\n}\n.btn-primary:active,\n.btn-primary.active,\n.open > .dropdown-toggle.btn-primary {\n  background-image: none;\n}\n.btn-primary.disabled:hover,\n.btn-primary[disabled]:hover,\nfieldset[disabled] .btn-primary:hover,\n.btn-primary.disabled:focus,\n.btn-primary[disabled]:focus,\nfieldset[disabled] .btn-primary:focus,\n.btn-primary.disabled.focus,\n.btn-primary[disabled].focus,\nfieldset[disabled] .btn-primary.focus {\n  background-color: #337ab7;\n  border-color: #2e6da4;\n}\n.btn-primary .badge {\n  color: #337ab7;\n  background-color: #fff;\n}\n.btn-success {\n  color: #fff;\n  background-color: #5cb85c;\n  border-color: #4cae4c;\n}\n.btn-success:focus,\n.btn-success.focus {\n  color: #fff;\n  background-color: #449d44;\n  border-color: #255625;\n}\n.btn-success:hover {\n  color: #fff;\n  background-color: #449d44;\n  border-color: #398439;\n}\n.btn-success:active,\n.btn-success.active,\n.open > .dropdown-toggle.btn-success {\n  color: #fff;\n  background-color: #449d44;\n  border-color: #398439;\n}\n.btn-success:active:hover,\n.btn-success.active:hover,\n.open > .dropdown-toggle.btn-success:hover,\n.btn-success:active:focus,\n.btn-success.active:focus,\n.open > .dropdown-toggle.btn-success:focus,\n.btn-success:active.focus,\n.btn-success.active.focus,\n.open > .dropdown-toggle.btn-success.focus {\n  color: #fff;\n  background-color: #398439;\n  border-color: #255625;\n}\n.btn-success:active,\n.btn-success.active,\n.open > .dropdown-toggle.btn-success {\n  background-image: none;\n}\n.btn-success.disabled:hover,\n.btn-success[disabled]:hover,\nfieldset[disabled] .btn-success:hover,\n.btn-success.disabled:focus,\n.btn-success[disabled]:focus,\nfieldset[disabled] .btn-success:focus,\n.btn-success.disabled.focus,\n.btn-success[disabled].focus,\nfieldset[disabled] .btn-success.focus {\n  background-color: #5cb85c;\n  border-color: #4cae4c;\n}\n.btn-success .badge {\n  color: #5cb85c;\n  background-color: #fff;\n}\n.btn-info {\n  color: #fff;\n  background-color: #5bc0de;\n  border-color: #46b8da;\n}\n.btn-info:focus,\n.btn-info.focus {\n  color: #fff;\n  background-color: #31b0d5;\n  border-color: #1b6d85;\n}\n.btn-info:hover {\n  color: #fff;\n  background-color: #31b0d5;\n  border-color: #269abc;\n}\n.btn-info:active,\n.btn-info.active,\n.open > .dropdown-toggle.btn-info {\n  color: #fff;\n  background-color: #31b0d5;\n  border-color: #269abc;\n}\n.btn-info:active:hover,\n.btn-info.active:hover,\n.open > .dropdown-toggle.btn-info:hover,\n.btn-info:active:focus,\n.btn-info.active:focus,\n.open > .dropdown-toggle.btn-info:focus,\n.btn-info:active.focus,\n.btn-info.active.focus,\n.open > .dropdown-toggle.btn-info.focus {\n  color: #fff;\n  background-color: #269abc;\n  border-color: #1b6d85;\n}\n.btn-info:active,\n.btn-info.active,\n.open > .dropdown-toggle.btn-info {\n  background-image: none;\n}\n.btn-info.disabled:hover,\n.btn-info[disabled]:hover,\nfieldset[disabled] .btn-info:hover,\n.btn-info.disabled:focus,\n.btn-info[disabled]:focus,\nfieldset[disabled] .btn-info:focus,\n.btn-info.disabled.focus,\n.btn-info[disabled].focus,\nfieldset[disabled] .btn-info.focus {\n  background-color: #5bc0de;\n  border-color: #46b8da;\n}\n.btn-info .badge {\n  color: #5bc0de;\n  background-color: #fff;\n}\n.btn-warning {\n  color: #fff;\n  background-color: #f0ad4e;\n  border-color: #eea236;\n}\n.btn-warning:focus,\n.btn-warning.focus {\n  color: #fff;\n  background-color: #ec971f;\n  border-color: #985f0d;\n}\n.btn-warning:hover {\n  color: #fff;\n  background-color: #ec971f;\n  border-color: #d58512;\n}\n.btn-warning:active,\n.btn-warning.active,\n.open > .dropdown-toggle.btn-warning {\n  color: #fff;\n  background-color: #ec971f;\n  border-color: #d58512;\n}\n.btn-warning:active:hover,\n.btn-warning.active:hover,\n.open > .dropdown-toggle.btn-warning:hover,\n.btn-warning:active:focus,\n.btn-warning.active:focus,\n.open > .dropdown-toggle.btn-warning:focus,\n.btn-warning:active.focus,\n.btn-warning.active.focus,\n.open > .dropdown-toggle.btn-warning.focus {\n  color: #fff;\n  background-color: #d58512;\n  border-color: #985f0d;\n}\n.btn-warning:active,\n.btn-warning.active,\n.open > .dropdown-toggle.btn-warning {\n  background-image: none;\n}\n.btn-warning.disabled:hover,\n.btn-warning[disabled]:hover,\nfieldset[disabled] .btn-warning:hover,\n.btn-warning.disabled:focus,\n.btn-warning[disabled]:focus,\nfieldset[disabled] .btn-warning:focus,\n.btn-warning.disabled.focus,\n.btn-warning[disabled].focus,\nfieldset[disabled] .btn-warning.focus {\n  background-color: #f0ad4e;\n  border-color: #eea236;\n}\n.btn-warning .badge {\n  color: #f0ad4e;\n  background-color: #fff;\n}\n.btn-danger {\n  color: #fff;\n  background-color: #d9534f;\n  border-color: #d43f3a;\n}\n.btn-danger:focus,\n.btn-danger.focus {\n  color: #fff;\n  background-color: #c9302c;\n  border-color: #761c19;\n}\n.btn-danger:hover {\n  color: #fff;\n  background-color: #c9302c;\n  border-color: #ac2925;\n}\n.btn-danger:active,\n.btn-danger.active,\n.open > .dropdown-toggle.btn-danger {\n  color: #fff;\n  background-color: #c9302c;\n  border-color: #ac2925;\n}\n.btn-danger:active:hover,\n.btn-danger.active:hover,\n.open > .dropdown-toggle.btn-danger:hover,\n.btn-danger:active:focus,\n.btn-danger.active:focus,\n.open > .dropdown-toggle.btn-danger:focus,\n.btn-danger:active.focus,\n.btn-danger.active.focus,\n.open > .dropdown-toggle.btn-danger.focus {\n  color: #fff;\n  background-color: #ac2925;\n  border-color: #761c19;\n}\n.btn-danger:active,\n.btn-danger.active,\n.open > .dropdown-toggle.btn-danger {\n  background-image: none;\n}\n.btn-danger.disabled:hover,\n.btn-danger[disabled]:hover,\nfieldset[disabled] .btn-danger:hover,\n.btn-danger.disabled:focus,\n.btn-danger[disabled]:focus,\nfieldset[disabled] .btn-danger:focus,\n.btn-danger.disabled.focus,\n.btn-danger[disabled].focus,\nfieldset[disabled] .btn-danger.focus {\n  background-color: #d9534f;\n  border-color: #d43f3a;\n}\n.btn-danger .badge {\n  color: #d9534f;\n  background-color: #fff;\n}\n.btn-link {\n  font-weight: normal;\n  color: #337ab7;\n  border-radius: 0;\n}\n.btn-link,\n.btn-link:active,\n.btn-link.active,\n.btn-link[disabled],\nfieldset[disabled] .btn-link {\n  background-color: transparent;\n  -webkit-box-shadow: none;\n          box-shadow: none;\n}\n.btn-link,\n.btn-link:hover,\n.btn-link:focus,\n.btn-link:active {\n  border-color: transparent;\n}\n.btn-link:hover,\n.btn-link:focus {\n  color: #23527c;\n  text-decoration: underline;\n  background-color: transparent;\n}\n.btn-link[disabled]:hover,\nfieldset[disabled] .btn-link:hover,\n.btn-link[disabled]:focus,\nfieldset[disabled] .btn-link:focus {\n  color: #777;\n  text-decoration: none;\n}\n.btn-lg,\n.btn-group-lg > .btn {\n  padding: 10px 16px;\n  font-size: 18px;\n  line-height: 1.3333333;\n  border-radius: 6px;\n}\n.btn-sm,\n.btn-group-sm > .btn {\n  padding: 5px 10px;\n  font-size: 12px;\n  line-height: 1.5;\n  border-radius: 3px;\n}\n.btn-xs,\n.btn-group-xs > .btn {\n  padding: 1px 5px;\n  font-size: 12px;\n  line-height: 1.5;\n  border-radius: 3px;\n}\n.btn-block {\n  display: block;\n  width: 100%;\n}\n.btn-block + .btn-block {\n  margin-top: 5px;\n}\ninput[type=\"submit\"].btn-block,\ninput[type=\"reset\"].btn-block,\ninput[type=\"button\"].btn-block {\n  width: 100%;\n}\n.fade {\n  opacity: 0;\n  -webkit-transition: opacity .15s linear;\n       -o-transition: opacity .15s linear;\n          transition: opacity .15s linear;\n}\n.fade.in {\n  opacity: 1;\n}\n.collapse {\n  display: none;\n}\n.collapse.in {\n  display: block;\n}\ntr.collapse.in {\n  display: table-row;\n}\ntbody.collapse.in {\n  display: table-row-group;\n}\n.collapsing {\n  position: relative;\n  height: 0;\n  overflow: hidden;\n  -webkit-transition-timing-function: ease;\n       -o-transition-timing-function: ease;\n          transition-timing-function: ease;\n  -webkit-transition-duration: .35s;\n       -o-transition-duration: .35s;\n          transition-duration: .35s;\n  -webkit-transition-property: height, visibility;\n       -o-transition-property: height, visibility;\n          transition-property: height, visibility;\n}\n.caret {\n  display: inline-block;\n  width: 0;\n  height: 0;\n  margin-left: 2px;\n  vertical-align: middle;\n  border-top: 4px dashed;\n  border-top: 4px solid \\9;\n  border-right: 4px solid transparent;\n  border-left: 4px solid transparent;\n}\n.dropup,\n.dropdown {\n  position: relative;\n}\n.dropdown-toggle:focus {\n  outline: 0;\n}\n.dropdown-menu {\n  position: absolute;\n  top: 100%;\n  left: 0;\n  z-index: 1000;\n  display: none;\n  float: left;\n  min-width: 160px;\n  padding: 5px 0;\n  margin: 2px 0 0;\n  font-size: 14px;\n  text-align: left;\n  list-style: none;\n  background-color: #fff;\n  -webkit-background-clip: padding-box;\n          background-clip: padding-box;\n  border: 1px solid #ccc;\n  border: 1px solid rgba(0, 0, 0, .15);\n  border-radius: 4px;\n  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);\n          box-shadow: 0 6px 12px rgba(0, 0, 0, .175);\n}\n.dropdown-menu.pull-right {\n  right: 0;\n  left: auto;\n}\n.dropdown-menu .divider {\n  height: 1px;\n  margin: 9px 0;\n  overflow: hidden;\n  background-color: #e5e5e5;\n}\n.dropdown-menu > li > a {\n  display: block;\n  padding: 3px 20px;\n  clear: both;\n  font-weight: normal;\n  line-height: 1.42857143;\n  color: #333;\n  white-space: nowrap;\n}\n.dropdown-menu > li > a:hover,\n.dropdown-menu > li > a:focus {\n  color: #262626;\n  text-decoration: none;\n  background-color: #f5f5f5;\n}\n.dropdown-menu > .active > a,\n.dropdown-menu > .active > a:hover,\n.dropdown-menu > .active > a:focus {\n  color: #fff;\n  text-decoration: none;\n  background-color: #337ab7;\n  outline: 0;\n}\n.dropdown-menu > .disabled > a,\n.dropdown-menu > .disabled > a:hover,\n.dropdown-menu > .disabled > a:focus {\n  color: #777;\n}\n.dropdown-menu > .disabled > a:hover,\n.dropdown-menu > .disabled > a:focus {\n  text-decoration: none;\n  cursor: not-allowed;\n  background-color: transparent;\n  background-image: none;\n  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);\n}\n.open > .dropdown-menu {\n  display: block;\n}\n.open > a {\n  outline: 0;\n}\n.dropdown-menu-right {\n  right: 0;\n  left: auto;\n}\n.dropdown-menu-left {\n  right: auto;\n  left: 0;\n}\n.dropdown-header {\n  display: block;\n  padding: 3px 20px;\n  font-size: 12px;\n  line-height: 1.42857143;\n  color: #777;\n  white-space: nowrap;\n}\n.dropdown-backdrop {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 990;\n}\n.pull-right > .dropdown-menu {\n  right: 0;\n  left: auto;\n}\n.dropup .caret,\n.navbar-fixed-bottom .dropdown .caret {\n  content: \"\";\n  border-top: 0;\n  border-bottom: 4px dashed;\n  border-bottom: 4px solid \\9;\n}\n.dropup .dropdown-menu,\n.navbar-fixed-bottom .dropdown .dropdown-menu {\n  top: auto;\n  bottom: 100%;\n  margin-bottom: 2px;\n}\n@media (min-width: 768px) {\n  .navbar-right .dropdown-menu {\n    right: 0;\n    left: auto;\n  }\n  .navbar-right .dropdown-menu-left {\n    right: auto;\n    left: 0;\n  }\n}\n.btn-group,\n.btn-group-vertical {\n  position: relative;\n  display: inline-block;\n  vertical-align: middle;\n}\n.btn-group > .btn,\n.btn-group-vertical > .btn {\n  position: relative;\n  float: left;\n}\n.btn-group > .btn:hover,\n.btn-group-vertical > .btn:hover,\n.btn-group > .btn:focus,\n.btn-group-vertical > .btn:focus,\n.btn-group > .btn:active,\n.btn-group-vertical > .btn:active,\n.btn-group > .btn.active,\n.btn-group-vertical > .btn.active {\n  z-index: 2;\n}\n.btn-group .btn + .btn,\n.btn-group .btn + .btn-group,\n.btn-group .btn-group + .btn,\n.btn-group .btn-group + .btn-group {\n  margin-left: -1px;\n}\n.btn-toolbar {\n  margin-left: -5px;\n}\n.btn-toolbar .btn,\n.btn-toolbar .btn-group,\n.btn-toolbar .input-group {\n  float: left;\n}\n.btn-toolbar > .btn,\n.btn-toolbar > .btn-group,\n.btn-toolbar > .input-group {\n  margin-left: 5px;\n}\n.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {\n  border-radius: 0;\n}\n.btn-group > .btn:first-child {\n  margin-left: 0;\n}\n.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0;\n}\n.btn-group > .btn:last-child:not(:first-child),\n.btn-group > .dropdown-toggle:not(:first-child) {\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n}\n.btn-group > .btn-group {\n  float: left;\n}\n.btn-group > .btn-group:not(:first-child):not(:last-child) > .btn {\n  border-radius: 0;\n}\n.btn-group > .btn-group:first-child:not(:last-child) > .btn:last-child,\n.btn-group > .btn-group:first-child:not(:last-child) > .dropdown-toggle {\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0;\n}\n.btn-group > .btn-group:last-child:not(:first-child) > .btn:first-child {\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n}\n.btn-group .dropdown-toggle:active,\n.btn-group.open .dropdown-toggle {\n  outline: 0;\n}\n.btn-group > .btn + .dropdown-toggle {\n  padding-right: 8px;\n  padding-left: 8px;\n}\n.btn-group > .btn-lg + .dropdown-toggle {\n  padding-right: 12px;\n  padding-left: 12px;\n}\n.btn-group.open .dropdown-toggle {\n  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);\n          box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);\n}\n.btn-group.open .dropdown-toggle.btn-link {\n  -webkit-box-shadow: none;\n          box-shadow: none;\n}\n.btn .caret {\n  margin-left: 0;\n}\n.btn-lg .caret {\n  border-width: 5px 5px 0;\n  border-bottom-width: 0;\n}\n.dropup .btn-lg .caret {\n  border-width: 0 5px 5px;\n}\n.btn-group-vertical > .btn,\n.btn-group-vertical > .btn-group,\n.btn-group-vertical > .btn-group > .btn {\n  display: block;\n  float: none;\n  width: 100%;\n  max-width: 100%;\n}\n.btn-group-vertical > .btn-group > .btn {\n  float: none;\n}\n.btn-group-vertical > .btn + .btn,\n.btn-group-vertical > .btn + .btn-group,\n.btn-group-vertical > .btn-group + .btn,\n.btn-group-vertical > .btn-group + .btn-group {\n  margin-top: -1px;\n  margin-left: 0;\n}\n.btn-group-vertical > .btn:not(:first-child):not(:last-child) {\n  border-radius: 0;\n}\n.btn-group-vertical > .btn:first-child:not(:last-child) {\n  border-top-left-radius: 4px;\n  border-top-right-radius: 4px;\n  border-bottom-right-radius: 0;\n  border-bottom-left-radius: 0;\n}\n.btn-group-vertical > .btn:last-child:not(:first-child) {\n  border-top-left-radius: 0;\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 4px;\n  border-bottom-left-radius: 4px;\n}\n.btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .btn {\n  border-radius: 0;\n}\n.btn-group-vertical > .btn-group:first-child:not(:last-child) > .btn:last-child,\n.btn-group-vertical > .btn-group:first-child:not(:last-child) > .dropdown-toggle {\n  border-bottom-right-radius: 0;\n  border-bottom-left-radius: 0;\n}\n.btn-group-vertical > .btn-group:last-child:not(:first-child) > .btn:first-child {\n  border-top-left-radius: 0;\n  border-top-right-radius: 0;\n}\n.btn-group-justified {\n  display: table;\n  width: 100%;\n  table-layout: fixed;\n  border-collapse: separate;\n}\n.btn-group-justified > .btn,\n.btn-group-justified > .btn-group {\n  display: table-cell;\n  float: none;\n  width: 1%;\n}\n.btn-group-justified > .btn-group .btn {\n  width: 100%;\n}\n.btn-group-justified > .btn-group .dropdown-menu {\n  left: auto;\n}\n[data-toggle=\"buttons\"] > .btn input[type=\"radio\"],\n[data-toggle=\"buttons\"] > .btn-group > .btn input[type=\"radio\"],\n[data-toggle=\"buttons\"] > .btn input[type=\"checkbox\"],\n[data-toggle=\"buttons\"] > .btn-group > .btn input[type=\"checkbox\"] {\n  position: absolute;\n  clip: rect(0, 0, 0, 0);\n  pointer-events: none;\n}\n.input-group {\n  position: relative;\n  display: table;\n  border-collapse: separate;\n}\n.input-group[class*=\"col-\"] {\n  float: none;\n  padding-right: 0;\n  padding-left: 0;\n}\n.input-group .form-control {\n  position: relative;\n  z-index: 2;\n  float: left;\n  width: 100%;\n  margin-bottom: 0;\n}\n.input-group .form-control:focus {\n  z-index: 3;\n}\n.input-group-lg > .form-control,\n.input-group-lg > .input-group-addon,\n.input-group-lg > .input-group-btn > .btn {\n  height: 46px;\n  padding: 10px 16px;\n  font-size: 18px;\n  line-height: 1.3333333;\n  border-radius: 6px;\n}\nselect.input-group-lg > .form-control,\nselect.input-group-lg > .input-group-addon,\nselect.input-group-lg > .input-group-btn > .btn {\n  height: 46px;\n  line-height: 46px;\n}\ntextarea.input-group-lg > .form-control,\ntextarea.input-group-lg > .input-group-addon,\ntextarea.input-group-lg > .input-group-btn > .btn,\nselect[multiple].input-group-lg > .form-control,\nselect[multiple].input-group-lg > .input-group-addon,\nselect[multiple].input-group-lg > .input-group-btn > .btn {\n  height: auto;\n}\n.input-group-sm > .form-control,\n.input-group-sm > .input-group-addon,\n.input-group-sm > .input-group-btn > .btn {\n  height: 30px;\n  padding: 5px 10px;\n  font-size: 12px;\n  line-height: 1.5;\n  border-radius: 3px;\n}\nselect.input-group-sm > .form-control,\nselect.input-group-sm > .input-group-addon,\nselect.input-group-sm > .input-group-btn > .btn {\n  height: 30px;\n  line-height: 30px;\n}\ntextarea.input-group-sm > .form-control,\ntextarea.input-group-sm > .input-group-addon,\ntextarea.input-group-sm > .input-group-btn > .btn,\nselect[multiple].input-group-sm > .form-control,\nselect[multiple].input-group-sm > .input-group-addon,\nselect[multiple].input-group-sm > .input-group-btn > .btn {\n  height: auto;\n}\n.input-group-addon,\n.input-group-btn,\n.input-group .form-control {\n  display: table-cell;\n}\n.input-group-addon:not(:first-child):not(:last-child),\n.input-group-btn:not(:first-child):not(:last-child),\n.input-group .form-control:not(:first-child):not(:last-child) {\n  border-radius: 0;\n}\n.input-group-addon,\n.input-group-btn {\n  width: 1%;\n  white-space: nowrap;\n  vertical-align: middle;\n}\n.input-group-addon {\n  padding: 6px 12px;\n  font-size: 14px;\n  font-weight: normal;\n  line-height: 1;\n  color: #555;\n  text-align: center;\n  background-color: #eee;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n}\n.input-group-addon.input-sm {\n  padding: 5px 10px;\n  font-size: 12px;\n  border-radius: 3px;\n}\n.input-group-addon.input-lg {\n  padding: 10px 16px;\n  font-size: 18px;\n  border-radius: 6px;\n}\n.input-group-addon input[type=\"radio\"],\n.input-group-addon input[type=\"checkbox\"] {\n  margin-top: 0;\n}\n.input-group .form-control:first-child,\n.input-group-addon:first-child,\n.input-group-btn:first-child > .btn,\n.input-group-btn:first-child > .btn-group > .btn,\n.input-group-btn:first-child > .dropdown-toggle,\n.input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle),\n.input-group-btn:last-child > .btn-group:not(:last-child) > .btn {\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0;\n}\n.input-group-addon:first-child {\n  border-right: 0;\n}\n.input-group .form-control:last-child,\n.input-group-addon:last-child,\n.input-group-btn:last-child > .btn,\n.input-group-btn:last-child > .btn-group > .btn,\n.input-group-btn:last-child > .dropdown-toggle,\n.input-group-btn:first-child > .btn:not(:first-child),\n.input-group-btn:first-child > .btn-group:not(:first-child) > .btn {\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n}\n.input-group-addon:last-child {\n  border-left: 0;\n}\n.input-group-btn {\n  position: relative;\n  font-size: 0;\n  white-space: nowrap;\n}\n.input-group-btn > .btn {\n  position: relative;\n}\n.input-group-btn > .btn + .btn {\n  margin-left: -1px;\n}\n.input-group-btn > .btn:hover,\n.input-group-btn > .btn:focus,\n.input-group-btn > .btn:active {\n  z-index: 2;\n}\n.input-group-btn:first-child > .btn,\n.input-group-btn:first-child > .btn-group {\n  margin-right: -1px;\n}\n.input-group-btn:last-child > .btn,\n.input-group-btn:last-child > .btn-group {\n  z-index: 2;\n  margin-left: -1px;\n}\n.nav {\n  padding-left: 0;\n  margin-bottom: 0;\n  list-style: none;\n}\n.nav > li {\n  position: relative;\n  display: block;\n}\n.nav > li > a {\n  position: relative;\n  display: block;\n  padding: 10px 15px;\n}\n.nav > li > a:hover,\n.nav > li > a:focus {\n  text-decoration: none;\n  background-color: #eee;\n}\n.nav > li.disabled > a {\n  color: #777;\n}\n.nav > li.disabled > a:hover,\n.nav > li.disabled > a:focus {\n  color: #777;\n  text-decoration: none;\n  cursor: not-allowed;\n  background-color: transparent;\n}\n.nav .open > a,\n.nav .open > a:hover,\n.nav .open > a:focus {\n  background-color: #eee;\n  border-color: #337ab7;\n}\n.nav .nav-divider {\n  height: 1px;\n  margin: 9px 0;\n  overflow: hidden;\n  background-color: #e5e5e5;\n}\n.nav > li > a > img {\n  max-width: none;\n}\n.nav-tabs {\n  border-bottom: 1px solid #ddd;\n}\n.nav-tabs > li {\n  float: left;\n  margin-bottom: -1px;\n}\n.nav-tabs > li > a {\n  margin-right: 2px;\n  line-height: 1.42857143;\n  border: 1px solid transparent;\n  border-radius: 4px 4px 0 0;\n}\n.nav-tabs > li > a:hover {\n  border-color: #eee #eee #ddd;\n}\n.nav-tabs > li.active > a,\n.nav-tabs > li.active > a:hover,\n.nav-tabs > li.active > a:focus {\n  color: #555;\n  cursor: default;\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-bottom-color: transparent;\n}\n.nav-tabs.nav-justified {\n  width: 100%;\n  border-bottom: 0;\n}\n.nav-tabs.nav-justified > li {\n  float: none;\n}\n.nav-tabs.nav-justified > li > a {\n  margin-bottom: 5px;\n  text-align: center;\n}\n.nav-tabs.nav-justified > .dropdown .dropdown-menu {\n  top: auto;\n  left: auto;\n}\n@media (min-width: 768px) {\n  .nav-tabs.nav-justified > li {\n    display: table-cell;\n    width: 1%;\n  }\n  .nav-tabs.nav-justified > li > a {\n    margin-bottom: 0;\n  }\n}\n.nav-tabs.nav-justified > li > a {\n  margin-right: 0;\n  border-radius: 4px;\n}\n.nav-tabs.nav-justified > .active > a,\n.nav-tabs.nav-justified > .active > a:hover,\n.nav-tabs.nav-justified > .active > a:focus {\n  border: 1px solid #ddd;\n}\n@media (min-width: 768px) {\n  .nav-tabs.nav-justified > li > a {\n    border-bottom: 1px solid #ddd;\n    border-radius: 4px 4px 0 0;\n  }\n  .nav-tabs.nav-justified > .active > a,\n  .nav-tabs.nav-justified > .active > a:hover,\n  .nav-tabs.nav-justified > .active > a:focus {\n    border-bottom-color: #fff;\n  }\n}\n.nav-pills > li {\n  float: left;\n}\n.nav-pills > li > a {\n  border-radius: 4px;\n}\n.nav-pills > li + li {\n  margin-left: 2px;\n}\n.nav-pills > li.active > a,\n.nav-pills > li.active > a:hover,\n.nav-pills > li.active > a:focus {\n  color: #fff;\n  background-color: #337ab7;\n}\n.nav-stacked > li {\n  float: none;\n}\n.nav-stacked > li + li {\n  margin-top: 2px;\n  margin-left: 0;\n}\n.nav-justified {\n  width: 100%;\n}\n.nav-justified > li {\n  float: none;\n}\n.nav-justified > li > a {\n  margin-bottom: 5px;\n  text-align: center;\n}\n.nav-justified > .dropdown .dropdown-menu {\n  top: auto;\n  left: auto;\n}\n@media (min-width: 768px) {\n  .nav-justified > li {\n    display: table-cell;\n    width: 1%;\n  }\n  .nav-justified > li > a {\n    margin-bottom: 0;\n  }\n}\n.nav-tabs-justified {\n  border-bottom: 0;\n}\n.nav-tabs-justified > li > a {\n  margin-right: 0;\n  border-radius: 4px;\n}\n.nav-tabs-justified > .active > a,\n.nav-tabs-justified > .active > a:hover,\n.nav-tabs-justified > .active > a:focus {\n  border: 1px solid #ddd;\n}\n@media (min-width: 768px) {\n  .nav-tabs-justified > li > a {\n    border-bottom: 1px solid #ddd;\n    border-radius: 4px 4px 0 0;\n  }\n  .nav-tabs-justified > .active > a,\n  .nav-tabs-justified > .active > a:hover,\n  .nav-tabs-justified > .active > a:focus {\n    border-bottom-color: #fff;\n  }\n}\n.tab-content > .tab-pane {\n  display: none;\n}\n.tab-content > .active {\n  display: block;\n}\n.nav-tabs .dropdown-menu {\n  margin-top: -1px;\n  border-top-left-radius: 0;\n  border-top-right-radius: 0;\n}\n.navbar {\n  position: relative;\n  min-height: 50px;\n  margin-bottom: 20px;\n  border: 1px solid transparent;\n}\n@media (min-width: 768px) {\n  .navbar {\n    border-radius: 4px;\n  }\n}\n@media (min-width: 768px) {\n  .navbar-header {\n    float: left;\n  }\n}\n.navbar-collapse {\n  padding-right: 15px;\n  padding-left: 15px;\n  overflow-x: visible;\n  -webkit-overflow-scrolling: touch;\n  border-top: 1px solid transparent;\n  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);\n          box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);\n}\n.navbar-collapse.in {\n  overflow-y: auto;\n}\n@media (min-width: 768px) {\n  .navbar-collapse {\n    width: auto;\n    border-top: 0;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n  }\n  .navbar-collapse.collapse {\n    display: block !important;\n    height: auto !important;\n    padding-bottom: 0;\n    overflow: visible !important;\n  }\n  .navbar-collapse.in {\n    overflow-y: visible;\n  }\n  .navbar-fixed-top .navbar-collapse,\n  .navbar-static-top .navbar-collapse,\n  .navbar-fixed-bottom .navbar-collapse {\n    padding-right: 0;\n    padding-left: 0;\n  }\n}\n.navbar-fixed-top .navbar-collapse,\n.navbar-fixed-bottom .navbar-collapse {\n  max-height: 340px;\n}\n@media (max-device-width: 480px) and (orientation: landscape) {\n  .navbar-fixed-top .navbar-collapse,\n  .navbar-fixed-bottom .navbar-collapse {\n    max-height: 200px;\n  }\n}\n.container > .navbar-header,\n.container-fluid > .navbar-header,\n.container > .navbar-collapse,\n.container-fluid > .navbar-collapse {\n  margin-right: -15px;\n  margin-left: -15px;\n}\n@media (min-width: 768px) {\n  .container > .navbar-header,\n  .container-fluid > .navbar-header,\n  .container > .navbar-collapse,\n  .container-fluid > .navbar-collapse {\n    margin-right: 0;\n    margin-left: 0;\n  }\n}\n.navbar-static-top {\n  z-index: 1000;\n  border-width: 0 0 1px;\n}\n@media (min-width: 768px) {\n  .navbar-static-top {\n    border-radius: 0;\n  }\n}\n.navbar-fixed-top,\n.navbar-fixed-bottom {\n  position: fixed;\n  right: 0;\n  left: 0;\n  z-index: 1030;\n}\n@media (min-width: 768px) {\n  .navbar-fixed-top,\n  .navbar-fixed-bottom {\n    border-radius: 0;\n  }\n}\n.navbar-fixed-top {\n  top: 0;\n  border-width: 0 0 1px;\n}\n.navbar-fixed-bottom {\n  bottom: 0;\n  margin-bottom: 0;\n  border-width: 1px 0 0;\n}\n.navbar-brand {\n  float: left;\n  height: 50px;\n  padding: 15px 15px;\n  font-size: 18px;\n  line-height: 20px;\n}\n.navbar-brand:hover,\n.navbar-brand:focus {\n  text-decoration: none;\n}\n.navbar-brand > img {\n  display: block;\n}\n@media (min-width: 768px) {\n  .navbar > .container .navbar-brand,\n  .navbar > .container-fluid .navbar-brand {\n    margin-left: -15px;\n  }\n}\n.navbar-toggle {\n  position: relative;\n  float: right;\n  padding: 9px 10px;\n  margin-top: 8px;\n  margin-right: 15px;\n  margin-bottom: 8px;\n  background-color: transparent;\n  background-image: none;\n  border: 1px solid transparent;\n  border-radius: 4px;\n}\n.navbar-toggle:focus {\n  outline: 0;\n}\n.navbar-toggle .icon-bar {\n  display: block;\n  width: 22px;\n  height: 2px;\n  border-radius: 1px;\n}\n.navbar-toggle .icon-bar + .icon-bar {\n  margin-top: 4px;\n}\n@media (min-width: 768px) {\n  .navbar-toggle {\n    display: none;\n  }\n}\n.navbar-nav {\n  margin: 7.5px -15px;\n}\n.navbar-nav > li > a {\n  padding-top: 10px;\n  padding-bottom: 10px;\n  line-height: 20px;\n}\n@media (max-width: 767px) {\n  .navbar-nav .open .dropdown-menu {\n    position: static;\n    float: none;\n    width: auto;\n    margin-top: 0;\n    background-color: transparent;\n    border: 0;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n  }\n  .navbar-nav .open .dropdown-menu > li > a,\n  .navbar-nav .open .dropdown-menu .dropdown-header {\n    padding: 5px 15px 5px 25px;\n  }\n  .navbar-nav .open .dropdown-menu > li > a {\n    line-height: 20px;\n  }\n  .navbar-nav .open .dropdown-menu > li > a:hover,\n  .navbar-nav .open .dropdown-menu > li > a:focus {\n    background-image: none;\n  }\n}\n@media (min-width: 768px) {\n  .navbar-nav {\n    float: left;\n    margin: 0;\n  }\n  .navbar-nav > li {\n    float: left;\n  }\n  .navbar-nav > li > a {\n    padding-top: 15px;\n    padding-bottom: 15px;\n  }\n}\n.navbar-form {\n  padding: 10px 15px;\n  margin-top: 8px;\n  margin-right: -15px;\n  margin-bottom: 8px;\n  margin-left: -15px;\n  border-top: 1px solid transparent;\n  border-bottom: 1px solid transparent;\n  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1), 0 1px 0 rgba(255, 255, 255, .1);\n          box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1), 0 1px 0 rgba(255, 255, 255, .1);\n}\n@media (min-width: 768px) {\n  .navbar-form .form-group {\n    display: inline-block;\n    margin-bottom: 0;\n    vertical-align: middle;\n  }\n  .navbar-form .form-control {\n    display: inline-block;\n    width: auto;\n    vertical-align: middle;\n  }\n  .navbar-form .form-control-static {\n    display: inline-block;\n  }\n  .navbar-form .input-group {\n    display: inline-table;\n    vertical-align: middle;\n  }\n  .navbar-form .input-group .input-group-addon,\n  .navbar-form .input-group .input-group-btn,\n  .navbar-form .input-group .form-control {\n    width: auto;\n  }\n  .navbar-form .input-group > .form-control {\n    width: 100%;\n  }\n  .navbar-form .control-label {\n    margin-bottom: 0;\n    vertical-align: middle;\n  }\n  .navbar-form .radio,\n  .navbar-form .checkbox {\n    display: inline-block;\n    margin-top: 0;\n    margin-bottom: 0;\n    vertical-align: middle;\n  }\n  .navbar-form .radio label,\n  .navbar-form .checkbox label {\n    padding-left: 0;\n  }\n  .navbar-form .radio input[type=\"radio\"],\n  .navbar-form .checkbox input[type=\"checkbox\"] {\n    position: relative;\n    margin-left: 0;\n  }\n  .navbar-form .has-feedback .form-control-feedback {\n    top: 0;\n  }\n}\n@media (max-width: 767px) {\n  .navbar-form .form-group {\n    margin-bottom: 5px;\n  }\n  .navbar-form .form-group:last-child {\n    margin-bottom: 0;\n  }\n}\n@media (min-width: 768px) {\n  .navbar-form {\n    width: auto;\n    padding-top: 0;\n    padding-bottom: 0;\n    margin-right: 0;\n    margin-left: 0;\n    border: 0;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n  }\n}\n.navbar-nav > li > .dropdown-menu {\n  margin-top: 0;\n  border-top-left-radius: 0;\n  border-top-right-radius: 0;\n}\n.navbar-fixed-bottom .navbar-nav > li > .dropdown-menu {\n  margin-bottom: 0;\n  border-top-left-radius: 4px;\n  border-top-right-radius: 4px;\n  border-bottom-right-radius: 0;\n  border-bottom-left-radius: 0;\n}\n.navbar-btn {\n  margin-top: 8px;\n  margin-bottom: 8px;\n}\n.navbar-btn.btn-sm {\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\n.navbar-btn.btn-xs {\n  margin-top: 14px;\n  margin-bottom: 14px;\n}\n.navbar-text {\n  margin-top: 15px;\n  margin-bottom: 15px;\n}\n@media (min-width: 768px) {\n  .navbar-text {\n    float: left;\n    margin-right: 15px;\n    margin-left: 15px;\n  }\n}\n@media (min-width: 768px) {\n  .navbar-left {\n    float: left !important;\n  }\n  .navbar-right {\n    float: right !important;\n    margin-right: -15px;\n  }\n  .navbar-right ~ .navbar-right {\n    margin-right: 0;\n  }\n}\n.navbar-default {\n  background-color: #f8f8f8;\n  border-color: #e7e7e7;\n}\n.navbar-default .navbar-brand {\n  color: #777;\n}\n.navbar-default .navbar-brand:hover,\n.navbar-default .navbar-brand:focus {\n  color: #5e5e5e;\n  background-color: transparent;\n}\n.navbar-default .navbar-text {\n  color: #777;\n}\n.navbar-default .navbar-nav > li > a {\n  color: #777;\n}\n.navbar-default .navbar-nav > li > a:hover,\n.navbar-default .navbar-nav > li > a:focus {\n  color: #333;\n  background-color: transparent;\n}\n.navbar-default .navbar-nav > .active > a,\n.navbar-default .navbar-nav > .active > a:hover,\n.navbar-default .navbar-nav > .active > a:focus {\n  color: #555;\n  background-color: #e7e7e7;\n}\n.navbar-default .navbar-nav > .disabled > a,\n.navbar-default .navbar-nav > .disabled > a:hover,\n.navbar-default .navbar-nav > .disabled > a:focus {\n  color: #ccc;\n  background-color: transparent;\n}\n.navbar-default .navbar-toggle {\n  border-color: #ddd;\n}\n.navbar-default .navbar-toggle:hover,\n.navbar-default .navbar-toggle:focus {\n  background-color: #ddd;\n}\n.navbar-default .navbar-toggle .icon-bar {\n  background-color: #888;\n}\n.navbar-default .navbar-collapse,\n.navbar-default .navbar-form {\n  border-color: #e7e7e7;\n}\n.navbar-default .navbar-nav > .open > a,\n.navbar-default .navbar-nav > .open > a:hover,\n.navbar-default .navbar-nav > .open > a:focus {\n  color: #555;\n  background-color: #e7e7e7;\n}\n@media (max-width: 767px) {\n  .navbar-default .navbar-nav .open .dropdown-menu > li > a {\n    color: #777;\n  }\n  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,\n  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {\n    color: #333;\n    background-color: transparent;\n  }\n  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,\n  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,\n  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {\n    color: #555;\n    background-color: #e7e7e7;\n  }\n  .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a,\n  .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:hover,\n  .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:focus {\n    color: #ccc;\n    background-color: transparent;\n  }\n}\n.navbar-default .navbar-link {\n  color: #777;\n}\n.navbar-default .navbar-link:hover {\n  color: #333;\n}\n.navbar-default .btn-link {\n  color: #777;\n}\n.navbar-default .btn-link:hover,\n.navbar-default .btn-link:focus {\n  color: #333;\n}\n.navbar-default .btn-link[disabled]:hover,\nfieldset[disabled] .navbar-default .btn-link:hover,\n.navbar-default .btn-link[disabled]:focus,\nfieldset[disabled] .navbar-default .btn-link:focus {\n  color: #ccc;\n}\n.navbar-inverse {\n  background-color: #222;\n  border-color: #080808;\n}\n.navbar-inverse .navbar-brand {\n  color: #9d9d9d;\n}\n.navbar-inverse .navbar-brand:hover,\n.navbar-inverse .navbar-brand:focus {\n  color: #fff;\n  background-color: transparent;\n}\n.navbar-inverse .navbar-text {\n  color: #9d9d9d;\n}\n.navbar-inverse .navbar-nav > li > a {\n  color: #9d9d9d;\n}\n.navbar-inverse .navbar-nav > li > a:hover,\n.navbar-inverse .navbar-nav > li > a:focus {\n  color: #fff;\n  background-color: transparent;\n}\n.navbar-inverse .navbar-nav > .active > a,\n.navbar-inverse .navbar-nav > .active > a:hover,\n.navbar-inverse .navbar-nav > .active > a:focus {\n  color: #fff;\n  background-color: #080808;\n}\n.navbar-inverse .navbar-nav > .disabled > a,\n.navbar-inverse .navbar-nav > .disabled > a:hover,\n.navbar-inverse .navbar-nav > .disabled > a:focus {\n  color: #444;\n  background-color: transparent;\n}\n.navbar-inverse .navbar-toggle {\n  border-color: #333;\n}\n.navbar-inverse .navbar-toggle:hover,\n.navbar-inverse .navbar-toggle:focus {\n  background-color: #333;\n}\n.navbar-inverse .navbar-toggle .icon-bar {\n  background-color: #fff;\n}\n.navbar-inverse .navbar-collapse,\n.navbar-inverse .navbar-form {\n  border-color: #101010;\n}\n.navbar-inverse .navbar-nav > .open > a,\n.navbar-inverse .navbar-nav > .open > a:hover,\n.navbar-inverse .navbar-nav > .open > a:focus {\n  color: #fff;\n  background-color: #080808;\n}\n@media (max-width: 767px) {\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .dropdown-header {\n    border-color: #080808;\n  }\n  .navbar-inverse .navbar-nav .open .dropdown-menu .divider {\n    background-color: #080808;\n  }\n  .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {\n    color: #9d9d9d;\n  }\n  .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover,\n  .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:focus {\n    color: #fff;\n    background-color: transparent;\n  }\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a,\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:hover,\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:focus {\n    color: #fff;\n    background-color: #080808;\n  }\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a,\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a:hover,\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a:focus {\n    color: #444;\n    background-color: transparent;\n  }\n}\n.navbar-inverse .navbar-link {\n  color: #9d9d9d;\n}\n.navbar-inverse .navbar-link:hover {\n  color: #fff;\n}\n.navbar-inverse .btn-link {\n  color: #9d9d9d;\n}\n.navbar-inverse .btn-link:hover,\n.navbar-inverse .btn-link:focus {\n  color: #fff;\n}\n.navbar-inverse .btn-link[disabled]:hover,\nfieldset[disabled] .navbar-inverse .btn-link:hover,\n.navbar-inverse .btn-link[disabled]:focus,\nfieldset[disabled] .navbar-inverse .btn-link:focus {\n  color: #444;\n}\n.breadcrumb {\n  padding: 8px 15px;\n  margin-bottom: 20px;\n  list-style: none;\n  background-color: #f5f5f5;\n  border-radius: 4px;\n}\n.breadcrumb > li {\n  display: inline-block;\n}\n.breadcrumb > li + li:before {\n  padding: 0 5px;\n  color: #ccc;\n  content: \"/\\A0\";\n}\n.breadcrumb > .active {\n  color: #777;\n}\n.pagination {\n  display: inline-block;\n  padding-left: 0;\n  margin: 20px 0;\n  border-radius: 4px;\n}\n.pagination > li {\n  display: inline;\n}\n.pagination > li > a,\n.pagination > li > span {\n  position: relative;\n  float: left;\n  padding: 6px 12px;\n  margin-left: -1px;\n  line-height: 1.42857143;\n  color: #337ab7;\n  text-decoration: none;\n  background-color: #fff;\n  border: 1px solid #ddd;\n}\n.pagination > li:first-child > a,\n.pagination > li:first-child > span {\n  margin-left: 0;\n  border-top-left-radius: 4px;\n  border-bottom-left-radius: 4px;\n}\n.pagination > li:last-child > a,\n.pagination > li:last-child > span {\n  border-top-right-radius: 4px;\n  border-bottom-right-radius: 4px;\n}\n.pagination > li > a:hover,\n.pagination > li > span:hover,\n.pagination > li > a:focus,\n.pagination > li > span:focus {\n  z-index: 2;\n  color: #23527c;\n  background-color: #eee;\n  border-color: #ddd;\n}\n.pagination > .active > a,\n.pagination > .active > span,\n.pagination > .active > a:hover,\n.pagination > .active > span:hover,\n.pagination > .active > a:focus,\n.pagination > .active > span:focus {\n  z-index: 3;\n  color: #fff;\n  cursor: default;\n  background-color: #337ab7;\n  border-color: #337ab7;\n}\n.pagination > .disabled > span,\n.pagination > .disabled > span:hover,\n.pagination > .disabled > span:focus,\n.pagination > .disabled > a,\n.pagination > .disabled > a:hover,\n.pagination > .disabled > a:focus {\n  color: #777;\n  cursor: not-allowed;\n  background-color: #fff;\n  border-color: #ddd;\n}\n.pagination-lg > li > a,\n.pagination-lg > li > span {\n  padding: 10px 16px;\n  font-size: 18px;\n  line-height: 1.3333333;\n}\n.pagination-lg > li:first-child > a,\n.pagination-lg > li:first-child > span {\n  border-top-left-radius: 6px;\n  border-bottom-left-radius: 6px;\n}\n.pagination-lg > li:last-child > a,\n.pagination-lg > li:last-child > span {\n  border-top-right-radius: 6px;\n  border-bottom-right-radius: 6px;\n}\n.pagination-sm > li > a,\n.pagination-sm > li > span {\n  padding: 5px 10px;\n  font-size: 12px;\n  line-height: 1.5;\n}\n.pagination-sm > li:first-child > a,\n.pagination-sm > li:first-child > span {\n  border-top-left-radius: 3px;\n  border-bottom-left-radius: 3px;\n}\n.pagination-sm > li:last-child > a,\n.pagination-sm > li:last-child > span {\n  border-top-right-radius: 3px;\n  border-bottom-right-radius: 3px;\n}\n.pager {\n  padding-left: 0;\n  margin: 20px 0;\n  text-align: center;\n  list-style: none;\n}\n.pager li {\n  display: inline;\n}\n.pager li > a,\n.pager li > span {\n  display: inline-block;\n  padding: 5px 14px;\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 15px;\n}\n.pager li > a:hover,\n.pager li > a:focus {\n  text-decoration: none;\n  background-color: #eee;\n}\n.pager .next > a,\n.pager .next > span {\n  float: right;\n}\n.pager .previous > a,\n.pager .previous > span {\n  float: left;\n}\n.pager .disabled > a,\n.pager .disabled > a:hover,\n.pager .disabled > a:focus,\n.pager .disabled > span {\n  color: #777;\n  cursor: not-allowed;\n  background-color: #fff;\n}\n.label {\n  display: inline;\n  padding: .2em .6em .3em;\n  font-size: 75%;\n  font-weight: bold;\n  line-height: 1;\n  color: #fff;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: baseline;\n  border-radius: .25em;\n}\na.label:hover,\na.label:focus {\n  color: #fff;\n  text-decoration: none;\n  cursor: pointer;\n}\n.label:empty {\n  display: none;\n}\n.btn .label {\n  position: relative;\n  top: -1px;\n}\n.label-default {\n  background-color: #777;\n}\n.label-default[href]:hover,\n.label-default[href]:focus {\n  background-color: #5e5e5e;\n}\n.label-primary {\n  background-color: #337ab7;\n}\n.label-primary[href]:hover,\n.label-primary[href]:focus {\n  background-color: #286090;\n}\n.label-success {\n  background-color: #5cb85c;\n}\n.label-success[href]:hover,\n.label-success[href]:focus {\n  background-color: #449d44;\n}\n.label-info {\n  background-color: #5bc0de;\n}\n.label-info[href]:hover,\n.label-info[href]:focus {\n  background-color: #31b0d5;\n}\n.label-warning {\n  background-color: #f0ad4e;\n}\n.label-warning[href]:hover,\n.label-warning[href]:focus {\n  background-color: #ec971f;\n}\n.label-danger {\n  background-color: #d9534f;\n}\n.label-danger[href]:hover,\n.label-danger[href]:focus {\n  background-color: #c9302c;\n}\n.badge {\n  display: inline-block;\n  min-width: 10px;\n  padding: 3px 7px;\n  font-size: 12px;\n  font-weight: bold;\n  line-height: 1;\n  color: #fff;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: middle;\n  background-color: #777;\n  border-radius: 10px;\n}\n.badge:empty {\n  display: none;\n}\n.btn .badge {\n  position: relative;\n  top: -1px;\n}\n.btn-xs .badge,\n.btn-group-xs > .btn .badge {\n  top: 0;\n  padding: 1px 5px;\n}\na.badge:hover,\na.badge:focus {\n  color: #fff;\n  text-decoration: none;\n  cursor: pointer;\n}\n.list-group-item.active > .badge,\n.nav-pills > .active > a > .badge {\n  color: #337ab7;\n  background-color: #fff;\n}\n.list-group-item > .badge {\n  float: right;\n}\n.list-group-item > .badge + .badge {\n  margin-right: 5px;\n}\n.nav-pills > li > a > .badge {\n  margin-left: 3px;\n}\n.jumbotron {\n  padding-top: 30px;\n  padding-bottom: 30px;\n  margin-bottom: 30px;\n  color: inherit;\n  background-color: #eee;\n}\n.jumbotron h1,\n.jumbotron .h1 {\n  color: inherit;\n}\n.jumbotron p {\n  margin-bottom: 15px;\n  font-size: 21px;\n  font-weight: 200;\n}\n.jumbotron > hr {\n  border-top-color: #d5d5d5;\n}\n.container .jumbotron,\n.container-fluid .jumbotron {\n  padding-right: 15px;\n  padding-left: 15px;\n  border-radius: 6px;\n}\n.jumbotron .container {\n  max-width: 100%;\n}\n@media screen and (min-width: 768px) {\n  .jumbotron {\n    padding-top: 48px;\n    padding-bottom: 48px;\n  }\n  .container .jumbotron,\n  .container-fluid .jumbotron {\n    padding-right: 60px;\n    padding-left: 60px;\n  }\n  .jumbotron h1,\n  .jumbotron .h1 {\n    font-size: 63px;\n  }\n}\n.thumbnail {\n  display: block;\n  padding: 4px;\n  margin-bottom: 20px;\n  line-height: 1.42857143;\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  -webkit-transition: border .2s ease-in-out;\n       -o-transition: border .2s ease-in-out;\n          transition: border .2s ease-in-out;\n}\n.thumbnail > img,\n.thumbnail a > img {\n  margin-right: auto;\n  margin-left: auto;\n}\na.thumbnail:hover,\na.thumbnail:focus,\na.thumbnail.active {\n  border-color: #337ab7;\n}\n.thumbnail .caption {\n  padding: 9px;\n  color: #333;\n}\n.alert {\n  padding: 15px;\n  margin-bottom: 20px;\n  border: 1px solid transparent;\n  border-radius: 4px;\n}\n.alert h4 {\n  margin-top: 0;\n  color: inherit;\n}\n.alert .alert-link {\n  font-weight: bold;\n}\n.alert > p,\n.alert > ul {\n  margin-bottom: 0;\n}\n.alert > p + p {\n  margin-top: 5px;\n}\n.alert-dismissable,\n.alert-dismissible {\n  padding-right: 35px;\n}\n.alert-dismissable .close,\n.alert-dismissible .close {\n  position: relative;\n  top: -2px;\n  right: -21px;\n  color: inherit;\n}\n.alert-success {\n  color: #3c763d;\n  background-color: #dff0d8;\n  border-color: #d6e9c6;\n}\n.alert-success hr {\n  border-top-color: #c9e2b3;\n}\n.alert-success .alert-link {\n  color: #2b542c;\n}\n.alert-info {\n  color: #31708f;\n  background-color: #d9edf7;\n  border-color: #bce8f1;\n}\n.alert-info hr {\n  border-top-color: #a6e1ec;\n}\n.alert-info .alert-link {\n  color: #245269;\n}\n.alert-warning {\n  color: #8a6d3b;\n  background-color: #fcf8e3;\n  border-color: #faebcc;\n}\n.alert-warning hr {\n  border-top-color: #f7e1b5;\n}\n.alert-warning .alert-link {\n  color: #66512c;\n}\n.alert-danger {\n  color: #a94442;\n  background-color: #f2dede;\n  border-color: #ebccd1;\n}\n.alert-danger hr {\n  border-top-color: #e4b9c0;\n}\n.alert-danger .alert-link {\n  color: #843534;\n}\n@-webkit-keyframes progress-bar-stripes {\n  from {\n    background-position: 40px 0;\n  }\n  to {\n    background-position: 0 0;\n  }\n}\n@-o-keyframes progress-bar-stripes {\n  from {\n    background-position: 40px 0;\n  }\n  to {\n    background-position: 0 0;\n  }\n}\n@keyframes progress-bar-stripes {\n  from {\n    background-position: 40px 0;\n  }\n  to {\n    background-position: 0 0;\n  }\n}\n.progress {\n  height: 20px;\n  margin-bottom: 20px;\n  overflow: hidden;\n  background-color: #f5f5f5;\n  border-radius: 4px;\n  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);\n          box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);\n}\n.progress-bar {\n  float: left;\n  width: 0;\n  height: 100%;\n  font-size: 12px;\n  line-height: 20px;\n  color: #fff;\n  text-align: center;\n  background-color: #337ab7;\n  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);\n          box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);\n  -webkit-transition: width .6s ease;\n       -o-transition: width .6s ease;\n          transition: width .6s ease;\n}\n.progress-striped .progress-bar,\n.progress-bar-striped {\n  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:      -o-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:         linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  -webkit-background-size: 40px 40px;\n          background-size: 40px 40px;\n}\n.progress.active .progress-bar,\n.progress-bar.active {\n  -webkit-animation: progress-bar-stripes 2s linear infinite;\n       -o-animation: progress-bar-stripes 2s linear infinite;\n          animation: progress-bar-stripes 2s linear infinite;\n}\n.progress-bar-success {\n  background-color: #5cb85c;\n}\n.progress-striped .progress-bar-success {\n  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:      -o-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:         linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n}\n.progress-bar-info {\n  background-color: #5bc0de;\n}\n.progress-striped .progress-bar-info {\n  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:      -o-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:         linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n}\n.progress-bar-warning {\n  background-color: #f0ad4e;\n}\n.progress-striped .progress-bar-warning {\n  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:      -o-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:         linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n}\n.progress-bar-danger {\n  background-color: #d9534f;\n}\n.progress-striped .progress-bar-danger {\n  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:      -o-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:         linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n}\n.media {\n  margin-top: 15px;\n}\n.media:first-child {\n  margin-top: 0;\n}\n.media,\n.media-body {\n  overflow: hidden;\n  zoom: 1;\n}\n.media-body {\n  width: 10000px;\n}\n.media-object {\n  display: block;\n}\n.media-object.img-thumbnail {\n  max-width: none;\n}\n.media-right,\n.media > .pull-right {\n  padding-left: 10px;\n}\n.media-left,\n.media > .pull-left {\n  padding-right: 10px;\n}\n.media-left,\n.media-right,\n.media-body {\n  display: table-cell;\n  vertical-align: top;\n}\n.media-middle {\n  vertical-align: middle;\n}\n.media-bottom {\n  vertical-align: bottom;\n}\n.media-heading {\n  margin-top: 0;\n  margin-bottom: 5px;\n}\n.media-list {\n  padding-left: 0;\n  list-style: none;\n}\n.list-group {\n  padding-left: 0;\n  margin-bottom: 20px;\n}\n.list-group-item {\n  position: relative;\n  display: block;\n  padding: 10px 15px;\n  margin-bottom: -1px;\n  background-color: #fff;\n  border: 1px solid #ddd;\n}\n.list-group-item:first-child {\n  border-top-left-radius: 4px;\n  border-top-right-radius: 4px;\n}\n.list-group-item:last-child {\n  margin-bottom: 0;\n  border-bottom-right-radius: 4px;\n  border-bottom-left-radius: 4px;\n}\na.list-group-item,\nbutton.list-group-item {\n  color: #555;\n}\na.list-group-item .list-group-item-heading,\nbutton.list-group-item .list-group-item-heading {\n  color: #333;\n}\na.list-group-item:hover,\nbutton.list-group-item:hover,\na.list-group-item:focus,\nbutton.list-group-item:focus {\n  color: #555;\n  text-decoration: none;\n  background-color: #f5f5f5;\n}\nbutton.list-group-item {\n  width: 100%;\n  text-align: left;\n}\n.list-group-item.disabled,\n.list-group-item.disabled:hover,\n.list-group-item.disabled:focus {\n  color: #777;\n  cursor: not-allowed;\n  background-color: #eee;\n}\n.list-group-item.disabled .list-group-item-heading,\n.list-group-item.disabled:hover .list-group-item-heading,\n.list-group-item.disabled:focus .list-group-item-heading {\n  color: inherit;\n}\n.list-group-item.disabled .list-group-item-text,\n.list-group-item.disabled:hover .list-group-item-text,\n.list-group-item.disabled:focus .list-group-item-text {\n  color: #777;\n}\n.list-group-item.active,\n.list-group-item.active:hover,\n.list-group-item.active:focus {\n  z-index: 2;\n  color: #fff;\n  background-color: #337ab7;\n  border-color: #337ab7;\n}\n.list-group-item.active .list-group-item-heading,\n.list-group-item.active:hover .list-group-item-heading,\n.list-group-item.active:focus .list-group-item-heading,\n.list-group-item.active .list-group-item-heading > small,\n.list-group-item.active:hover .list-group-item-heading > small,\n.list-group-item.active:focus .list-group-item-heading > small,\n.list-group-item.active .list-group-item-heading > .small,\n.list-group-item.active:hover .list-group-item-heading > .small,\n.list-group-item.active:focus .list-group-item-heading > .small {\n  color: inherit;\n}\n.list-group-item.active .list-group-item-text,\n.list-group-item.active:hover .list-group-item-text,\n.list-group-item.active:focus .list-group-item-text {\n  color: #c7ddef;\n}\n.list-group-item-success {\n  color: #3c763d;\n  background-color: #dff0d8;\n}\na.list-group-item-success,\nbutton.list-group-item-success {\n  color: #3c763d;\n}\na.list-group-item-success .list-group-item-heading,\nbutton.list-group-item-success .list-group-item-heading {\n  color: inherit;\n}\na.list-group-item-success:hover,\nbutton.list-group-item-success:hover,\na.list-group-item-success:focus,\nbutton.list-group-item-success:focus {\n  color: #3c763d;\n  background-color: #d0e9c6;\n}\na.list-group-item-success.active,\nbutton.list-group-item-success.active,\na.list-group-item-success.active:hover,\nbutton.list-group-item-success.active:hover,\na.list-group-item-success.active:focus,\nbutton.list-group-item-success.active:focus {\n  color: #fff;\n  background-color: #3c763d;\n  border-color: #3c763d;\n}\n.list-group-item-info {\n  color: #31708f;\n  background-color: #d9edf7;\n}\na.list-group-item-info,\nbutton.list-group-item-info {\n  color: #31708f;\n}\na.list-group-item-info .list-group-item-heading,\nbutton.list-group-item-info .list-group-item-heading {\n  color: inherit;\n}\na.list-group-item-info:hover,\nbutton.list-group-item-info:hover,\na.list-group-item-info:focus,\nbutton.list-group-item-info:focus {\n  color: #31708f;\n  background-color: #c4e3f3;\n}\na.list-group-item-info.active,\nbutton.list-group-item-info.active,\na.list-group-item-info.active:hover,\nbutton.list-group-item-info.active:hover,\na.list-group-item-info.active:focus,\nbutton.list-group-item-info.active:focus {\n  color: #fff;\n  background-color: #31708f;\n  border-color: #31708f;\n}\n.list-group-item-warning {\n  color: #8a6d3b;\n  background-color: #fcf8e3;\n}\na.list-group-item-warning,\nbutton.list-group-item-warning {\n  color: #8a6d3b;\n}\na.list-group-item-warning .list-group-item-heading,\nbutton.list-group-item-warning .list-group-item-heading {\n  color: inherit;\n}\na.list-group-item-warning:hover,\nbutton.list-group-item-warning:hover,\na.list-group-item-warning:focus,\nbutton.list-group-item-warning:focus {\n  color: #8a6d3b;\n  background-color: #faf2cc;\n}\na.list-group-item-warning.active,\nbutton.list-group-item-warning.active,\na.list-group-item-warning.active:hover,\nbutton.list-group-item-warning.active:hover,\na.list-group-item-warning.active:focus,\nbutton.list-group-item-warning.active:focus {\n  color: #fff;\n  background-color: #8a6d3b;\n  border-color: #8a6d3b;\n}\n.list-group-item-danger {\n  color: #a94442;\n  background-color: #f2dede;\n}\na.list-group-item-danger,\nbutton.list-group-item-danger {\n  color: #a94442;\n}\na.list-group-item-danger .list-group-item-heading,\nbutton.list-group-item-danger .list-group-item-heading {\n  color: inherit;\n}\na.list-group-item-danger:hover,\nbutton.list-group-item-danger:hover,\na.list-group-item-danger:focus,\nbutton.list-group-item-danger:focus {\n  color: #a94442;\n  background-color: #ebcccc;\n}\na.list-group-item-danger.active,\nbutton.list-group-item-danger.active,\na.list-group-item-danger.active:hover,\nbutton.list-group-item-danger.active:hover,\na.list-group-item-danger.active:focus,\nbutton.list-group-item-danger.active:focus {\n  color: #fff;\n  background-color: #a94442;\n  border-color: #a94442;\n}\n.list-group-item-heading {\n  margin-top: 0;\n  margin-bottom: 5px;\n}\n.list-group-item-text {\n  margin-bottom: 0;\n  line-height: 1.3;\n}\n.panel {\n  margin-bottom: 20px;\n  background-color: #fff;\n  border: 1px solid transparent;\n  border-radius: 4px;\n  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n          box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.panel-body {\n  padding: 15px;\n}\n.panel-heading {\n  padding: 10px 15px;\n  border-bottom: 1px solid transparent;\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px;\n}\n.panel-heading > .dropdown .dropdown-toggle {\n  color: inherit;\n}\n.panel-title {\n  margin-top: 0;\n  margin-bottom: 0;\n  font-size: 16px;\n  color: inherit;\n}\n.panel-title > a,\n.panel-title > small,\n.panel-title > .small,\n.panel-title > small > a,\n.panel-title > .small > a {\n  color: inherit;\n}\n.panel-footer {\n  padding: 10px 15px;\n  background-color: #f5f5f5;\n  border-top: 1px solid #ddd;\n  border-bottom-right-radius: 3px;\n  border-bottom-left-radius: 3px;\n}\n.panel > .list-group,\n.panel > .panel-collapse > .list-group {\n  margin-bottom: 0;\n}\n.panel > .list-group .list-group-item,\n.panel > .panel-collapse > .list-group .list-group-item {\n  border-width: 1px 0;\n  border-radius: 0;\n}\n.panel > .list-group:first-child .list-group-item:first-child,\n.panel > .panel-collapse > .list-group:first-child .list-group-item:first-child {\n  border-top: 0;\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px;\n}\n.panel > .list-group:last-child .list-group-item:last-child,\n.panel > .panel-collapse > .list-group:last-child .list-group-item:last-child {\n  border-bottom: 0;\n  border-bottom-right-radius: 3px;\n  border-bottom-left-radius: 3px;\n}\n.panel > .panel-heading + .panel-collapse > .list-group .list-group-item:first-child {\n  border-top-left-radius: 0;\n  border-top-right-radius: 0;\n}\n.panel-heading + .list-group .list-group-item:first-child {\n  border-top-width: 0;\n}\n.list-group + .panel-footer {\n  border-top-width: 0;\n}\n.panel > .table,\n.panel > .table-responsive > .table,\n.panel > .panel-collapse > .table {\n  margin-bottom: 0;\n}\n.panel > .table caption,\n.panel > .table-responsive > .table caption,\n.panel > .panel-collapse > .table caption {\n  padding-right: 15px;\n  padding-left: 15px;\n}\n.panel > .table:first-child,\n.panel > .table-responsive:first-child > .table:first-child {\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px;\n}\n.panel > .table:first-child > thead:first-child > tr:first-child,\n.panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child,\n.panel > .table:first-child > tbody:first-child > tr:first-child,\n.panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child {\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px;\n}\n.panel > .table:first-child > thead:first-child > tr:first-child td:first-child,\n.panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:first-child,\n.panel > .table:first-child > tbody:first-child > tr:first-child td:first-child,\n.panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:first-child,\n.panel > .table:first-child > thead:first-child > tr:first-child th:first-child,\n.panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:first-child,\n.panel > .table:first-child > tbody:first-child > tr:first-child th:first-child,\n.panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:first-child {\n  border-top-left-radius: 3px;\n}\n.panel > .table:first-child > thead:first-child > tr:first-child td:last-child,\n.panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:last-child,\n.panel > .table:first-child > tbody:first-child > tr:first-child td:last-child,\n.panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:last-child,\n.panel > .table:first-child > thead:first-child > tr:first-child th:last-child,\n.panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:last-child,\n.panel > .table:first-child > tbody:first-child > tr:first-child th:last-child,\n.panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:last-child {\n  border-top-right-radius: 3px;\n}\n.panel > .table:last-child,\n.panel > .table-responsive:last-child > .table:last-child {\n  border-bottom-right-radius: 3px;\n  border-bottom-left-radius: 3px;\n}\n.panel > .table:last-child > tbody:last-child > tr:last-child,\n.panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child,\n.panel > .table:last-child > tfoot:last-child > tr:last-child,\n.panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child {\n  border-bottom-right-radius: 3px;\n  border-bottom-left-radius: 3px;\n}\n.panel > .table:last-child > tbody:last-child > tr:last-child td:first-child,\n.panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:first-child,\n.panel > .table:last-child > tfoot:last-child > tr:last-child td:first-child,\n.panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:first-child,\n.panel > .table:last-child > tbody:last-child > tr:last-child th:first-child,\n.panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:first-child,\n.panel > .table:last-child > tfoot:last-child > tr:last-child th:first-child,\n.panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:first-child {\n  border-bottom-left-radius: 3px;\n}\n.panel > .table:last-child > tbody:last-child > tr:last-child td:last-child,\n.panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:last-child,\n.panel > .table:last-child > tfoot:last-child > tr:last-child td:last-child,\n.panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:last-child,\n.panel > .table:last-child > tbody:last-child > tr:last-child th:last-child,\n.panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:last-child,\n.panel > .table:last-child > tfoot:last-child > tr:last-child th:last-child,\n.panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:last-child {\n  border-bottom-right-radius: 3px;\n}\n.panel > .panel-body + .table,\n.panel > .panel-body + .table-responsive,\n.panel > .table + .panel-body,\n.panel > .table-responsive + .panel-body {\n  border-top: 1px solid #ddd;\n}\n.panel > .table > tbody:first-child > tr:first-child th,\n.panel > .table > tbody:first-child > tr:first-child td {\n  border-top: 0;\n}\n.panel > .table-bordered,\n.panel > .table-responsive > .table-bordered {\n  border: 0;\n}\n.panel > .table-bordered > thead > tr > th:first-child,\n.panel > .table-responsive > .table-bordered > thead > tr > th:first-child,\n.panel > .table-bordered > tbody > tr > th:first-child,\n.panel > .table-responsive > .table-bordered > tbody > tr > th:first-child,\n.panel > .table-bordered > tfoot > tr > th:first-child,\n.panel > .table-responsive > .table-bordered > tfoot > tr > th:first-child,\n.panel > .table-bordered > thead > tr > td:first-child,\n.panel > .table-responsive > .table-bordered > thead > tr > td:first-child,\n.panel > .table-bordered > tbody > tr > td:first-child,\n.panel > .table-responsive > .table-bordered > tbody > tr > td:first-child,\n.panel > .table-bordered > tfoot > tr > td:first-child,\n.panel > .table-responsive > .table-bordered > tfoot > tr > td:first-child {\n  border-left: 0;\n}\n.panel > .table-bordered > thead > tr > th:last-child,\n.panel > .table-responsive > .table-bordered > thead > tr > th:last-child,\n.panel > .table-bordered > tbody > tr > th:last-child,\n.panel > .table-responsive > .table-bordered > tbody > tr > th:last-child,\n.panel > .table-bordered > tfoot > tr > th:last-child,\n.panel > .table-responsive > .table-bordered > tfoot > tr > th:last-child,\n.panel > .table-bordered > thead > tr > td:last-child,\n.panel > .table-responsive > .table-bordered > thead > tr > td:last-child,\n.panel > .table-bordered > tbody > tr > td:last-child,\n.panel > .table-responsive > .table-bordered > tbody > tr > td:last-child,\n.panel > .table-bordered > tfoot > tr > td:last-child,\n.panel > .table-responsive > .table-bordered > tfoot > tr > td:last-child {\n  border-right: 0;\n}\n.panel > .table-bordered > thead > tr:first-child > td,\n.panel > .table-responsive > .table-bordered > thead > tr:first-child > td,\n.panel > .table-bordered > tbody > tr:first-child > td,\n.panel > .table-responsive > .table-bordered > tbody > tr:first-child > td,\n.panel > .table-bordered > thead > tr:first-child > th,\n.panel > .table-responsive > .table-bordered > thead > tr:first-child > th,\n.panel > .table-bordered > tbody > tr:first-child > th,\n.panel > .table-responsive > .table-bordered > tbody > tr:first-child > th {\n  border-bottom: 0;\n}\n.panel > .table-bordered > tbody > tr:last-child > td,\n.panel > .table-responsive > .table-bordered > tbody > tr:last-child > td,\n.panel > .table-bordered > tfoot > tr:last-child > td,\n.panel > .table-responsive > .table-bordered > tfoot > tr:last-child > td,\n.panel > .table-bordered > tbody > tr:last-child > th,\n.panel > .table-responsive > .table-bordered > tbody > tr:last-child > th,\n.panel > .table-bordered > tfoot > tr:last-child > th,\n.panel > .table-responsive > .table-bordered > tfoot > tr:last-child > th {\n  border-bottom: 0;\n}\n.panel > .table-responsive {\n  margin-bottom: 0;\n  border: 0;\n}\n.panel-group {\n  margin-bottom: 20px;\n}\n.panel-group .panel {\n  margin-bottom: 0;\n  border-radius: 4px;\n}\n.panel-group .panel + .panel {\n  margin-top: 5px;\n}\n.panel-group .panel-heading {\n  border-bottom: 0;\n}\n.panel-group .panel-heading + .panel-collapse > .panel-body,\n.panel-group .panel-heading + .panel-collapse > .list-group {\n  border-top: 1px solid #ddd;\n}\n.panel-group .panel-footer {\n  border-top: 0;\n}\n.panel-group .panel-footer + .panel-collapse .panel-body {\n  border-bottom: 1px solid #ddd;\n}\n.panel-default {\n  border-color: #ddd;\n}\n.panel-default > .panel-heading {\n  color: #333;\n  background-color: #f5f5f5;\n  border-color: #ddd;\n}\n.panel-default > .panel-heading + .panel-collapse > .panel-body {\n  border-top-color: #ddd;\n}\n.panel-default > .panel-heading .badge {\n  color: #f5f5f5;\n  background-color: #333;\n}\n.panel-default > .panel-footer + .panel-collapse > .panel-body {\n  border-bottom-color: #ddd;\n}\n.panel-primary {\n  border-color: #337ab7;\n}\n.panel-primary > .panel-heading {\n  color: #fff;\n  background-color: #337ab7;\n  border-color: #337ab7;\n}\n.panel-primary > .panel-heading + .panel-collapse > .panel-body {\n  border-top-color: #337ab7;\n}\n.panel-primary > .panel-heading .badge {\n  color: #337ab7;\n  background-color: #fff;\n}\n.panel-primary > .panel-footer + .panel-collapse > .panel-body {\n  border-bottom-color: #337ab7;\n}\n.panel-success {\n  border-color: #d6e9c6;\n}\n.panel-success > .panel-heading {\n  color: #3c763d;\n  background-color: #dff0d8;\n  border-color: #d6e9c6;\n}\n.panel-success > .panel-heading + .panel-collapse > .panel-body {\n  border-top-color: #d6e9c6;\n}\n.panel-success > .panel-heading .badge {\n  color: #dff0d8;\n  background-color: #3c763d;\n}\n.panel-success > .panel-footer + .panel-collapse > .panel-body {\n  border-bottom-color: #d6e9c6;\n}\n.panel-info {\n  border-color: #bce8f1;\n}\n.panel-info > .panel-heading {\n  color: #31708f;\n  background-color: #d9edf7;\n  border-color: #bce8f1;\n}\n.panel-info > .panel-heading + .panel-collapse > .panel-body {\n  border-top-color: #bce8f1;\n}\n.panel-info > .panel-heading .badge {\n  color: #d9edf7;\n  background-color: #31708f;\n}\n.panel-info > .panel-footer + .panel-collapse > .panel-body {\n  border-bottom-color: #bce8f1;\n}\n.panel-warning {\n  border-color: #faebcc;\n}\n.panel-warning > .panel-heading {\n  color: #8a6d3b;\n  background-color: #fcf8e3;\n  border-color: #faebcc;\n}\n.panel-warning > .panel-heading + .panel-collapse > .panel-body {\n  border-top-color: #faebcc;\n}\n.panel-warning > .panel-heading .badge {\n  color: #fcf8e3;\n  background-color: #8a6d3b;\n}\n.panel-warning > .panel-footer + .panel-collapse > .panel-body {\n  border-bottom-color: #faebcc;\n}\n.panel-danger {\n  border-color: #ebccd1;\n}\n.panel-danger > .panel-heading {\n  color: #a94442;\n  background-color: #f2dede;\n  border-color: #ebccd1;\n}\n.panel-danger > .panel-heading + .panel-collapse > .panel-body {\n  border-top-color: #ebccd1;\n}\n.panel-danger > .panel-heading .badge {\n  color: #f2dede;\n  background-color: #a94442;\n}\n.panel-danger > .panel-footer + .panel-collapse > .panel-body {\n  border-bottom-color: #ebccd1;\n}\n.embed-responsive {\n  position: relative;\n  display: block;\n  height: 0;\n  padding: 0;\n  overflow: hidden;\n}\n.embed-responsive .embed-responsive-item,\n.embed-responsive iframe,\n.embed-responsive embed,\n.embed-responsive object,\n.embed-responsive video {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  border: 0;\n}\n.embed-responsive-16by9 {\n  padding-bottom: 56.25%;\n}\n.embed-responsive-4by3 {\n  padding-bottom: 75%;\n}\n.well {\n  min-height: 20px;\n  padding: 19px;\n  margin-bottom: 20px;\n  background-color: #f5f5f5;\n  border: 1px solid #e3e3e3;\n  border-radius: 4px;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);\n}\n.well blockquote {\n  border-color: #ddd;\n  border-color: rgba(0, 0, 0, .15);\n}\n.well-lg {\n  padding: 24px;\n  border-radius: 6px;\n}\n.well-sm {\n  padding: 9px;\n  border-radius: 3px;\n}\n.close {\n  float: right;\n  font-size: 21px;\n  font-weight: bold;\n  line-height: 1;\n  color: #000;\n  text-shadow: 0 1px 0 #fff;\n  filter: alpha(opacity=20);\n  opacity: .2;\n}\n.close:hover,\n.close:focus {\n  color: #000;\n  text-decoration: none;\n  cursor: pointer;\n  filter: alpha(opacity=50);\n  opacity: .5;\n}\nbutton.close {\n  -webkit-appearance: none;\n  padding: 0;\n  cursor: pointer;\n  background: transparent;\n  border: 0;\n}\n.modal-open {\n  overflow: hidden;\n}\n.modal {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 1050;\n  display: none;\n  overflow: hidden;\n  -webkit-overflow-scrolling: touch;\n  outline: 0;\n}\n.modal.fade .modal-dialog {\n  -webkit-transition: -webkit-transform .3s ease-out;\n       -o-transition:      -o-transform .3s ease-out;\n          transition:         transform .3s ease-out;\n  -webkit-transform: translate(0, -25%);\n      -ms-transform: translate(0, -25%);\n       -o-transform: translate(0, -25%);\n          transform: translate(0, -25%);\n}\n.modal.in .modal-dialog {\n  -webkit-transform: translate(0, 0);\n      -ms-transform: translate(0, 0);\n       -o-transform: translate(0, 0);\n          transform: translate(0, 0);\n}\n.modal-open .modal {\n  overflow-x: hidden;\n  overflow-y: auto;\n}\n.modal-dialog {\n  position: relative;\n  width: auto;\n  margin: 10px;\n}\n.modal-content {\n  position: relative;\n  background-color: #fff;\n  -webkit-background-clip: padding-box;\n          background-clip: padding-box;\n  border: 1px solid #999;\n  border: 1px solid rgba(0, 0, 0, .2);\n  border-radius: 6px;\n  outline: 0;\n  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);\n          box-shadow: 0 3px 9px rgba(0, 0, 0, .5);\n}\n.modal-backdrop {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 1040;\n  background-color: #000;\n}\n.modal-backdrop.fade {\n  filter: alpha(opacity=0);\n  opacity: 0;\n}\n.modal-backdrop.in {\n  filter: alpha(opacity=50);\n  opacity: .5;\n}\n.modal-header {\n  padding: 15px;\n  border-bottom: 1px solid #e5e5e5;\n}\n.modal-header .close {\n  margin-top: -2px;\n}\n.modal-title {\n  margin: 0;\n  line-height: 1.42857143;\n}\n.modal-body {\n  position: relative;\n  padding: 15px;\n}\n.modal-footer {\n  padding: 15px;\n  text-align: right;\n  border-top: 1px solid #e5e5e5;\n}\n.modal-footer .btn + .btn {\n  margin-bottom: 0;\n  margin-left: 5px;\n}\n.modal-footer .btn-group .btn + .btn {\n  margin-left: -1px;\n}\n.modal-footer .btn-block + .btn-block {\n  margin-left: 0;\n}\n.modal-scrollbar-measure {\n  position: absolute;\n  top: -9999px;\n  width: 50px;\n  height: 50px;\n  overflow: scroll;\n}\n@media (min-width: 768px) {\n  .modal-dialog {\n    width: 600px;\n    margin: 30px auto;\n  }\n  .modal-content {\n    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);\n            box-shadow: 0 5px 15px rgba(0, 0, 0, .5);\n  }\n  .modal-sm {\n    width: 300px;\n  }\n}\n@media (min-width: 992px) {\n  .modal-lg {\n    width: 900px;\n  }\n}\n.tooltip {\n  position: absolute;\n  z-index: 1070;\n  display: block;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 12px;\n  font-style: normal;\n  font-weight: normal;\n  line-height: 1.42857143;\n  text-align: left;\n  text-align: start;\n  text-decoration: none;\n  text-shadow: none;\n  text-transform: none;\n  letter-spacing: normal;\n  word-break: normal;\n  word-spacing: normal;\n  word-wrap: normal;\n  white-space: normal;\n  filter: alpha(opacity=0);\n  opacity: 0;\n\n  line-break: auto;\n}\n.tooltip.in {\n  filter: alpha(opacity=90);\n  opacity: .9;\n}\n.tooltip.top {\n  padding: 5px 0;\n  margin-top: -3px;\n}\n.tooltip.right {\n  padding: 0 5px;\n  margin-left: 3px;\n}\n.tooltip.bottom {\n  padding: 5px 0;\n  margin-top: 3px;\n}\n.tooltip.left {\n  padding: 0 5px;\n  margin-left: -3px;\n}\n.tooltip-inner {\n  max-width: 200px;\n  padding: 3px 8px;\n  color: #fff;\n  text-align: center;\n  background-color: #000;\n  border-radius: 4px;\n}\n.tooltip-arrow {\n  position: absolute;\n  width: 0;\n  height: 0;\n  border-color: transparent;\n  border-style: solid;\n}\n.tooltip.top .tooltip-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-width: 5px 5px 0;\n  border-top-color: #000;\n}\n.tooltip.top-left .tooltip-arrow {\n  right: 5px;\n  bottom: 0;\n  margin-bottom: -5px;\n  border-width: 5px 5px 0;\n  border-top-color: #000;\n}\n.tooltip.top-right .tooltip-arrow {\n  bottom: 0;\n  left: 5px;\n  margin-bottom: -5px;\n  border-width: 5px 5px 0;\n  border-top-color: #000;\n}\n.tooltip.right .tooltip-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-width: 5px 5px 5px 0;\n  border-right-color: #000;\n}\n.tooltip.left .tooltip-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-width: 5px 0 5px 5px;\n  border-left-color: #000;\n}\n.tooltip.bottom .tooltip-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-width: 0 5px 5px;\n  border-bottom-color: #000;\n}\n.tooltip.bottom-left .tooltip-arrow {\n  top: 0;\n  right: 5px;\n  margin-top: -5px;\n  border-width: 0 5px 5px;\n  border-bottom-color: #000;\n}\n.tooltip.bottom-right .tooltip-arrow {\n  top: 0;\n  left: 5px;\n  margin-top: -5px;\n  border-width: 0 5px 5px;\n  border-bottom-color: #000;\n}\n.popover {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 1060;\n  display: none;\n  max-width: 276px;\n  padding: 1px;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 14px;\n  font-style: normal;\n  font-weight: normal;\n  line-height: 1.42857143;\n  text-align: left;\n  text-align: start;\n  text-decoration: none;\n  text-shadow: none;\n  text-transform: none;\n  letter-spacing: normal;\n  word-break: normal;\n  word-spacing: normal;\n  word-wrap: normal;\n  white-space: normal;\n  background-color: #fff;\n  -webkit-background-clip: padding-box;\n          background-clip: padding-box;\n  border: 1px solid #ccc;\n  border: 1px solid rgba(0, 0, 0, .2);\n  border-radius: 6px;\n  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);\n          box-shadow: 0 5px 10px rgba(0, 0, 0, .2);\n\n  line-break: auto;\n}\n.popover.top {\n  margin-top: -10px;\n}\n.popover.right {\n  margin-left: 10px;\n}\n.popover.bottom {\n  margin-top: 10px;\n}\n.popover.left {\n  margin-left: -10px;\n}\n.popover-title {\n  padding: 8px 14px;\n  margin: 0;\n  font-size: 14px;\n  background-color: #f7f7f7;\n  border-bottom: 1px solid #ebebeb;\n  border-radius: 5px 5px 0 0;\n}\n.popover-content {\n  padding: 9px 14px;\n}\n.popover > .arrow,\n.popover > .arrow:after {\n  position: absolute;\n  display: block;\n  width: 0;\n  height: 0;\n  border-color: transparent;\n  border-style: solid;\n}\n.popover > .arrow {\n  border-width: 11px;\n}\n.popover > .arrow:after {\n  content: \"\";\n  border-width: 10px;\n}\n.popover.top > .arrow {\n  bottom: -11px;\n  left: 50%;\n  margin-left: -11px;\n  border-top-color: #999;\n  border-top-color: rgba(0, 0, 0, .25);\n  border-bottom-width: 0;\n}\n.popover.top > .arrow:after {\n  bottom: 1px;\n  margin-left: -10px;\n  content: \" \";\n  border-top-color: #fff;\n  border-bottom-width: 0;\n}\n.popover.right > .arrow {\n  top: 50%;\n  left: -11px;\n  margin-top: -11px;\n  border-right-color: #999;\n  border-right-color: rgba(0, 0, 0, .25);\n  border-left-width: 0;\n}\n.popover.right > .arrow:after {\n  bottom: -10px;\n  left: 1px;\n  content: \" \";\n  border-right-color: #fff;\n  border-left-width: 0;\n}\n.popover.bottom > .arrow {\n  top: -11px;\n  left: 50%;\n  margin-left: -11px;\n  border-top-width: 0;\n  border-bottom-color: #999;\n  border-bottom-color: rgba(0, 0, 0, .25);\n}\n.popover.bottom > .arrow:after {\n  top: 1px;\n  margin-left: -10px;\n  content: \" \";\n  border-top-width: 0;\n  border-bottom-color: #fff;\n}\n.popover.left > .arrow {\n  top: 50%;\n  right: -11px;\n  margin-top: -11px;\n  border-right-width: 0;\n  border-left-color: #999;\n  border-left-color: rgba(0, 0, 0, .25);\n}\n.popover.left > .arrow:after {\n  right: 1px;\n  bottom: -10px;\n  content: \" \";\n  border-right-width: 0;\n  border-left-color: #fff;\n}\n.carousel {\n  position: relative;\n}\n.carousel-inner {\n  position: relative;\n  width: 100%;\n  overflow: hidden;\n}\n.carousel-inner > .item {\n  position: relative;\n  display: none;\n  -webkit-transition: .6s ease-in-out left;\n       -o-transition: .6s ease-in-out left;\n          transition: .6s ease-in-out left;\n}\n.carousel-inner > .item > img,\n.carousel-inner > .item > a > img {\n  line-height: 1;\n}\n@media all and (transform-3d), (-webkit-transform-3d) {\n  .carousel-inner > .item {\n    -webkit-transition: -webkit-transform .6s ease-in-out;\n         -o-transition:      -o-transform .6s ease-in-out;\n            transition:         transform .6s ease-in-out;\n\n    -webkit-backface-visibility: hidden;\n            backface-visibility: hidden;\n    -webkit-perspective: 1000px;\n            perspective: 1000px;\n  }\n  .carousel-inner > .item.next,\n  .carousel-inner > .item.active.right {\n    left: 0;\n    -webkit-transform: translate3d(100%, 0, 0);\n            transform: translate3d(100%, 0, 0);\n  }\n  .carousel-inner > .item.prev,\n  .carousel-inner > .item.active.left {\n    left: 0;\n    -webkit-transform: translate3d(-100%, 0, 0);\n            transform: translate3d(-100%, 0, 0);\n  }\n  .carousel-inner > .item.next.left,\n  .carousel-inner > .item.prev.right,\n  .carousel-inner > .item.active {\n    left: 0;\n    -webkit-transform: translate3d(0, 0, 0);\n            transform: translate3d(0, 0, 0);\n  }\n}\n.carousel-inner > .active,\n.carousel-inner > .next,\n.carousel-inner > .prev {\n  display: block;\n}\n.carousel-inner > .active {\n  left: 0;\n}\n.carousel-inner > .next,\n.carousel-inner > .prev {\n  position: absolute;\n  top: 0;\n  width: 100%;\n}\n.carousel-inner > .next {\n  left: 100%;\n}\n.carousel-inner > .prev {\n  left: -100%;\n}\n.carousel-inner > .next.left,\n.carousel-inner > .prev.right {\n  left: 0;\n}\n.carousel-inner > .active.left {\n  left: -100%;\n}\n.carousel-inner > .active.right {\n  left: 100%;\n}\n.carousel-control {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  width: 15%;\n  font-size: 20px;\n  color: #fff;\n  text-align: center;\n  text-shadow: 0 1px 2px rgba(0, 0, 0, .6);\n  background-color: rgba(0, 0, 0, 0);\n  filter: alpha(opacity=50);\n  opacity: .5;\n}\n.carousel-control.left {\n  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);\n  background-image:      -o-linear-gradient(left, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);\n  background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .5)), to(rgba(0, 0, 0, .0001)));\n  background-image:         linear-gradient(to right, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);\n  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);\n  background-repeat: repeat-x;\n}\n.carousel-control.right {\n  right: 0;\n  left: auto;\n  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);\n  background-image:      -o-linear-gradient(left, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);\n  background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .0001)), to(rgba(0, 0, 0, .5)));\n  background-image:         linear-gradient(to right, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);\n  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);\n  background-repeat: repeat-x;\n}\n.carousel-control:hover,\n.carousel-control:focus {\n  color: #fff;\n  text-decoration: none;\n  filter: alpha(opacity=90);\n  outline: 0;\n  opacity: .9;\n}\n.carousel-control .icon-prev,\n.carousel-control .icon-next,\n.carousel-control .glyphicon-chevron-left,\n.carousel-control .glyphicon-chevron-right {\n  position: absolute;\n  top: 50%;\n  z-index: 5;\n  display: inline-block;\n  margin-top: -10px;\n}\n.carousel-control .icon-prev,\n.carousel-control .glyphicon-chevron-left {\n  left: 50%;\n  margin-left: -10px;\n}\n.carousel-control .icon-next,\n.carousel-control .glyphicon-chevron-right {\n  right: 50%;\n  margin-right: -10px;\n}\n.carousel-control .icon-prev,\n.carousel-control .icon-next {\n  width: 20px;\n  height: 20px;\n  font-family: serif;\n  line-height: 1;\n}\n.carousel-control .icon-prev:before {\n  content: '\\2039';\n}\n.carousel-control .icon-next:before {\n  content: '\\203A';\n}\n.carousel-indicators {\n  position: absolute;\n  bottom: 10px;\n  left: 50%;\n  z-index: 15;\n  width: 60%;\n  padding-left: 0;\n  margin-left: -30%;\n  text-align: center;\n  list-style: none;\n}\n.carousel-indicators li {\n  display: inline-block;\n  width: 10px;\n  height: 10px;\n  margin: 1px;\n  text-indent: -999px;\n  cursor: pointer;\n  background-color: #000 \\9;\n  background-color: rgba(0, 0, 0, 0);\n  border: 1px solid #fff;\n  border-radius: 10px;\n}\n.carousel-indicators .active {\n  width: 12px;\n  height: 12px;\n  margin: 0;\n  background-color: #fff;\n}\n.carousel-caption {\n  position: absolute;\n  right: 15%;\n  bottom: 20px;\n  left: 15%;\n  z-index: 10;\n  padding-top: 20px;\n  padding-bottom: 20px;\n  color: #fff;\n  text-align: center;\n  text-shadow: 0 1px 2px rgba(0, 0, 0, .6);\n}\n.carousel-caption .btn {\n  text-shadow: none;\n}\n@media screen and (min-width: 768px) {\n  .carousel-control .glyphicon-chevron-left,\n  .carousel-control .glyphicon-chevron-right,\n  .carousel-control .icon-prev,\n  .carousel-control .icon-next {\n    width: 30px;\n    height: 30px;\n    margin-top: -10px;\n    font-size: 30px;\n  }\n  .carousel-control .glyphicon-chevron-left,\n  .carousel-control .icon-prev {\n    margin-left: -10px;\n  }\n  .carousel-control .glyphicon-chevron-right,\n  .carousel-control .icon-next {\n    margin-right: -10px;\n  }\n  .carousel-caption {\n    right: 20%;\n    left: 20%;\n    padding-bottom: 30px;\n  }\n  .carousel-indicators {\n    bottom: 20px;\n  }\n}\n.clearfix:before,\n.clearfix:after,\n.dl-horizontal dd:before,\n.dl-horizontal dd:after,\n.container:before,\n.container:after,\n.container-fluid:before,\n.container-fluid:after,\n.row:before,\n.row:after,\n.form-horizontal .form-group:before,\n.form-horizontal .form-group:after,\n.btn-toolbar:before,\n.btn-toolbar:after,\n.btn-group-vertical > .btn-group:before,\n.btn-group-vertical > .btn-group:after,\n.nav:before,\n.nav:after,\n.navbar:before,\n.navbar:after,\n.navbar-header:before,\n.navbar-header:after,\n.navbar-collapse:before,\n.navbar-collapse:after,\n.pager:before,\n.pager:after,\n.panel-body:before,\n.panel-body:after,\n.modal-header:before,\n.modal-header:after,\n.modal-footer:before,\n.modal-footer:after {\n  display: table;\n  content: \" \";\n}\n.clearfix:after,\n.dl-horizontal dd:after,\n.container:after,\n.container-fluid:after,\n.row:after,\n.form-horizontal .form-group:after,\n.btn-toolbar:after,\n.btn-group-vertical > .btn-group:after,\n.nav:after,\n.navbar:after,\n.navbar-header:after,\n.navbar-collapse:after,\n.pager:after,\n.panel-body:after,\n.modal-header:after,\n.modal-footer:after {\n  clear: both;\n}\n.center-block {\n  display: block;\n  margin-right: auto;\n  margin-left: auto;\n}\n.pull-right {\n  float: right !important;\n}\n.pull-left {\n  float: left !important;\n}\n.hide {\n  display: none !important;\n}\n.show {\n  display: block !important;\n}\n.invisible {\n  visibility: hidden;\n}\n.text-hide {\n  font: 0/0 a;\n  color: transparent;\n  text-shadow: none;\n  background-color: transparent;\n  border: 0;\n}\n.hidden {\n  display: none !important;\n}\n.affix {\n  position: fixed;\n}\n@-ms-viewport {\n  width: device-width;\n}\n.visible-xs,\n.visible-sm,\n.visible-md,\n.visible-lg {\n  display: none !important;\n}\n.visible-xs-block,\n.visible-xs-inline,\n.visible-xs-inline-block,\n.visible-sm-block,\n.visible-sm-inline,\n.visible-sm-inline-block,\n.visible-md-block,\n.visible-md-inline,\n.visible-md-inline-block,\n.visible-lg-block,\n.visible-lg-inline,\n.visible-lg-inline-block {\n  display: none !important;\n}\n@media (max-width: 767px) {\n  .visible-xs {\n    display: block !important;\n  }\n  table.visible-xs {\n    display: table !important;\n  }\n  tr.visible-xs {\n    display: table-row !important;\n  }\n  th.visible-xs,\n  td.visible-xs {\n    display: table-cell !important;\n  }\n}\n@media (max-width: 767px) {\n  .visible-xs-block {\n    display: block !important;\n  }\n}\n@media (max-width: 767px) {\n  .visible-xs-inline {\n    display: inline !important;\n  }\n}\n@media (max-width: 767px) {\n  .visible-xs-inline-block {\n    display: inline-block !important;\n  }\n}\n@media (min-width: 768px) and (max-width: 991px) {\n  .visible-sm {\n    display: block !important;\n  }\n  table.visible-sm {\n    display: table !important;\n  }\n  tr.visible-sm {\n    display: table-row !important;\n  }\n  th.visible-sm,\n  td.visible-sm {\n    display: table-cell !important;\n  }\n}\n@media (min-width: 768px) and (max-width: 991px) {\n  .visible-sm-block {\n    display: block !important;\n  }\n}\n@media (min-width: 768px) and (max-width: 991px) {\n  .visible-sm-inline {\n    display: inline !important;\n  }\n}\n@media (min-width: 768px) and (max-width: 991px) {\n  .visible-sm-inline-block {\n    display: inline-block !important;\n  }\n}\n@media (min-width: 992px) and (max-width: 1199px) {\n  .visible-md {\n    display: block !important;\n  }\n  table.visible-md {\n    display: table !important;\n  }\n  tr.visible-md {\n    display: table-row !important;\n  }\n  th.visible-md,\n  td.visible-md {\n    display: table-cell !important;\n  }\n}\n@media (min-width: 992px) and (max-width: 1199px) {\n  .visible-md-block {\n    display: block !important;\n  }\n}\n@media (min-width: 992px) and (max-width: 1199px) {\n  .visible-md-inline {\n    display: inline !important;\n  }\n}\n@media (min-width: 992px) and (max-width: 1199px) {\n  .visible-md-inline-block {\n    display: inline-block !important;\n  }\n}\n@media (min-width: 1200px) {\n  .visible-lg {\n    display: block !important;\n  }\n  table.visible-lg {\n    display: table !important;\n  }\n  tr.visible-lg {\n    display: table-row !important;\n  }\n  th.visible-lg,\n  td.visible-lg {\n    display: table-cell !important;\n  }\n}\n@media (min-width: 1200px) {\n  .visible-lg-block {\n    display: block !important;\n  }\n}\n@media (min-width: 1200px) {\n  .visible-lg-inline {\n    display: inline !important;\n  }\n}\n@media (min-width: 1200px) {\n  .visible-lg-inline-block {\n    display: inline-block !important;\n  }\n}\n@media (max-width: 767px) {\n  .hidden-xs {\n    display: none !important;\n  }\n}\n@media (min-width: 768px) and (max-width: 991px) {\n  .hidden-sm {\n    display: none !important;\n  }\n}\n@media (min-width: 992px) and (max-width: 1199px) {\n  .hidden-md {\n    display: none !important;\n  }\n}\n@media (min-width: 1200px) {\n  .hidden-lg {\n    display: none !important;\n  }\n}\n.visible-print {\n  display: none !important;\n}\n@media print {\n  .visible-print {\n    display: block !important;\n  }\n  table.visible-print {\n    display: table !important;\n  }\n  tr.visible-print {\n    display: table-row !important;\n  }\n  th.visible-print,\n  td.visible-print {\n    display: table-cell !important;\n  }\n}\n.visible-print-block {\n  display: none !important;\n}\n@media print {\n  .visible-print-block {\n    display: block !important;\n  }\n}\n.visible-print-inline {\n  display: none !important;\n}\n@media print {\n  .visible-print-inline {\n    display: inline !important;\n  }\n}\n.visible-print-inline-block {\n  display: none !important;\n}\n@media print {\n  .visible-print-inline-block {\n    display: inline-block !important;\n  }\n}\n@media print {\n  .hidden-print {\n    display: none !important;\n  }\n}\n/*# sourceMappingURL=bootstrap.css.map */\n", ""]);
+	exports.push([module.id, "/*!\n * Bootstrap v3.3.6 (http://getbootstrap.com)\n * Copyright 2011-2015 Twitter, Inc.\n * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)\n */\n/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */\nhtml {\n  font-family: sans-serif;\n  -webkit-text-size-adjust: 100%;\n      -ms-text-size-adjust: 100%;\n}\nbody {\n  margin: 0;\n}\narticle,\naside,\ndetails,\nfigcaption,\nfigure,\nfooter,\nheader,\nhgroup,\nmain,\nmenu,\nnav,\nsection,\nsummary {\n  display: block;\n}\naudio,\ncanvas,\nprogress,\nvideo {\n  display: inline-block;\n  vertical-align: baseline;\n}\naudio:not([controls]) {\n  display: none;\n  height: 0;\n}\n[hidden],\ntemplate {\n  display: none;\n}\na {\n  background-color: transparent;\n}\na:active,\na:hover {\n  outline: 0;\n}\nabbr[title] {\n  border-bottom: 1px dotted;\n}\nb,\nstrong {\n  font-weight: bold;\n}\ndfn {\n  font-style: italic;\n}\nh1 {\n  margin: .67em 0;\n  font-size: 2em;\n}\nmark {\n  color: #000;\n  background: #ff0;\n}\nsmall {\n  font-size: 80%;\n}\nsub,\nsup {\n  position: relative;\n  font-size: 75%;\n  line-height: 0;\n  vertical-align: baseline;\n}\nsup {\n  top: -.5em;\n}\nsub {\n  bottom: -.25em;\n}\nimg {\n  border: 0;\n}\nsvg:not(:root) {\n  overflow: hidden;\n}\nfigure {\n  margin: 1em 40px;\n}\nhr {\n  height: 0;\n  -webkit-box-sizing: content-box;\n     -moz-box-sizing: content-box;\n          box-sizing: content-box;\n}\npre {\n  overflow: auto;\n}\ncode,\nkbd,\npre,\nsamp {\n  font-family: monospace, monospace;\n  font-size: 1em;\n}\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  margin: 0;\n  font: inherit;\n  color: inherit;\n}\nbutton {\n  overflow: visible;\n}\nbutton,\nselect {\n  text-transform: none;\n}\nbutton,\nhtml input[type=\"button\"],\ninput[type=\"reset\"],\ninput[type=\"submit\"] {\n  -webkit-appearance: button;\n  cursor: pointer;\n}\nbutton[disabled],\nhtml input[disabled] {\n  cursor: default;\n}\nbutton::-moz-focus-inner,\ninput::-moz-focus-inner {\n  padding: 0;\n  border: 0;\n}\ninput {\n  line-height: normal;\n}\ninput[type=\"checkbox\"],\ninput[type=\"radio\"] {\n  -webkit-box-sizing: border-box;\n     -moz-box-sizing: border-box;\n          box-sizing: border-box;\n  padding: 0;\n}\ninput[type=\"number\"]::-webkit-inner-spin-button,\ninput[type=\"number\"]::-webkit-outer-spin-button {\n  height: auto;\n}\ninput[type=\"search\"] {\n  -webkit-box-sizing: content-box;\n     -moz-box-sizing: content-box;\n          box-sizing: content-box;\n  -webkit-appearance: textfield;\n}\ninput[type=\"search\"]::-webkit-search-cancel-button,\ninput[type=\"search\"]::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\nfieldset {\n  padding: .35em .625em .75em;\n  margin: 0 2px;\n  border: 1px solid #c0c0c0;\n}\nlegend {\n  padding: 0;\n  border: 0;\n}\ntextarea {\n  overflow: auto;\n}\noptgroup {\n  font-weight: bold;\n}\ntable {\n  border-spacing: 0;\n  border-collapse: collapse;\n}\ntd,\nth {\n  padding: 0;\n}\n/*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */\n@media print {\n  *,\n  *:before,\n  *:after {\n    color: #000 !important;\n    text-shadow: none !important;\n    background: transparent !important;\n    -webkit-box-shadow: none !important;\n            box-shadow: none !important;\n  }\n  a,\n  a:visited {\n    text-decoration: underline;\n  }\n  a[href]:after {\n    content: \" (\" attr(href) \")\";\n  }\n  abbr[title]:after {\n    content: \" (\" attr(title) \")\";\n  }\n  a[href^=\"#\"]:after,\n  a[href^=\"javascript:\"]:after {\n    content: \"\";\n  }\n  pre,\n  blockquote {\n    border: 1px solid #999;\n\n    page-break-inside: avoid;\n  }\n  thead {\n    display: table-header-group;\n  }\n  tr,\n  img {\n    page-break-inside: avoid;\n  }\n  img {\n    max-width: 100% !important;\n  }\n  p,\n  h2,\n  h3 {\n    orphans: 3;\n    widows: 3;\n  }\n  h2,\n  h3 {\n    page-break-after: avoid;\n  }\n  .navbar {\n    display: none;\n  }\n  .btn > .caret,\n  .dropup > .btn > .caret {\n    border-top-color: #000 !important;\n  }\n  .label {\n    border: 1px solid #000;\n  }\n  .table {\n    border-collapse: collapse !important;\n  }\n  .table td,\n  .table th {\n    background-color: #fff !important;\n  }\n  .table-bordered th,\n  .table-bordered td {\n    border: 1px solid #ddd !important;\n  }\n}\n@font-face {\n  font-family: 'Glyphicons Halflings';\n\n  src: url(" + __webpack_require__(63) + ");\n  src: url(" + __webpack_require__(63) + "?#iefix) format('embedded-opentype'), url(" + __webpack_require__(64) + ") format('woff2'), url(" + __webpack_require__(65) + ") format('woff'), url(" + __webpack_require__(66) + ") format('truetype'), url(" + __webpack_require__(67) + "#glyphicons_halflingsregular) format('svg');\n}\n.glyphicon {\n  position: relative;\n  top: 1px;\n  display: inline-block;\n  font-family: 'Glyphicons Halflings';\n  font-style: normal;\n  font-weight: normal;\n  line-height: 1;\n\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n.glyphicon-asterisk:before {\n  content: \"*\";\n}\n.glyphicon-plus:before {\n  content: \"+\";\n}\n.glyphicon-euro:before,\n.glyphicon-eur:before {\n  content: \"\\20AC\";\n}\n.glyphicon-minus:before {\n  content: \"\\2212\";\n}\n.glyphicon-cloud:before {\n  content: \"\\2601\";\n}\n.glyphicon-envelope:before {\n  content: \"\\2709\";\n}\n.glyphicon-pencil:before {\n  content: \"\\270F\";\n}\n.glyphicon-glass:before {\n  content: \"\\E001\";\n}\n.glyphicon-music:before {\n  content: \"\\E002\";\n}\n.glyphicon-search:before {\n  content: \"\\E003\";\n}\n.glyphicon-heart:before {\n  content: \"\\E005\";\n}\n.glyphicon-star:before {\n  content: \"\\E006\";\n}\n.glyphicon-star-empty:before {\n  content: \"\\E007\";\n}\n.glyphicon-user:before {\n  content: \"\\E008\";\n}\n.glyphicon-film:before {\n  content: \"\\E009\";\n}\n.glyphicon-th-large:before {\n  content: \"\\E010\";\n}\n.glyphicon-th:before {\n  content: \"\\E011\";\n}\n.glyphicon-th-list:before {\n  content: \"\\E012\";\n}\n.glyphicon-ok:before {\n  content: \"\\E013\";\n}\n.glyphicon-remove:before {\n  content: \"\\E014\";\n}\n.glyphicon-zoom-in:before {\n  content: \"\\E015\";\n}\n.glyphicon-zoom-out:before {\n  content: \"\\E016\";\n}\n.glyphicon-off:before {\n  content: \"\\E017\";\n}\n.glyphicon-signal:before {\n  content: \"\\E018\";\n}\n.glyphicon-cog:before {\n  content: \"\\E019\";\n}\n.glyphicon-trash:before {\n  content: \"\\E020\";\n}\n.glyphicon-home:before {\n  content: \"\\E021\";\n}\n.glyphicon-file:before {\n  content: \"\\E022\";\n}\n.glyphicon-time:before {\n  content: \"\\E023\";\n}\n.glyphicon-road:before {\n  content: \"\\E024\";\n}\n.glyphicon-download-alt:before {\n  content: \"\\E025\";\n}\n.glyphicon-download:before {\n  content: \"\\E026\";\n}\n.glyphicon-upload:before {\n  content: \"\\E027\";\n}\n.glyphicon-inbox:before {\n  content: \"\\E028\";\n}\n.glyphicon-play-circle:before {\n  content: \"\\E029\";\n}\n.glyphicon-repeat:before {\n  content: \"\\E030\";\n}\n.glyphicon-refresh:before {\n  content: \"\\E031\";\n}\n.glyphicon-list-alt:before {\n  content: \"\\E032\";\n}\n.glyphicon-lock:before {\n  content: \"\\E033\";\n}\n.glyphicon-flag:before {\n  content: \"\\E034\";\n}\n.glyphicon-headphones:before {\n  content: \"\\E035\";\n}\n.glyphicon-volume-off:before {\n  content: \"\\E036\";\n}\n.glyphicon-volume-down:before {\n  content: \"\\E037\";\n}\n.glyphicon-volume-up:before {\n  content: \"\\E038\";\n}\n.glyphicon-qrcode:before {\n  content: \"\\E039\";\n}\n.glyphicon-barcode:before {\n  content: \"\\E040\";\n}\n.glyphicon-tag:before {\n  content: \"\\E041\";\n}\n.glyphicon-tags:before {\n  content: \"\\E042\";\n}\n.glyphicon-book:before {\n  content: \"\\E043\";\n}\n.glyphicon-bookmark:before {\n  content: \"\\E044\";\n}\n.glyphicon-print:before {\n  content: \"\\E045\";\n}\n.glyphicon-camera:before {\n  content: \"\\E046\";\n}\n.glyphicon-font:before {\n  content: \"\\E047\";\n}\n.glyphicon-bold:before {\n  content: \"\\E048\";\n}\n.glyphicon-italic:before {\n  content: \"\\E049\";\n}\n.glyphicon-text-height:before {\n  content: \"\\E050\";\n}\n.glyphicon-text-width:before {\n  content: \"\\E051\";\n}\n.glyphicon-align-left:before {\n  content: \"\\E052\";\n}\n.glyphicon-align-center:before {\n  content: \"\\E053\";\n}\n.glyphicon-align-right:before {\n  content: \"\\E054\";\n}\n.glyphicon-align-justify:before {\n  content: \"\\E055\";\n}\n.glyphicon-list:before {\n  content: \"\\E056\";\n}\n.glyphicon-indent-left:before {\n  content: \"\\E057\";\n}\n.glyphicon-indent-right:before {\n  content: \"\\E058\";\n}\n.glyphicon-facetime-video:before {\n  content: \"\\E059\";\n}\n.glyphicon-picture:before {\n  content: \"\\E060\";\n}\n.glyphicon-map-marker:before {\n  content: \"\\E062\";\n}\n.glyphicon-adjust:before {\n  content: \"\\E063\";\n}\n.glyphicon-tint:before {\n  content: \"\\E064\";\n}\n.glyphicon-edit:before {\n  content: \"\\E065\";\n}\n.glyphicon-share:before {\n  content: \"\\E066\";\n}\n.glyphicon-check:before {\n  content: \"\\E067\";\n}\n.glyphicon-move:before {\n  content: \"\\E068\";\n}\n.glyphicon-step-backward:before {\n  content: \"\\E069\";\n}\n.glyphicon-fast-backward:before {\n  content: \"\\E070\";\n}\n.glyphicon-backward:before {\n  content: \"\\E071\";\n}\n.glyphicon-play:before {\n  content: \"\\E072\";\n}\n.glyphicon-pause:before {\n  content: \"\\E073\";\n}\n.glyphicon-stop:before {\n  content: \"\\E074\";\n}\n.glyphicon-forward:before {\n  content: \"\\E075\";\n}\n.glyphicon-fast-forward:before {\n  content: \"\\E076\";\n}\n.glyphicon-step-forward:before {\n  content: \"\\E077\";\n}\n.glyphicon-eject:before {\n  content: \"\\E078\";\n}\n.glyphicon-chevron-left:before {\n  content: \"\\E079\";\n}\n.glyphicon-chevron-right:before {\n  content: \"\\E080\";\n}\n.glyphicon-plus-sign:before {\n  content: \"\\E081\";\n}\n.glyphicon-minus-sign:before {\n  content: \"\\E082\";\n}\n.glyphicon-remove-sign:before {\n  content: \"\\E083\";\n}\n.glyphicon-ok-sign:before {\n  content: \"\\E084\";\n}\n.glyphicon-question-sign:before {\n  content: \"\\E085\";\n}\n.glyphicon-info-sign:before {\n  content: \"\\E086\";\n}\n.glyphicon-screenshot:before {\n  content: \"\\E087\";\n}\n.glyphicon-remove-circle:before {\n  content: \"\\E088\";\n}\n.glyphicon-ok-circle:before {\n  content: \"\\E089\";\n}\n.glyphicon-ban-circle:before {\n  content: \"\\E090\";\n}\n.glyphicon-arrow-left:before {\n  content: \"\\E091\";\n}\n.glyphicon-arrow-right:before {\n  content: \"\\E092\";\n}\n.glyphicon-arrow-up:before {\n  content: \"\\E093\";\n}\n.glyphicon-arrow-down:before {\n  content: \"\\E094\";\n}\n.glyphicon-share-alt:before {\n  content: \"\\E095\";\n}\n.glyphicon-resize-full:before {\n  content: \"\\E096\";\n}\n.glyphicon-resize-small:before {\n  content: \"\\E097\";\n}\n.glyphicon-exclamation-sign:before {\n  content: \"\\E101\";\n}\n.glyphicon-gift:before {\n  content: \"\\E102\";\n}\n.glyphicon-leaf:before {\n  content: \"\\E103\";\n}\n.glyphicon-fire:before {\n  content: \"\\E104\";\n}\n.glyphicon-eye-open:before {\n  content: \"\\E105\";\n}\n.glyphicon-eye-close:before {\n  content: \"\\E106\";\n}\n.glyphicon-warning-sign:before {\n  content: \"\\E107\";\n}\n.glyphicon-plane:before {\n  content: \"\\E108\";\n}\n.glyphicon-calendar:before {\n  content: \"\\E109\";\n}\n.glyphicon-random:before {\n  content: \"\\E110\";\n}\n.glyphicon-comment:before {\n  content: \"\\E111\";\n}\n.glyphicon-magnet:before {\n  content: \"\\E112\";\n}\n.glyphicon-chevron-up:before {\n  content: \"\\E113\";\n}\n.glyphicon-chevron-down:before {\n  content: \"\\E114\";\n}\n.glyphicon-retweet:before {\n  content: \"\\E115\";\n}\n.glyphicon-shopping-cart:before {\n  content: \"\\E116\";\n}\n.glyphicon-folder-close:before {\n  content: \"\\E117\";\n}\n.glyphicon-folder-open:before {\n  content: \"\\E118\";\n}\n.glyphicon-resize-vertical:before {\n  content: \"\\E119\";\n}\n.glyphicon-resize-horizontal:before {\n  content: \"\\E120\";\n}\n.glyphicon-hdd:before {\n  content: \"\\E121\";\n}\n.glyphicon-bullhorn:before {\n  content: \"\\E122\";\n}\n.glyphicon-bell:before {\n  content: \"\\E123\";\n}\n.glyphicon-certificate:before {\n  content: \"\\E124\";\n}\n.glyphicon-thumbs-up:before {\n  content: \"\\E125\";\n}\n.glyphicon-thumbs-down:before {\n  content: \"\\E126\";\n}\n.glyphicon-hand-right:before {\n  content: \"\\E127\";\n}\n.glyphicon-hand-left:before {\n  content: \"\\E128\";\n}\n.glyphicon-hand-up:before {\n  content: \"\\E129\";\n}\n.glyphicon-hand-down:before {\n  content: \"\\E130\";\n}\n.glyphicon-circle-arrow-right:before {\n  content: \"\\E131\";\n}\n.glyphicon-circle-arrow-left:before {\n  content: \"\\E132\";\n}\n.glyphicon-circle-arrow-up:before {\n  content: \"\\E133\";\n}\n.glyphicon-circle-arrow-down:before {\n  content: \"\\E134\";\n}\n.glyphicon-globe:before {\n  content: \"\\E135\";\n}\n.glyphicon-wrench:before {\n  content: \"\\E136\";\n}\n.glyphicon-tasks:before {\n  content: \"\\E137\";\n}\n.glyphicon-filter:before {\n  content: \"\\E138\";\n}\n.glyphicon-briefcase:before {\n  content: \"\\E139\";\n}\n.glyphicon-fullscreen:before {\n  content: \"\\E140\";\n}\n.glyphicon-dashboard:before {\n  content: \"\\E141\";\n}\n.glyphicon-paperclip:before {\n  content: \"\\E142\";\n}\n.glyphicon-heart-empty:before {\n  content: \"\\E143\";\n}\n.glyphicon-link:before {\n  content: \"\\E144\";\n}\n.glyphicon-phone:before {\n  content: \"\\E145\";\n}\n.glyphicon-pushpin:before {\n  content: \"\\E146\";\n}\n.glyphicon-usd:before {\n  content: \"\\E148\";\n}\n.glyphicon-gbp:before {\n  content: \"\\E149\";\n}\n.glyphicon-sort:before {\n  content: \"\\E150\";\n}\n.glyphicon-sort-by-alphabet:before {\n  content: \"\\E151\";\n}\n.glyphicon-sort-by-alphabet-alt:before {\n  content: \"\\E152\";\n}\n.glyphicon-sort-by-order:before {\n  content: \"\\E153\";\n}\n.glyphicon-sort-by-order-alt:before {\n  content: \"\\E154\";\n}\n.glyphicon-sort-by-attributes:before {\n  content: \"\\E155\";\n}\n.glyphicon-sort-by-attributes-alt:before {\n  content: \"\\E156\";\n}\n.glyphicon-unchecked:before {\n  content: \"\\E157\";\n}\n.glyphicon-expand:before {\n  content: \"\\E158\";\n}\n.glyphicon-collapse-down:before {\n  content: \"\\E159\";\n}\n.glyphicon-collapse-up:before {\n  content: \"\\E160\";\n}\n.glyphicon-log-in:before {\n  content: \"\\E161\";\n}\n.glyphicon-flash:before {\n  content: \"\\E162\";\n}\n.glyphicon-log-out:before {\n  content: \"\\E163\";\n}\n.glyphicon-new-window:before {\n  content: \"\\E164\";\n}\n.glyphicon-record:before {\n  content: \"\\E165\";\n}\n.glyphicon-save:before {\n  content: \"\\E166\";\n}\n.glyphicon-open:before {\n  content: \"\\E167\";\n}\n.glyphicon-saved:before {\n  content: \"\\E168\";\n}\n.glyphicon-import:before {\n  content: \"\\E169\";\n}\n.glyphicon-export:before {\n  content: \"\\E170\";\n}\n.glyphicon-send:before {\n  content: \"\\E171\";\n}\n.glyphicon-floppy-disk:before {\n  content: \"\\E172\";\n}\n.glyphicon-floppy-saved:before {\n  content: \"\\E173\";\n}\n.glyphicon-floppy-remove:before {\n  content: \"\\E174\";\n}\n.glyphicon-floppy-save:before {\n  content: \"\\E175\";\n}\n.glyphicon-floppy-open:before {\n  content: \"\\E176\";\n}\n.glyphicon-credit-card:before {\n  content: \"\\E177\";\n}\n.glyphicon-transfer:before {\n  content: \"\\E178\";\n}\n.glyphicon-cutlery:before {\n  content: \"\\E179\";\n}\n.glyphicon-header:before {\n  content: \"\\E180\";\n}\n.glyphicon-compressed:before {\n  content: \"\\E181\";\n}\n.glyphicon-earphone:before {\n  content: \"\\E182\";\n}\n.glyphicon-phone-alt:before {\n  content: \"\\E183\";\n}\n.glyphicon-tower:before {\n  content: \"\\E184\";\n}\n.glyphicon-stats:before {\n  content: \"\\E185\";\n}\n.glyphicon-sd-video:before {\n  content: \"\\E186\";\n}\n.glyphicon-hd-video:before {\n  content: \"\\E187\";\n}\n.glyphicon-subtitles:before {\n  content: \"\\E188\";\n}\n.glyphicon-sound-stereo:before {\n  content: \"\\E189\";\n}\n.glyphicon-sound-dolby:before {\n  content: \"\\E190\";\n}\n.glyphicon-sound-5-1:before {\n  content: \"\\E191\";\n}\n.glyphicon-sound-6-1:before {\n  content: \"\\E192\";\n}\n.glyphicon-sound-7-1:before {\n  content: \"\\E193\";\n}\n.glyphicon-copyright-mark:before {\n  content: \"\\E194\";\n}\n.glyphicon-registration-mark:before {\n  content: \"\\E195\";\n}\n.glyphicon-cloud-download:before {\n  content: \"\\E197\";\n}\n.glyphicon-cloud-upload:before {\n  content: \"\\E198\";\n}\n.glyphicon-tree-conifer:before {\n  content: \"\\E199\";\n}\n.glyphicon-tree-deciduous:before {\n  content: \"\\E200\";\n}\n.glyphicon-cd:before {\n  content: \"\\E201\";\n}\n.glyphicon-save-file:before {\n  content: \"\\E202\";\n}\n.glyphicon-open-file:before {\n  content: \"\\E203\";\n}\n.glyphicon-level-up:before {\n  content: \"\\E204\";\n}\n.glyphicon-copy:before {\n  content: \"\\E205\";\n}\n.glyphicon-paste:before {\n  content: \"\\E206\";\n}\n.glyphicon-alert:before {\n  content: \"\\E209\";\n}\n.glyphicon-equalizer:before {\n  content: \"\\E210\";\n}\n.glyphicon-king:before {\n  content: \"\\E211\";\n}\n.glyphicon-queen:before {\n  content: \"\\E212\";\n}\n.glyphicon-pawn:before {\n  content: \"\\E213\";\n}\n.glyphicon-bishop:before {\n  content: \"\\E214\";\n}\n.glyphicon-knight:before {\n  content: \"\\E215\";\n}\n.glyphicon-baby-formula:before {\n  content: \"\\E216\";\n}\n.glyphicon-tent:before {\n  content: \"\\26FA\";\n}\n.glyphicon-blackboard:before {\n  content: \"\\E218\";\n}\n.glyphicon-bed:before {\n  content: \"\\E219\";\n}\n.glyphicon-apple:before {\n  content: \"\\F8FF\";\n}\n.glyphicon-erase:before {\n  content: \"\\E221\";\n}\n.glyphicon-hourglass:before {\n  content: \"\\231B\";\n}\n.glyphicon-lamp:before {\n  content: \"\\E223\";\n}\n.glyphicon-duplicate:before {\n  content: \"\\E224\";\n}\n.glyphicon-piggy-bank:before {\n  content: \"\\E225\";\n}\n.glyphicon-scissors:before {\n  content: \"\\E226\";\n}\n.glyphicon-bitcoin:before {\n  content: \"\\E227\";\n}\n.glyphicon-btc:before {\n  content: \"\\E227\";\n}\n.glyphicon-xbt:before {\n  content: \"\\E227\";\n}\n.glyphicon-yen:before {\n  content: \"\\A5\";\n}\n.glyphicon-jpy:before {\n  content: \"\\A5\";\n}\n.glyphicon-ruble:before {\n  content: \"\\20BD\";\n}\n.glyphicon-rub:before {\n  content: \"\\20BD\";\n}\n.glyphicon-scale:before {\n  content: \"\\E230\";\n}\n.glyphicon-ice-lolly:before {\n  content: \"\\E231\";\n}\n.glyphicon-ice-lolly-tasted:before {\n  content: \"\\E232\";\n}\n.glyphicon-education:before {\n  content: \"\\E233\";\n}\n.glyphicon-option-horizontal:before {\n  content: \"\\E234\";\n}\n.glyphicon-option-vertical:before {\n  content: \"\\E235\";\n}\n.glyphicon-menu-hamburger:before {\n  content: \"\\E236\";\n}\n.glyphicon-modal-window:before {\n  content: \"\\E237\";\n}\n.glyphicon-oil:before {\n  content: \"\\E238\";\n}\n.glyphicon-grain:before {\n  content: \"\\E239\";\n}\n.glyphicon-sunglasses:before {\n  content: \"\\E240\";\n}\n.glyphicon-text-size:before {\n  content: \"\\E241\";\n}\n.glyphicon-text-color:before {\n  content: \"\\E242\";\n}\n.glyphicon-text-background:before {\n  content: \"\\E243\";\n}\n.glyphicon-object-align-top:before {\n  content: \"\\E244\";\n}\n.glyphicon-object-align-bottom:before {\n  content: \"\\E245\";\n}\n.glyphicon-object-align-horizontal:before {\n  content: \"\\E246\";\n}\n.glyphicon-object-align-left:before {\n  content: \"\\E247\";\n}\n.glyphicon-object-align-vertical:before {\n  content: \"\\E248\";\n}\n.glyphicon-object-align-right:before {\n  content: \"\\E249\";\n}\n.glyphicon-triangle-right:before {\n  content: \"\\E250\";\n}\n.glyphicon-triangle-left:before {\n  content: \"\\E251\";\n}\n.glyphicon-triangle-bottom:before {\n  content: \"\\E252\";\n}\n.glyphicon-triangle-top:before {\n  content: \"\\E253\";\n}\n.glyphicon-console:before {\n  content: \"\\E254\";\n}\n.glyphicon-superscript:before {\n  content: \"\\E255\";\n}\n.glyphicon-subscript:before {\n  content: \"\\E256\";\n}\n.glyphicon-menu-left:before {\n  content: \"\\E257\";\n}\n.glyphicon-menu-right:before {\n  content: \"\\E258\";\n}\n.glyphicon-menu-down:before {\n  content: \"\\E259\";\n}\n.glyphicon-menu-up:before {\n  content: \"\\E260\";\n}\n* {\n  -webkit-box-sizing: border-box;\n     -moz-box-sizing: border-box;\n          box-sizing: border-box;\n}\n*:before,\n*:after {\n  -webkit-box-sizing: border-box;\n     -moz-box-sizing: border-box;\n          box-sizing: border-box;\n}\nhtml {\n  font-size: 10px;\n\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n}\nbody {\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 14px;\n  line-height: 1.42857143;\n  color: #333;\n  background-color: #fff;\n}\ninput,\nbutton,\nselect,\ntextarea {\n  font-family: inherit;\n  font-size: inherit;\n  line-height: inherit;\n}\na {\n  color: #337ab7;\n  text-decoration: none;\n}\na:hover,\na:focus {\n  color: #23527c;\n  text-decoration: underline;\n}\na:focus {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px;\n}\nfigure {\n  margin: 0;\n}\nimg {\n  vertical-align: middle;\n}\n.img-responsive,\n.thumbnail > img,\n.thumbnail a > img,\n.carousel-inner > .item > img,\n.carousel-inner > .item > a > img {\n  display: block;\n  max-width: 100%;\n  height: auto;\n}\n.img-rounded {\n  border-radius: 6px;\n}\n.img-thumbnail {\n  display: inline-block;\n  max-width: 100%;\n  height: auto;\n  padding: 4px;\n  line-height: 1.42857143;\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  -webkit-transition: all .2s ease-in-out;\n       -o-transition: all .2s ease-in-out;\n          transition: all .2s ease-in-out;\n}\n.img-circle {\n  border-radius: 50%;\n}\nhr {\n  margin-top: 20px;\n  margin-bottom: 20px;\n  border: 0;\n  border-top: 1px solid #eee;\n}\n.sr-only {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  padding: 0;\n  margin: -1px;\n  overflow: hidden;\n  clip: rect(0, 0, 0, 0);\n  border: 0;\n}\n.sr-only-focusable:active,\n.sr-only-focusable:focus {\n  position: static;\n  width: auto;\n  height: auto;\n  margin: 0;\n  overflow: visible;\n  clip: auto;\n}\n[role=\"button\"] {\n  cursor: pointer;\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\n.h1,\n.h2,\n.h3,\n.h4,\n.h5,\n.h6 {\n  font-family: inherit;\n  font-weight: 500;\n  line-height: 1.1;\n  color: inherit;\n}\nh1 small,\nh2 small,\nh3 small,\nh4 small,\nh5 small,\nh6 small,\n.h1 small,\n.h2 small,\n.h3 small,\n.h4 small,\n.h5 small,\n.h6 small,\nh1 .small,\nh2 .small,\nh3 .small,\nh4 .small,\nh5 .small,\nh6 .small,\n.h1 .small,\n.h2 .small,\n.h3 .small,\n.h4 .small,\n.h5 .small,\n.h6 .small {\n  font-weight: normal;\n  line-height: 1;\n  color: #777;\n}\nh1,\n.h1,\nh2,\n.h2,\nh3,\n.h3 {\n  margin-top: 20px;\n  margin-bottom: 10px;\n}\nh1 small,\n.h1 small,\nh2 small,\n.h2 small,\nh3 small,\n.h3 small,\nh1 .small,\n.h1 .small,\nh2 .small,\n.h2 .small,\nh3 .small,\n.h3 .small {\n  font-size: 65%;\n}\nh4,\n.h4,\nh5,\n.h5,\nh6,\n.h6 {\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\nh4 small,\n.h4 small,\nh5 small,\n.h5 small,\nh6 small,\n.h6 small,\nh4 .small,\n.h4 .small,\nh5 .small,\n.h5 .small,\nh6 .small,\n.h6 .small {\n  font-size: 75%;\n}\nh1,\n.h1 {\n  font-size: 36px;\n}\nh2,\n.h2 {\n  font-size: 30px;\n}\nh3,\n.h3 {\n  font-size: 24px;\n}\nh4,\n.h4 {\n  font-size: 18px;\n}\nh5,\n.h5 {\n  font-size: 14px;\n}\nh6,\n.h6 {\n  font-size: 12px;\n}\np {\n  margin: 0 0 10px;\n}\n.lead {\n  margin-bottom: 20px;\n  font-size: 16px;\n  font-weight: 300;\n  line-height: 1.4;\n}\n@media (min-width: 768px) {\n  .lead {\n    font-size: 21px;\n  }\n}\nsmall,\n.small {\n  font-size: 85%;\n}\nmark,\n.mark {\n  padding: .2em;\n  background-color: #fcf8e3;\n}\n.text-left {\n  text-align: left;\n}\n.text-right {\n  text-align: right;\n}\n.text-center {\n  text-align: center;\n}\n.text-justify {\n  text-align: justify;\n}\n.text-nowrap {\n  white-space: nowrap;\n}\n.text-lowercase {\n  text-transform: lowercase;\n}\n.text-uppercase {\n  text-transform: uppercase;\n}\n.text-capitalize {\n  text-transform: capitalize;\n}\n.text-muted {\n  color: #777;\n}\n.text-primary {\n  color: #337ab7;\n}\na.text-primary:hover,\na.text-primary:focus {\n  color: #286090;\n}\n.text-success {\n  color: #3c763d;\n}\na.text-success:hover,\na.text-success:focus {\n  color: #2b542c;\n}\n.text-info {\n  color: #31708f;\n}\na.text-info:hover,\na.text-info:focus {\n  color: #245269;\n}\n.text-warning {\n  color: #8a6d3b;\n}\na.text-warning:hover,\na.text-warning:focus {\n  color: #66512c;\n}\n.text-danger {\n  color: #a94442;\n}\na.text-danger:hover,\na.text-danger:focus {\n  color: #843534;\n}\n.bg-primary {\n  color: #fff;\n  background-color: #337ab7;\n}\na.bg-primary:hover,\na.bg-primary:focus {\n  background-color: #286090;\n}\n.bg-success {\n  background-color: #dff0d8;\n}\na.bg-success:hover,\na.bg-success:focus {\n  background-color: #c1e2b3;\n}\n.bg-info {\n  background-color: #d9edf7;\n}\na.bg-info:hover,\na.bg-info:focus {\n  background-color: #afd9ee;\n}\n.bg-warning {\n  background-color: #fcf8e3;\n}\na.bg-warning:hover,\na.bg-warning:focus {\n  background-color: #f7ecb5;\n}\n.bg-danger {\n  background-color: #f2dede;\n}\na.bg-danger:hover,\na.bg-danger:focus {\n  background-color: #e4b9b9;\n}\n.page-header {\n  padding-bottom: 9px;\n  margin: 40px 0 20px;\n  border-bottom: 1px solid #eee;\n}\nul,\nol {\n  margin-top: 0;\n  margin-bottom: 10px;\n}\nul ul,\nol ul,\nul ol,\nol ol {\n  margin-bottom: 0;\n}\n.list-unstyled {\n  padding-left: 0;\n  list-style: none;\n}\n.list-inline {\n  padding-left: 0;\n  margin-left: -5px;\n  list-style: none;\n}\n.list-inline > li {\n  display: inline-block;\n  padding-right: 5px;\n  padding-left: 5px;\n}\ndl {\n  margin-top: 0;\n  margin-bottom: 20px;\n}\ndt,\ndd {\n  line-height: 1.42857143;\n}\ndt {\n  font-weight: bold;\n}\ndd {\n  margin-left: 0;\n}\n@media (min-width: 768px) {\n  .dl-horizontal dt {\n    float: left;\n    width: 160px;\n    overflow: hidden;\n    clear: left;\n    text-align: right;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n  }\n  .dl-horizontal dd {\n    margin-left: 180px;\n  }\n}\nabbr[title],\nabbr[data-original-title] {\n  cursor: help;\n  border-bottom: 1px dotted #777;\n}\n.initialism {\n  font-size: 90%;\n  text-transform: uppercase;\n}\nblockquote {\n  padding: 10px 20px;\n  margin: 0 0 20px;\n  font-size: 17.5px;\n  border-left: 5px solid #eee;\n}\nblockquote p:last-child,\nblockquote ul:last-child,\nblockquote ol:last-child {\n  margin-bottom: 0;\n}\nblockquote footer,\nblockquote small,\nblockquote .small {\n  display: block;\n  font-size: 80%;\n  line-height: 1.42857143;\n  color: #777;\n}\nblockquote footer:before,\nblockquote small:before,\nblockquote .small:before {\n  content: '\\2014   \\A0';\n}\n.blockquote-reverse,\nblockquote.pull-right {\n  padding-right: 15px;\n  padding-left: 0;\n  text-align: right;\n  border-right: 5px solid #eee;\n  border-left: 0;\n}\n.blockquote-reverse footer:before,\nblockquote.pull-right footer:before,\n.blockquote-reverse small:before,\nblockquote.pull-right small:before,\n.blockquote-reverse .small:before,\nblockquote.pull-right .small:before {\n  content: '';\n}\n.blockquote-reverse footer:after,\nblockquote.pull-right footer:after,\n.blockquote-reverse small:after,\nblockquote.pull-right small:after,\n.blockquote-reverse .small:after,\nblockquote.pull-right .small:after {\n  content: '\\A0   \\2014';\n}\naddress {\n  margin-bottom: 20px;\n  font-style: normal;\n  line-height: 1.42857143;\n}\ncode,\nkbd,\npre,\nsamp {\n  font-family: Menlo, Monaco, Consolas, \"Courier New\", monospace;\n}\ncode {\n  padding: 2px 4px;\n  font-size: 90%;\n  color: #c7254e;\n  background-color: #f9f2f4;\n  border-radius: 4px;\n}\nkbd {\n  padding: 2px 4px;\n  font-size: 90%;\n  color: #fff;\n  background-color: #333;\n  border-radius: 3px;\n  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .25);\n          box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .25);\n}\nkbd kbd {\n  padding: 0;\n  font-size: 100%;\n  font-weight: bold;\n  -webkit-box-shadow: none;\n          box-shadow: none;\n}\npre {\n  display: block;\n  padding: 9.5px;\n  margin: 0 0 10px;\n  font-size: 13px;\n  line-height: 1.42857143;\n  color: #333;\n  word-break: break-all;\n  word-wrap: break-word;\n  background-color: #f5f5f5;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n}\npre code {\n  padding: 0;\n  font-size: inherit;\n  color: inherit;\n  white-space: pre-wrap;\n  background-color: transparent;\n  border-radius: 0;\n}\n.pre-scrollable {\n  max-height: 340px;\n  overflow-y: scroll;\n}\n.container {\n  padding-right: 15px;\n  padding-left: 15px;\n  margin-right: auto;\n  margin-left: auto;\n}\n@media (min-width: 768px) {\n  .container {\n    width: 750px;\n  }\n}\n@media (min-width: 992px) {\n  .container {\n    width: 970px;\n  }\n}\n@media (min-width: 1200px) {\n  .container {\n    width: 1170px;\n  }\n}\n.container-fluid {\n  padding-right: 15px;\n  padding-left: 15px;\n  margin-right: auto;\n  margin-left: auto;\n}\n.row {\n  margin-right: -15px;\n  margin-left: -15px;\n}\n.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {\n  position: relative;\n  min-height: 1px;\n  padding-right: 15px;\n  padding-left: 15px;\n}\n.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {\n  float: left;\n}\n.col-xs-12 {\n  width: 100%;\n}\n.col-xs-11 {\n  width: 91.66666667%;\n}\n.col-xs-10 {\n  width: 83.33333333%;\n}\n.col-xs-9 {\n  width: 75%;\n}\n.col-xs-8 {\n  width: 66.66666667%;\n}\n.col-xs-7 {\n  width: 58.33333333%;\n}\n.col-xs-6 {\n  width: 50%;\n}\n.col-xs-5 {\n  width: 41.66666667%;\n}\n.col-xs-4 {\n  width: 33.33333333%;\n}\n.col-xs-3 {\n  width: 25%;\n}\n.col-xs-2 {\n  width: 16.66666667%;\n}\n.col-xs-1 {\n  width: 8.33333333%;\n}\n.col-xs-pull-12 {\n  right: 100%;\n}\n.col-xs-pull-11 {\n  right: 91.66666667%;\n}\n.col-xs-pull-10 {\n  right: 83.33333333%;\n}\n.col-xs-pull-9 {\n  right: 75%;\n}\n.col-xs-pull-8 {\n  right: 66.66666667%;\n}\n.col-xs-pull-7 {\n  right: 58.33333333%;\n}\n.col-xs-pull-6 {\n  right: 50%;\n}\n.col-xs-pull-5 {\n  right: 41.66666667%;\n}\n.col-xs-pull-4 {\n  right: 33.33333333%;\n}\n.col-xs-pull-3 {\n  right: 25%;\n}\n.col-xs-pull-2 {\n  right: 16.66666667%;\n}\n.col-xs-pull-1 {\n  right: 8.33333333%;\n}\n.col-xs-pull-0 {\n  right: auto;\n}\n.col-xs-push-12 {\n  left: 100%;\n}\n.col-xs-push-11 {\n  left: 91.66666667%;\n}\n.col-xs-push-10 {\n  left: 83.33333333%;\n}\n.col-xs-push-9 {\n  left: 75%;\n}\n.col-xs-push-8 {\n  left: 66.66666667%;\n}\n.col-xs-push-7 {\n  left: 58.33333333%;\n}\n.col-xs-push-6 {\n  left: 50%;\n}\n.col-xs-push-5 {\n  left: 41.66666667%;\n}\n.col-xs-push-4 {\n  left: 33.33333333%;\n}\n.col-xs-push-3 {\n  left: 25%;\n}\n.col-xs-push-2 {\n  left: 16.66666667%;\n}\n.col-xs-push-1 {\n  left: 8.33333333%;\n}\n.col-xs-push-0 {\n  left: auto;\n}\n.col-xs-offset-12 {\n  margin-left: 100%;\n}\n.col-xs-offset-11 {\n  margin-left: 91.66666667%;\n}\n.col-xs-offset-10 {\n  margin-left: 83.33333333%;\n}\n.col-xs-offset-9 {\n  margin-left: 75%;\n}\n.col-xs-offset-8 {\n  margin-left: 66.66666667%;\n}\n.col-xs-offset-7 {\n  margin-left: 58.33333333%;\n}\n.col-xs-offset-6 {\n  margin-left: 50%;\n}\n.col-xs-offset-5 {\n  margin-left: 41.66666667%;\n}\n.col-xs-offset-4 {\n  margin-left: 33.33333333%;\n}\n.col-xs-offset-3 {\n  margin-left: 25%;\n}\n.col-xs-offset-2 {\n  margin-left: 16.66666667%;\n}\n.col-xs-offset-1 {\n  margin-left: 8.33333333%;\n}\n.col-xs-offset-0 {\n  margin-left: 0;\n}\n@media (min-width: 768px) {\n  .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {\n    float: left;\n  }\n  .col-sm-12 {\n    width: 100%;\n  }\n  .col-sm-11 {\n    width: 91.66666667%;\n  }\n  .col-sm-10 {\n    width: 83.33333333%;\n  }\n  .col-sm-9 {\n    width: 75%;\n  }\n  .col-sm-8 {\n    width: 66.66666667%;\n  }\n  .col-sm-7 {\n    width: 58.33333333%;\n  }\n  .col-sm-6 {\n    width: 50%;\n  }\n  .col-sm-5 {\n    width: 41.66666667%;\n  }\n  .col-sm-4 {\n    width: 33.33333333%;\n  }\n  .col-sm-3 {\n    width: 25%;\n  }\n  .col-sm-2 {\n    width: 16.66666667%;\n  }\n  .col-sm-1 {\n    width: 8.33333333%;\n  }\n  .col-sm-pull-12 {\n    right: 100%;\n  }\n  .col-sm-pull-11 {\n    right: 91.66666667%;\n  }\n  .col-sm-pull-10 {\n    right: 83.33333333%;\n  }\n  .col-sm-pull-9 {\n    right: 75%;\n  }\n  .col-sm-pull-8 {\n    right: 66.66666667%;\n  }\n  .col-sm-pull-7 {\n    right: 58.33333333%;\n  }\n  .col-sm-pull-6 {\n    right: 50%;\n  }\n  .col-sm-pull-5 {\n    right: 41.66666667%;\n  }\n  .col-sm-pull-4 {\n    right: 33.33333333%;\n  }\n  .col-sm-pull-3 {\n    right: 25%;\n  }\n  .col-sm-pull-2 {\n    right: 16.66666667%;\n  }\n  .col-sm-pull-1 {\n    right: 8.33333333%;\n  }\n  .col-sm-pull-0 {\n    right: auto;\n  }\n  .col-sm-push-12 {\n    left: 100%;\n  }\n  .col-sm-push-11 {\n    left: 91.66666667%;\n  }\n  .col-sm-push-10 {\n    left: 83.33333333%;\n  }\n  .col-sm-push-9 {\n    left: 75%;\n  }\n  .col-sm-push-8 {\n    left: 66.66666667%;\n  }\n  .col-sm-push-7 {\n    left: 58.33333333%;\n  }\n  .col-sm-push-6 {\n    left: 50%;\n  }\n  .col-sm-push-5 {\n    left: 41.66666667%;\n  }\n  .col-sm-push-4 {\n    left: 33.33333333%;\n  }\n  .col-sm-push-3 {\n    left: 25%;\n  }\n  .col-sm-push-2 {\n    left: 16.66666667%;\n  }\n  .col-sm-push-1 {\n    left: 8.33333333%;\n  }\n  .col-sm-push-0 {\n    left: auto;\n  }\n  .col-sm-offset-12 {\n    margin-left: 100%;\n  }\n  .col-sm-offset-11 {\n    margin-left: 91.66666667%;\n  }\n  .col-sm-offset-10 {\n    margin-left: 83.33333333%;\n  }\n  .col-sm-offset-9 {\n    margin-left: 75%;\n  }\n  .col-sm-offset-8 {\n    margin-left: 66.66666667%;\n  }\n  .col-sm-offset-7 {\n    margin-left: 58.33333333%;\n  }\n  .col-sm-offset-6 {\n    margin-left: 50%;\n  }\n  .col-sm-offset-5 {\n    margin-left: 41.66666667%;\n  }\n  .col-sm-offset-4 {\n    margin-left: 33.33333333%;\n  }\n  .col-sm-offset-3 {\n    margin-left: 25%;\n  }\n  .col-sm-offset-2 {\n    margin-left: 16.66666667%;\n  }\n  .col-sm-offset-1 {\n    margin-left: 8.33333333%;\n  }\n  .col-sm-offset-0 {\n    margin-left: 0;\n  }\n}\n@media (min-width: 992px) {\n  .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {\n    float: left;\n  }\n  .col-md-12 {\n    width: 100%;\n  }\n  .col-md-11 {\n    width: 91.66666667%;\n  }\n  .col-md-10 {\n    width: 83.33333333%;\n  }\n  .col-md-9 {\n    width: 75%;\n  }\n  .col-md-8 {\n    width: 66.66666667%;\n  }\n  .col-md-7 {\n    width: 58.33333333%;\n  }\n  .col-md-6 {\n    width: 50%;\n  }\n  .col-md-5 {\n    width: 41.66666667%;\n  }\n  .col-md-4 {\n    width: 33.33333333%;\n  }\n  .col-md-3 {\n    width: 25%;\n  }\n  .col-md-2 {\n    width: 16.66666667%;\n  }\n  .col-md-1 {\n    width: 8.33333333%;\n  }\n  .col-md-pull-12 {\n    right: 100%;\n  }\n  .col-md-pull-11 {\n    right: 91.66666667%;\n  }\n  .col-md-pull-10 {\n    right: 83.33333333%;\n  }\n  .col-md-pull-9 {\n    right: 75%;\n  }\n  .col-md-pull-8 {\n    right: 66.66666667%;\n  }\n  .col-md-pull-7 {\n    right: 58.33333333%;\n  }\n  .col-md-pull-6 {\n    right: 50%;\n  }\n  .col-md-pull-5 {\n    right: 41.66666667%;\n  }\n  .col-md-pull-4 {\n    right: 33.33333333%;\n  }\n  .col-md-pull-3 {\n    right: 25%;\n  }\n  .col-md-pull-2 {\n    right: 16.66666667%;\n  }\n  .col-md-pull-1 {\n    right: 8.33333333%;\n  }\n  .col-md-pull-0 {\n    right: auto;\n  }\n  .col-md-push-12 {\n    left: 100%;\n  }\n  .col-md-push-11 {\n    left: 91.66666667%;\n  }\n  .col-md-push-10 {\n    left: 83.33333333%;\n  }\n  .col-md-push-9 {\n    left: 75%;\n  }\n  .col-md-push-8 {\n    left: 66.66666667%;\n  }\n  .col-md-push-7 {\n    left: 58.33333333%;\n  }\n  .col-md-push-6 {\n    left: 50%;\n  }\n  .col-md-push-5 {\n    left: 41.66666667%;\n  }\n  .col-md-push-4 {\n    left: 33.33333333%;\n  }\n  .col-md-push-3 {\n    left: 25%;\n  }\n  .col-md-push-2 {\n    left: 16.66666667%;\n  }\n  .col-md-push-1 {\n    left: 8.33333333%;\n  }\n  .col-md-push-0 {\n    left: auto;\n  }\n  .col-md-offset-12 {\n    margin-left: 100%;\n  }\n  .col-md-offset-11 {\n    margin-left: 91.66666667%;\n  }\n  .col-md-offset-10 {\n    margin-left: 83.33333333%;\n  }\n  .col-md-offset-9 {\n    margin-left: 75%;\n  }\n  .col-md-offset-8 {\n    margin-left: 66.66666667%;\n  }\n  .col-md-offset-7 {\n    margin-left: 58.33333333%;\n  }\n  .col-md-offset-6 {\n    margin-left: 50%;\n  }\n  .col-md-offset-5 {\n    margin-left: 41.66666667%;\n  }\n  .col-md-offset-4 {\n    margin-left: 33.33333333%;\n  }\n  .col-md-offset-3 {\n    margin-left: 25%;\n  }\n  .col-md-offset-2 {\n    margin-left: 16.66666667%;\n  }\n  .col-md-offset-1 {\n    margin-left: 8.33333333%;\n  }\n  .col-md-offset-0 {\n    margin-left: 0;\n  }\n}\n@media (min-width: 1200px) {\n  .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {\n    float: left;\n  }\n  .col-lg-12 {\n    width: 100%;\n  }\n  .col-lg-11 {\n    width: 91.66666667%;\n  }\n  .col-lg-10 {\n    width: 83.33333333%;\n  }\n  .col-lg-9 {\n    width: 75%;\n  }\n  .col-lg-8 {\n    width: 66.66666667%;\n  }\n  .col-lg-7 {\n    width: 58.33333333%;\n  }\n  .col-lg-6 {\n    width: 50%;\n  }\n  .col-lg-5 {\n    width: 41.66666667%;\n  }\n  .col-lg-4 {\n    width: 33.33333333%;\n  }\n  .col-lg-3 {\n    width: 25%;\n  }\n  .col-lg-2 {\n    width: 16.66666667%;\n  }\n  .col-lg-1 {\n    width: 8.33333333%;\n  }\n  .col-lg-pull-12 {\n    right: 100%;\n  }\n  .col-lg-pull-11 {\n    right: 91.66666667%;\n  }\n  .col-lg-pull-10 {\n    right: 83.33333333%;\n  }\n  .col-lg-pull-9 {\n    right: 75%;\n  }\n  .col-lg-pull-8 {\n    right: 66.66666667%;\n  }\n  .col-lg-pull-7 {\n    right: 58.33333333%;\n  }\n  .col-lg-pull-6 {\n    right: 50%;\n  }\n  .col-lg-pull-5 {\n    right: 41.66666667%;\n  }\n  .col-lg-pull-4 {\n    right: 33.33333333%;\n  }\n  .col-lg-pull-3 {\n    right: 25%;\n  }\n  .col-lg-pull-2 {\n    right: 16.66666667%;\n  }\n  .col-lg-pull-1 {\n    right: 8.33333333%;\n  }\n  .col-lg-pull-0 {\n    right: auto;\n  }\n  .col-lg-push-12 {\n    left: 100%;\n  }\n  .col-lg-push-11 {\n    left: 91.66666667%;\n  }\n  .col-lg-push-10 {\n    left: 83.33333333%;\n  }\n  .col-lg-push-9 {\n    left: 75%;\n  }\n  .col-lg-push-8 {\n    left: 66.66666667%;\n  }\n  .col-lg-push-7 {\n    left: 58.33333333%;\n  }\n  .col-lg-push-6 {\n    left: 50%;\n  }\n  .col-lg-push-5 {\n    left: 41.66666667%;\n  }\n  .col-lg-push-4 {\n    left: 33.33333333%;\n  }\n  .col-lg-push-3 {\n    left: 25%;\n  }\n  .col-lg-push-2 {\n    left: 16.66666667%;\n  }\n  .col-lg-push-1 {\n    left: 8.33333333%;\n  }\n  .col-lg-push-0 {\n    left: auto;\n  }\n  .col-lg-offset-12 {\n    margin-left: 100%;\n  }\n  .col-lg-offset-11 {\n    margin-left: 91.66666667%;\n  }\n  .col-lg-offset-10 {\n    margin-left: 83.33333333%;\n  }\n  .col-lg-offset-9 {\n    margin-left: 75%;\n  }\n  .col-lg-offset-8 {\n    margin-left: 66.66666667%;\n  }\n  .col-lg-offset-7 {\n    margin-left: 58.33333333%;\n  }\n  .col-lg-offset-6 {\n    margin-left: 50%;\n  }\n  .col-lg-offset-5 {\n    margin-left: 41.66666667%;\n  }\n  .col-lg-offset-4 {\n    margin-left: 33.33333333%;\n  }\n  .col-lg-offset-3 {\n    margin-left: 25%;\n  }\n  .col-lg-offset-2 {\n    margin-left: 16.66666667%;\n  }\n  .col-lg-offset-1 {\n    margin-left: 8.33333333%;\n  }\n  .col-lg-offset-0 {\n    margin-left: 0;\n  }\n}\ntable {\n  background-color: transparent;\n}\ncaption {\n  padding-top: 8px;\n  padding-bottom: 8px;\n  color: #777;\n  text-align: left;\n}\nth {\n  text-align: left;\n}\n.table {\n  width: 100%;\n  max-width: 100%;\n  margin-bottom: 20px;\n}\n.table > thead > tr > th,\n.table > tbody > tr > th,\n.table > tfoot > tr > th,\n.table > thead > tr > td,\n.table > tbody > tr > td,\n.table > tfoot > tr > td {\n  padding: 8px;\n  line-height: 1.42857143;\n  vertical-align: top;\n  border-top: 1px solid #ddd;\n}\n.table > thead > tr > th {\n  vertical-align: bottom;\n  border-bottom: 2px solid #ddd;\n}\n.table > caption + thead > tr:first-child > th,\n.table > colgroup + thead > tr:first-child > th,\n.table > thead:first-child > tr:first-child > th,\n.table > caption + thead > tr:first-child > td,\n.table > colgroup + thead > tr:first-child > td,\n.table > thead:first-child > tr:first-child > td {\n  border-top: 0;\n}\n.table > tbody + tbody {\n  border-top: 2px solid #ddd;\n}\n.table .table {\n  background-color: #fff;\n}\n.table-condensed > thead > tr > th,\n.table-condensed > tbody > tr > th,\n.table-condensed > tfoot > tr > th,\n.table-condensed > thead > tr > td,\n.table-condensed > tbody > tr > td,\n.table-condensed > tfoot > tr > td {\n  padding: 5px;\n}\n.table-bordered {\n  border: 1px solid #ddd;\n}\n.table-bordered > thead > tr > th,\n.table-bordered > tbody > tr > th,\n.table-bordered > tfoot > tr > th,\n.table-bordered > thead > tr > td,\n.table-bordered > tbody > tr > td,\n.table-bordered > tfoot > tr > td {\n  border: 1px solid #ddd;\n}\n.table-bordered > thead > tr > th,\n.table-bordered > thead > tr > td {\n  border-bottom-width: 2px;\n}\n.table-striped > tbody > tr:nth-of-type(odd) {\n  background-color: #f9f9f9;\n}\n.table-hover > tbody > tr:hover {\n  background-color: #f5f5f5;\n}\ntable col[class*=\"col-\"] {\n  position: static;\n  display: table-column;\n  float: none;\n}\ntable td[class*=\"col-\"],\ntable th[class*=\"col-\"] {\n  position: static;\n  display: table-cell;\n  float: none;\n}\n.table > thead > tr > td.active,\n.table > tbody > tr > td.active,\n.table > tfoot > tr > td.active,\n.table > thead > tr > th.active,\n.table > tbody > tr > th.active,\n.table > tfoot > tr > th.active,\n.table > thead > tr.active > td,\n.table > tbody > tr.active > td,\n.table > tfoot > tr.active > td,\n.table > thead > tr.active > th,\n.table > tbody > tr.active > th,\n.table > tfoot > tr.active > th {\n  background-color: #f5f5f5;\n}\n.table-hover > tbody > tr > td.active:hover,\n.table-hover > tbody > tr > th.active:hover,\n.table-hover > tbody > tr.active:hover > td,\n.table-hover > tbody > tr:hover > .active,\n.table-hover > tbody > tr.active:hover > th {\n  background-color: #e8e8e8;\n}\n.table > thead > tr > td.success,\n.table > tbody > tr > td.success,\n.table > tfoot > tr > td.success,\n.table > thead > tr > th.success,\n.table > tbody > tr > th.success,\n.table > tfoot > tr > th.success,\n.table > thead > tr.success > td,\n.table > tbody > tr.success > td,\n.table > tfoot > tr.success > td,\n.table > thead > tr.success > th,\n.table > tbody > tr.success > th,\n.table > tfoot > tr.success > th {\n  background-color: #dff0d8;\n}\n.table-hover > tbody > tr > td.success:hover,\n.table-hover > tbody > tr > th.success:hover,\n.table-hover > tbody > tr.success:hover > td,\n.table-hover > tbody > tr:hover > .success,\n.table-hover > tbody > tr.success:hover > th {\n  background-color: #d0e9c6;\n}\n.table > thead > tr > td.info,\n.table > tbody > tr > td.info,\n.table > tfoot > tr > td.info,\n.table > thead > tr > th.info,\n.table > tbody > tr > th.info,\n.table > tfoot > tr > th.info,\n.table > thead > tr.info > td,\n.table > tbody > tr.info > td,\n.table > tfoot > tr.info > td,\n.table > thead > tr.info > th,\n.table > tbody > tr.info > th,\n.table > tfoot > tr.info > th {\n  background-color: #d9edf7;\n}\n.table-hover > tbody > tr > td.info:hover,\n.table-hover > tbody > tr > th.info:hover,\n.table-hover > tbody > tr.info:hover > td,\n.table-hover > tbody > tr:hover > .info,\n.table-hover > tbody > tr.info:hover > th {\n  background-color: #c4e3f3;\n}\n.table > thead > tr > td.warning,\n.table > tbody > tr > td.warning,\n.table > tfoot > tr > td.warning,\n.table > thead > tr > th.warning,\n.table > tbody > tr > th.warning,\n.table > tfoot > tr > th.warning,\n.table > thead > tr.warning > td,\n.table > tbody > tr.warning > td,\n.table > tfoot > tr.warning > td,\n.table > thead > tr.warning > th,\n.table > tbody > tr.warning > th,\n.table > tfoot > tr.warning > th {\n  background-color: #fcf8e3;\n}\n.table-hover > tbody > tr > td.warning:hover,\n.table-hover > tbody > tr > th.warning:hover,\n.table-hover > tbody > tr.warning:hover > td,\n.table-hover > tbody > tr:hover > .warning,\n.table-hover > tbody > tr.warning:hover > th {\n  background-color: #faf2cc;\n}\n.table > thead > tr > td.danger,\n.table > tbody > tr > td.danger,\n.table > tfoot > tr > td.danger,\n.table > thead > tr > th.danger,\n.table > tbody > tr > th.danger,\n.table > tfoot > tr > th.danger,\n.table > thead > tr.danger > td,\n.table > tbody > tr.danger > td,\n.table > tfoot > tr.danger > td,\n.table > thead > tr.danger > th,\n.table > tbody > tr.danger > th,\n.table > tfoot > tr.danger > th {\n  background-color: #f2dede;\n}\n.table-hover > tbody > tr > td.danger:hover,\n.table-hover > tbody > tr > th.danger:hover,\n.table-hover > tbody > tr.danger:hover > td,\n.table-hover > tbody > tr:hover > .danger,\n.table-hover > tbody > tr.danger:hover > th {\n  background-color: #ebcccc;\n}\n.table-responsive {\n  min-height: .01%;\n  overflow-x: auto;\n}\n@media screen and (max-width: 767px) {\n  .table-responsive {\n    width: 100%;\n    margin-bottom: 15px;\n    overflow-y: hidden;\n    -ms-overflow-style: -ms-autohiding-scrollbar;\n    border: 1px solid #ddd;\n  }\n  .table-responsive > .table {\n    margin-bottom: 0;\n  }\n  .table-responsive > .table > thead > tr > th,\n  .table-responsive > .table > tbody > tr > th,\n  .table-responsive > .table > tfoot > tr > th,\n  .table-responsive > .table > thead > tr > td,\n  .table-responsive > .table > tbody > tr > td,\n  .table-responsive > .table > tfoot > tr > td {\n    white-space: nowrap;\n  }\n  .table-responsive > .table-bordered {\n    border: 0;\n  }\n  .table-responsive > .table-bordered > thead > tr > th:first-child,\n  .table-responsive > .table-bordered > tbody > tr > th:first-child,\n  .table-responsive > .table-bordered > tfoot > tr > th:first-child,\n  .table-responsive > .table-bordered > thead > tr > td:first-child,\n  .table-responsive > .table-bordered > tbody > tr > td:first-child,\n  .table-responsive > .table-bordered > tfoot > tr > td:first-child {\n    border-left: 0;\n  }\n  .table-responsive > .table-bordered > thead > tr > th:last-child,\n  .table-responsive > .table-bordered > tbody > tr > th:last-child,\n  .table-responsive > .table-bordered > tfoot > tr > th:last-child,\n  .table-responsive > .table-bordered > thead > tr > td:last-child,\n  .table-responsive > .table-bordered > tbody > tr > td:last-child,\n  .table-responsive > .table-bordered > tfoot > tr > td:last-child {\n    border-right: 0;\n  }\n  .table-responsive > .table-bordered > tbody > tr:last-child > th,\n  .table-responsive > .table-bordered > tfoot > tr:last-child > th,\n  .table-responsive > .table-bordered > tbody > tr:last-child > td,\n  .table-responsive > .table-bordered > tfoot > tr:last-child > td {\n    border-bottom: 0;\n  }\n}\nfieldset {\n  min-width: 0;\n  padding: 0;\n  margin: 0;\n  border: 0;\n}\nlegend {\n  display: block;\n  width: 100%;\n  padding: 0;\n  margin-bottom: 20px;\n  font-size: 21px;\n  line-height: inherit;\n  color: #333;\n  border: 0;\n  border-bottom: 1px solid #e5e5e5;\n}\nlabel {\n  display: inline-block;\n  max-width: 100%;\n  margin-bottom: 5px;\n  font-weight: bold;\n}\ninput[type=\"search\"] {\n  -webkit-box-sizing: border-box;\n     -moz-box-sizing: border-box;\n          box-sizing: border-box;\n}\ninput[type=\"radio\"],\ninput[type=\"checkbox\"] {\n  margin: 4px 0 0;\n  margin-top: 1px \\9;\n  line-height: normal;\n}\ninput[type=\"file\"] {\n  display: block;\n}\ninput[type=\"range\"] {\n  display: block;\n  width: 100%;\n}\nselect[multiple],\nselect[size] {\n  height: auto;\n}\ninput[type=\"file\"]:focus,\ninput[type=\"radio\"]:focus,\ninput[type=\"checkbox\"]:focus {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px;\n}\noutput {\n  display: block;\n  padding-top: 7px;\n  font-size: 14px;\n  line-height: 1.42857143;\n  color: #555;\n}\n.form-control {\n  display: block;\n  width: 100%;\n  height: 34px;\n  padding: 6px 12px;\n  font-size: 14px;\n  line-height: 1.42857143;\n  color: #555;\n  background-color: #fff;\n  background-image: none;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;\n       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;\n          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;\n}\n.form-control:focus {\n  border-color: #66afe9;\n  outline: 0;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);\n          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);\n}\n.form-control::-moz-placeholder {\n  color: #999;\n  opacity: 1;\n}\n.form-control:-ms-input-placeholder {\n  color: #999;\n}\n.form-control::-webkit-input-placeholder {\n  color: #999;\n}\n.form-control::-ms-expand {\n  background-color: transparent;\n  border: 0;\n}\n.form-control[disabled],\n.form-control[readonly],\nfieldset[disabled] .form-control {\n  background-color: #eee;\n  opacity: 1;\n}\n.form-control[disabled],\nfieldset[disabled] .form-control {\n  cursor: not-allowed;\n}\ntextarea.form-control {\n  height: auto;\n}\ninput[type=\"search\"] {\n  -webkit-appearance: none;\n}\n@media screen and (-webkit-min-device-pixel-ratio: 0) {\n  input[type=\"date\"].form-control,\n  input[type=\"time\"].form-control,\n  input[type=\"datetime-local\"].form-control,\n  input[type=\"month\"].form-control {\n    line-height: 34px;\n  }\n  input[type=\"date\"].input-sm,\n  input[type=\"time\"].input-sm,\n  input[type=\"datetime-local\"].input-sm,\n  input[type=\"month\"].input-sm,\n  .input-group-sm input[type=\"date\"],\n  .input-group-sm input[type=\"time\"],\n  .input-group-sm input[type=\"datetime-local\"],\n  .input-group-sm input[type=\"month\"] {\n    line-height: 30px;\n  }\n  input[type=\"date\"].input-lg,\n  input[type=\"time\"].input-lg,\n  input[type=\"datetime-local\"].input-lg,\n  input[type=\"month\"].input-lg,\n  .input-group-lg input[type=\"date\"],\n  .input-group-lg input[type=\"time\"],\n  .input-group-lg input[type=\"datetime-local\"],\n  .input-group-lg input[type=\"month\"] {\n    line-height: 46px;\n  }\n}\n.form-group {\n  margin-bottom: 15px;\n}\n.radio,\n.checkbox {\n  position: relative;\n  display: block;\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\n.radio label,\n.checkbox label {\n  min-height: 20px;\n  padding-left: 20px;\n  margin-bottom: 0;\n  font-weight: normal;\n  cursor: pointer;\n}\n.radio input[type=\"radio\"],\n.radio-inline input[type=\"radio\"],\n.checkbox input[type=\"checkbox\"],\n.checkbox-inline input[type=\"checkbox\"] {\n  position: absolute;\n  margin-top: 4px \\9;\n  margin-left: -20px;\n}\n.radio + .radio,\n.checkbox + .checkbox {\n  margin-top: -5px;\n}\n.radio-inline,\n.checkbox-inline {\n  position: relative;\n  display: inline-block;\n  padding-left: 20px;\n  margin-bottom: 0;\n  font-weight: normal;\n  vertical-align: middle;\n  cursor: pointer;\n}\n.radio-inline + .radio-inline,\n.checkbox-inline + .checkbox-inline {\n  margin-top: 0;\n  margin-left: 10px;\n}\ninput[type=\"radio\"][disabled],\ninput[type=\"checkbox\"][disabled],\ninput[type=\"radio\"].disabled,\ninput[type=\"checkbox\"].disabled,\nfieldset[disabled] input[type=\"radio\"],\nfieldset[disabled] input[type=\"checkbox\"] {\n  cursor: not-allowed;\n}\n.radio-inline.disabled,\n.checkbox-inline.disabled,\nfieldset[disabled] .radio-inline,\nfieldset[disabled] .checkbox-inline {\n  cursor: not-allowed;\n}\n.radio.disabled label,\n.checkbox.disabled label,\nfieldset[disabled] .radio label,\nfieldset[disabled] .checkbox label {\n  cursor: not-allowed;\n}\n.form-control-static {\n  min-height: 34px;\n  padding-top: 7px;\n  padding-bottom: 7px;\n  margin-bottom: 0;\n}\n.form-control-static.input-lg,\n.form-control-static.input-sm {\n  padding-right: 0;\n  padding-left: 0;\n}\n.input-sm {\n  height: 30px;\n  padding: 5px 10px;\n  font-size: 12px;\n  line-height: 1.5;\n  border-radius: 3px;\n}\nselect.input-sm {\n  height: 30px;\n  line-height: 30px;\n}\ntextarea.input-sm,\nselect[multiple].input-sm {\n  height: auto;\n}\n.form-group-sm .form-control {\n  height: 30px;\n  padding: 5px 10px;\n  font-size: 12px;\n  line-height: 1.5;\n  border-radius: 3px;\n}\n.form-group-sm select.form-control {\n  height: 30px;\n  line-height: 30px;\n}\n.form-group-sm textarea.form-control,\n.form-group-sm select[multiple].form-control {\n  height: auto;\n}\n.form-group-sm .form-control-static {\n  height: 30px;\n  min-height: 32px;\n  padding: 6px 10px;\n  font-size: 12px;\n  line-height: 1.5;\n}\n.input-lg {\n  height: 46px;\n  padding: 10px 16px;\n  font-size: 18px;\n  line-height: 1.3333333;\n  border-radius: 6px;\n}\nselect.input-lg {\n  height: 46px;\n  line-height: 46px;\n}\ntextarea.input-lg,\nselect[multiple].input-lg {\n  height: auto;\n}\n.form-group-lg .form-control {\n  height: 46px;\n  padding: 10px 16px;\n  font-size: 18px;\n  line-height: 1.3333333;\n  border-radius: 6px;\n}\n.form-group-lg select.form-control {\n  height: 46px;\n  line-height: 46px;\n}\n.form-group-lg textarea.form-control,\n.form-group-lg select[multiple].form-control {\n  height: auto;\n}\n.form-group-lg .form-control-static {\n  height: 46px;\n  min-height: 38px;\n  padding: 11px 16px;\n  font-size: 18px;\n  line-height: 1.3333333;\n}\n.has-feedback {\n  position: relative;\n}\n.has-feedback .form-control {\n  padding-right: 42.5px;\n}\n.form-control-feedback {\n  position: absolute;\n  top: 0;\n  right: 0;\n  z-index: 2;\n  display: block;\n  width: 34px;\n  height: 34px;\n  line-height: 34px;\n  text-align: center;\n  pointer-events: none;\n}\n.input-lg + .form-control-feedback,\n.input-group-lg + .form-control-feedback,\n.form-group-lg .form-control + .form-control-feedback {\n  width: 46px;\n  height: 46px;\n  line-height: 46px;\n}\n.input-sm + .form-control-feedback,\n.input-group-sm + .form-control-feedback,\n.form-group-sm .form-control + .form-control-feedback {\n  width: 30px;\n  height: 30px;\n  line-height: 30px;\n}\n.has-success .help-block,\n.has-success .control-label,\n.has-success .radio,\n.has-success .checkbox,\n.has-success .radio-inline,\n.has-success .checkbox-inline,\n.has-success.radio label,\n.has-success.checkbox label,\n.has-success.radio-inline label,\n.has-success.checkbox-inline label {\n  color: #3c763d;\n}\n.has-success .form-control {\n  border-color: #3c763d;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n}\n.has-success .form-control:focus {\n  border-color: #2b542c;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #67b168;\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #67b168;\n}\n.has-success .input-group-addon {\n  color: #3c763d;\n  background-color: #dff0d8;\n  border-color: #3c763d;\n}\n.has-success .form-control-feedback {\n  color: #3c763d;\n}\n.has-warning .help-block,\n.has-warning .control-label,\n.has-warning .radio,\n.has-warning .checkbox,\n.has-warning .radio-inline,\n.has-warning .checkbox-inline,\n.has-warning.radio label,\n.has-warning.checkbox label,\n.has-warning.radio-inline label,\n.has-warning.checkbox-inline label {\n  color: #8a6d3b;\n}\n.has-warning .form-control {\n  border-color: #8a6d3b;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n}\n.has-warning .form-control:focus {\n  border-color: #66512c;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #c0a16b;\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #c0a16b;\n}\n.has-warning .input-group-addon {\n  color: #8a6d3b;\n  background-color: #fcf8e3;\n  border-color: #8a6d3b;\n}\n.has-warning .form-control-feedback {\n  color: #8a6d3b;\n}\n.has-error .help-block,\n.has-error .control-label,\n.has-error .radio,\n.has-error .checkbox,\n.has-error .radio-inline,\n.has-error .checkbox-inline,\n.has-error.radio label,\n.has-error.checkbox label,\n.has-error.radio-inline label,\n.has-error.checkbox-inline label {\n  color: #a94442;\n}\n.has-error .form-control {\n  border-color: #a94442;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);\n}\n.has-error .form-control:focus {\n  border-color: #843534;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;\n}\n.has-error .input-group-addon {\n  color: #a94442;\n  background-color: #f2dede;\n  border-color: #a94442;\n}\n.has-error .form-control-feedback {\n  color: #a94442;\n}\n.has-feedback label ~ .form-control-feedback {\n  top: 25px;\n}\n.has-feedback label.sr-only ~ .form-control-feedback {\n  top: 0;\n}\n.help-block {\n  display: block;\n  margin-top: 5px;\n  margin-bottom: 10px;\n  color: #737373;\n}\n@media (min-width: 768px) {\n  .form-inline .form-group {\n    display: inline-block;\n    margin-bottom: 0;\n    vertical-align: middle;\n  }\n  .form-inline .form-control {\n    display: inline-block;\n    width: auto;\n    vertical-align: middle;\n  }\n  .form-inline .form-control-static {\n    display: inline-block;\n  }\n  .form-inline .input-group {\n    display: inline-table;\n    vertical-align: middle;\n  }\n  .form-inline .input-group .input-group-addon,\n  .form-inline .input-group .input-group-btn,\n  .form-inline .input-group .form-control {\n    width: auto;\n  }\n  .form-inline .input-group > .form-control {\n    width: 100%;\n  }\n  .form-inline .control-label {\n    margin-bottom: 0;\n    vertical-align: middle;\n  }\n  .form-inline .radio,\n  .form-inline .checkbox {\n    display: inline-block;\n    margin-top: 0;\n    margin-bottom: 0;\n    vertical-align: middle;\n  }\n  .form-inline .radio label,\n  .form-inline .checkbox label {\n    padding-left: 0;\n  }\n  .form-inline .radio input[type=\"radio\"],\n  .form-inline .checkbox input[type=\"checkbox\"] {\n    position: relative;\n    margin-left: 0;\n  }\n  .form-inline .has-feedback .form-control-feedback {\n    top: 0;\n  }\n}\n.form-horizontal .radio,\n.form-horizontal .checkbox,\n.form-horizontal .radio-inline,\n.form-horizontal .checkbox-inline {\n  padding-top: 7px;\n  margin-top: 0;\n  margin-bottom: 0;\n}\n.form-horizontal .radio,\n.form-horizontal .checkbox {\n  min-height: 27px;\n}\n.form-horizontal .form-group {\n  margin-right: -15px;\n  margin-left: -15px;\n}\n@media (min-width: 768px) {\n  .form-horizontal .control-label {\n    padding-top: 7px;\n    margin-bottom: 0;\n    text-align: right;\n  }\n}\n.form-horizontal .has-feedback .form-control-feedback {\n  right: 15px;\n}\n@media (min-width: 768px) {\n  .form-horizontal .form-group-lg .control-label {\n    padding-top: 11px;\n    font-size: 18px;\n  }\n}\n@media (min-width: 768px) {\n  .form-horizontal .form-group-sm .control-label {\n    padding-top: 6px;\n    font-size: 12px;\n  }\n}\n.btn {\n  display: inline-block;\n  padding: 6px 12px;\n  margin-bottom: 0;\n  font-size: 14px;\n  font-weight: normal;\n  line-height: 1.42857143;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: middle;\n  -ms-touch-action: manipulation;\n      touch-action: manipulation;\n  cursor: pointer;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  background-image: none;\n  border: 1px solid transparent;\n  border-radius: 4px;\n}\n.btn:focus,\n.btn:active:focus,\n.btn.active:focus,\n.btn.focus,\n.btn:active.focus,\n.btn.active.focus {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px;\n}\n.btn:hover,\n.btn:focus,\n.btn.focus {\n  color: #333;\n  text-decoration: none;\n}\n.btn:active,\n.btn.active {\n  background-image: none;\n  outline: 0;\n  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);\n          box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);\n}\n.btn.disabled,\n.btn[disabled],\nfieldset[disabled] .btn {\n  cursor: not-allowed;\n  filter: alpha(opacity=65);\n  -webkit-box-shadow: none;\n          box-shadow: none;\n  opacity: .65;\n}\na.btn.disabled,\nfieldset[disabled] a.btn {\n  pointer-events: none;\n}\n.btn-default {\n  color: #333;\n  background-color: #fff;\n  border-color: #ccc;\n}\n.btn-default:focus,\n.btn-default.focus {\n  color: #333;\n  background-color: #e6e6e6;\n  border-color: #8c8c8c;\n}\n.btn-default:hover {\n  color: #333;\n  background-color: #e6e6e6;\n  border-color: #adadad;\n}\n.btn-default:active,\n.btn-default.active,\n.open > .dropdown-toggle.btn-default {\n  color: #333;\n  background-color: #e6e6e6;\n  border-color: #adadad;\n}\n.btn-default:active:hover,\n.btn-default.active:hover,\n.open > .dropdown-toggle.btn-default:hover,\n.btn-default:active:focus,\n.btn-default.active:focus,\n.open > .dropdown-toggle.btn-default:focus,\n.btn-default:active.focus,\n.btn-default.active.focus,\n.open > .dropdown-toggle.btn-default.focus {\n  color: #333;\n  background-color: #d4d4d4;\n  border-color: #8c8c8c;\n}\n.btn-default:active,\n.btn-default.active,\n.open > .dropdown-toggle.btn-default {\n  background-image: none;\n}\n.btn-default.disabled:hover,\n.btn-default[disabled]:hover,\nfieldset[disabled] .btn-default:hover,\n.btn-default.disabled:focus,\n.btn-default[disabled]:focus,\nfieldset[disabled] .btn-default:focus,\n.btn-default.disabled.focus,\n.btn-default[disabled].focus,\nfieldset[disabled] .btn-default.focus {\n  background-color: #fff;\n  border-color: #ccc;\n}\n.btn-default .badge {\n  color: #fff;\n  background-color: #333;\n}\n.btn-primary {\n  color: #fff;\n  background-color: #337ab7;\n  border-color: #2e6da4;\n}\n.btn-primary:focus,\n.btn-primary.focus {\n  color: #fff;\n  background-color: #286090;\n  border-color: #122b40;\n}\n.btn-primary:hover {\n  color: #fff;\n  background-color: #286090;\n  border-color: #204d74;\n}\n.btn-primary:active,\n.btn-primary.active,\n.open > .dropdown-toggle.btn-primary {\n  color: #fff;\n  background-color: #286090;\n  border-color: #204d74;\n}\n.btn-primary:active:hover,\n.btn-primary.active:hover,\n.open > .dropdown-toggle.btn-primary:hover,\n.btn-primary:active:focus,\n.btn-primary.active:focus,\n.open > .dropdown-toggle.btn-primary:focus,\n.btn-primary:active.focus,\n.btn-primary.active.focus,\n.open > .dropdown-toggle.btn-primary.focus {\n  color: #fff;\n  background-color: #204d74;\n  border-color: #122b40;\n}\n.btn-primary:active,\n.btn-primary.active,\n.open > .dropdown-toggle.btn-primary {\n  background-image: none;\n}\n.btn-primary.disabled:hover,\n.btn-primary[disabled]:hover,\nfieldset[disabled] .btn-primary:hover,\n.btn-primary.disabled:focus,\n.btn-primary[disabled]:focus,\nfieldset[disabled] .btn-primary:focus,\n.btn-primary.disabled.focus,\n.btn-primary[disabled].focus,\nfieldset[disabled] .btn-primary.focus {\n  background-color: #337ab7;\n  border-color: #2e6da4;\n}\n.btn-primary .badge {\n  color: #337ab7;\n  background-color: #fff;\n}\n.btn-success {\n  color: #fff;\n  background-color: #5cb85c;\n  border-color: #4cae4c;\n}\n.btn-success:focus,\n.btn-success.focus {\n  color: #fff;\n  background-color: #449d44;\n  border-color: #255625;\n}\n.btn-success:hover {\n  color: #fff;\n  background-color: #449d44;\n  border-color: #398439;\n}\n.btn-success:active,\n.btn-success.active,\n.open > .dropdown-toggle.btn-success {\n  color: #fff;\n  background-color: #449d44;\n  border-color: #398439;\n}\n.btn-success:active:hover,\n.btn-success.active:hover,\n.open > .dropdown-toggle.btn-success:hover,\n.btn-success:active:focus,\n.btn-success.active:focus,\n.open > .dropdown-toggle.btn-success:focus,\n.btn-success:active.focus,\n.btn-success.active.focus,\n.open > .dropdown-toggle.btn-success.focus {\n  color: #fff;\n  background-color: #398439;\n  border-color: #255625;\n}\n.btn-success:active,\n.btn-success.active,\n.open > .dropdown-toggle.btn-success {\n  background-image: none;\n}\n.btn-success.disabled:hover,\n.btn-success[disabled]:hover,\nfieldset[disabled] .btn-success:hover,\n.btn-success.disabled:focus,\n.btn-success[disabled]:focus,\nfieldset[disabled] .btn-success:focus,\n.btn-success.disabled.focus,\n.btn-success[disabled].focus,\nfieldset[disabled] .btn-success.focus {\n  background-color: #5cb85c;\n  border-color: #4cae4c;\n}\n.btn-success .badge {\n  color: #5cb85c;\n  background-color: #fff;\n}\n.btn-info {\n  color: #fff;\n  background-color: #5bc0de;\n  border-color: #46b8da;\n}\n.btn-info:focus,\n.btn-info.focus {\n  color: #fff;\n  background-color: #31b0d5;\n  border-color: #1b6d85;\n}\n.btn-info:hover {\n  color: #fff;\n  background-color: #31b0d5;\n  border-color: #269abc;\n}\n.btn-info:active,\n.btn-info.active,\n.open > .dropdown-toggle.btn-info {\n  color: #fff;\n  background-color: #31b0d5;\n  border-color: #269abc;\n}\n.btn-info:active:hover,\n.btn-info.active:hover,\n.open > .dropdown-toggle.btn-info:hover,\n.btn-info:active:focus,\n.btn-info.active:focus,\n.open > .dropdown-toggle.btn-info:focus,\n.btn-info:active.focus,\n.btn-info.active.focus,\n.open > .dropdown-toggle.btn-info.focus {\n  color: #fff;\n  background-color: #269abc;\n  border-color: #1b6d85;\n}\n.btn-info:active,\n.btn-info.active,\n.open > .dropdown-toggle.btn-info {\n  background-image: none;\n}\n.btn-info.disabled:hover,\n.btn-info[disabled]:hover,\nfieldset[disabled] .btn-info:hover,\n.btn-info.disabled:focus,\n.btn-info[disabled]:focus,\nfieldset[disabled] .btn-info:focus,\n.btn-info.disabled.focus,\n.btn-info[disabled].focus,\nfieldset[disabled] .btn-info.focus {\n  background-color: #5bc0de;\n  border-color: #46b8da;\n}\n.btn-info .badge {\n  color: #5bc0de;\n  background-color: #fff;\n}\n.btn-warning {\n  color: #fff;\n  background-color: #f0ad4e;\n  border-color: #eea236;\n}\n.btn-warning:focus,\n.btn-warning.focus {\n  color: #fff;\n  background-color: #ec971f;\n  border-color: #985f0d;\n}\n.btn-warning:hover {\n  color: #fff;\n  background-color: #ec971f;\n  border-color: #d58512;\n}\n.btn-warning:active,\n.btn-warning.active,\n.open > .dropdown-toggle.btn-warning {\n  color: #fff;\n  background-color: #ec971f;\n  border-color: #d58512;\n}\n.btn-warning:active:hover,\n.btn-warning.active:hover,\n.open > .dropdown-toggle.btn-warning:hover,\n.btn-warning:active:focus,\n.btn-warning.active:focus,\n.open > .dropdown-toggle.btn-warning:focus,\n.btn-warning:active.focus,\n.btn-warning.active.focus,\n.open > .dropdown-toggle.btn-warning.focus {\n  color: #fff;\n  background-color: #d58512;\n  border-color: #985f0d;\n}\n.btn-warning:active,\n.btn-warning.active,\n.open > .dropdown-toggle.btn-warning {\n  background-image: none;\n}\n.btn-warning.disabled:hover,\n.btn-warning[disabled]:hover,\nfieldset[disabled] .btn-warning:hover,\n.btn-warning.disabled:focus,\n.btn-warning[disabled]:focus,\nfieldset[disabled] .btn-warning:focus,\n.btn-warning.disabled.focus,\n.btn-warning[disabled].focus,\nfieldset[disabled] .btn-warning.focus {\n  background-color: #f0ad4e;\n  border-color: #eea236;\n}\n.btn-warning .badge {\n  color: #f0ad4e;\n  background-color: #fff;\n}\n.btn-danger {\n  color: #fff;\n  background-color: #d9534f;\n  border-color: #d43f3a;\n}\n.btn-danger:focus,\n.btn-danger.focus {\n  color: #fff;\n  background-color: #c9302c;\n  border-color: #761c19;\n}\n.btn-danger:hover {\n  color: #fff;\n  background-color: #c9302c;\n  border-color: #ac2925;\n}\n.btn-danger:active,\n.btn-danger.active,\n.open > .dropdown-toggle.btn-danger {\n  color: #fff;\n  background-color: #c9302c;\n  border-color: #ac2925;\n}\n.btn-danger:active:hover,\n.btn-danger.active:hover,\n.open > .dropdown-toggle.btn-danger:hover,\n.btn-danger:active:focus,\n.btn-danger.active:focus,\n.open > .dropdown-toggle.btn-danger:focus,\n.btn-danger:active.focus,\n.btn-danger.active.focus,\n.open > .dropdown-toggle.btn-danger.focus {\n  color: #fff;\n  background-color: #ac2925;\n  border-color: #761c19;\n}\n.btn-danger:active,\n.btn-danger.active,\n.open > .dropdown-toggle.btn-danger {\n  background-image: none;\n}\n.btn-danger.disabled:hover,\n.btn-danger[disabled]:hover,\nfieldset[disabled] .btn-danger:hover,\n.btn-danger.disabled:focus,\n.btn-danger[disabled]:focus,\nfieldset[disabled] .btn-danger:focus,\n.btn-danger.disabled.focus,\n.btn-danger[disabled].focus,\nfieldset[disabled] .btn-danger.focus {\n  background-color: #d9534f;\n  border-color: #d43f3a;\n}\n.btn-danger .badge {\n  color: #d9534f;\n  background-color: #fff;\n}\n.btn-link {\n  font-weight: normal;\n  color: #337ab7;\n  border-radius: 0;\n}\n.btn-link,\n.btn-link:active,\n.btn-link.active,\n.btn-link[disabled],\nfieldset[disabled] .btn-link {\n  background-color: transparent;\n  -webkit-box-shadow: none;\n          box-shadow: none;\n}\n.btn-link,\n.btn-link:hover,\n.btn-link:focus,\n.btn-link:active {\n  border-color: transparent;\n}\n.btn-link:hover,\n.btn-link:focus {\n  color: #23527c;\n  text-decoration: underline;\n  background-color: transparent;\n}\n.btn-link[disabled]:hover,\nfieldset[disabled] .btn-link:hover,\n.btn-link[disabled]:focus,\nfieldset[disabled] .btn-link:focus {\n  color: #777;\n  text-decoration: none;\n}\n.btn-lg,\n.btn-group-lg > .btn {\n  padding: 10px 16px;\n  font-size: 18px;\n  line-height: 1.3333333;\n  border-radius: 6px;\n}\n.btn-sm,\n.btn-group-sm > .btn {\n  padding: 5px 10px;\n  font-size: 12px;\n  line-height: 1.5;\n  border-radius: 3px;\n}\n.btn-xs,\n.btn-group-xs > .btn {\n  padding: 1px 5px;\n  font-size: 12px;\n  line-height: 1.5;\n  border-radius: 3px;\n}\n.btn-block {\n  display: block;\n  width: 100%;\n}\n.btn-block + .btn-block {\n  margin-top: 5px;\n}\ninput[type=\"submit\"].btn-block,\ninput[type=\"reset\"].btn-block,\ninput[type=\"button\"].btn-block {\n  width: 100%;\n}\n.fade {\n  opacity: 0;\n  -webkit-transition: opacity .15s linear;\n       -o-transition: opacity .15s linear;\n          transition: opacity .15s linear;\n}\n.fade.in {\n  opacity: 1;\n}\n.collapse {\n  display: none;\n}\n.collapse.in {\n  display: block;\n}\ntr.collapse.in {\n  display: table-row;\n}\ntbody.collapse.in {\n  display: table-row-group;\n}\n.collapsing {\n  position: relative;\n  height: 0;\n  overflow: hidden;\n  -webkit-transition-timing-function: ease;\n       -o-transition-timing-function: ease;\n          transition-timing-function: ease;\n  -webkit-transition-duration: .35s;\n       -o-transition-duration: .35s;\n          transition-duration: .35s;\n  -webkit-transition-property: height, visibility;\n       -o-transition-property: height, visibility;\n          transition-property: height, visibility;\n}\n.caret {\n  display: inline-block;\n  width: 0;\n  height: 0;\n  margin-left: 2px;\n  vertical-align: middle;\n  border-top: 4px dashed;\n  border-top: 4px solid \\9;\n  border-right: 4px solid transparent;\n  border-left: 4px solid transparent;\n}\n.dropup,\n.dropdown {\n  position: relative;\n}\n.dropdown-toggle:focus {\n  outline: 0;\n}\n.dropdown-menu {\n  position: absolute;\n  top: 100%;\n  left: 0;\n  z-index: 1000;\n  display: none;\n  float: left;\n  min-width: 160px;\n  padding: 5px 0;\n  margin: 2px 0 0;\n  font-size: 14px;\n  text-align: left;\n  list-style: none;\n  background-color: #fff;\n  -webkit-background-clip: padding-box;\n          background-clip: padding-box;\n  border: 1px solid #ccc;\n  border: 1px solid rgba(0, 0, 0, .15);\n  border-radius: 4px;\n  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);\n          box-shadow: 0 6px 12px rgba(0, 0, 0, .175);\n}\n.dropdown-menu.pull-right {\n  right: 0;\n  left: auto;\n}\n.dropdown-menu .divider {\n  height: 1px;\n  margin: 9px 0;\n  overflow: hidden;\n  background-color: #e5e5e5;\n}\n.dropdown-menu > li > a {\n  display: block;\n  padding: 3px 20px;\n  clear: both;\n  font-weight: normal;\n  line-height: 1.42857143;\n  color: #333;\n  white-space: nowrap;\n}\n.dropdown-menu > li > a:hover,\n.dropdown-menu > li > a:focus {\n  color: #262626;\n  text-decoration: none;\n  background-color: #f5f5f5;\n}\n.dropdown-menu > .active > a,\n.dropdown-menu > .active > a:hover,\n.dropdown-menu > .active > a:focus {\n  color: #fff;\n  text-decoration: none;\n  background-color: #337ab7;\n  outline: 0;\n}\n.dropdown-menu > .disabled > a,\n.dropdown-menu > .disabled > a:hover,\n.dropdown-menu > .disabled > a:focus {\n  color: #777;\n}\n.dropdown-menu > .disabled > a:hover,\n.dropdown-menu > .disabled > a:focus {\n  text-decoration: none;\n  cursor: not-allowed;\n  background-color: transparent;\n  background-image: none;\n  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);\n}\n.open > .dropdown-menu {\n  display: block;\n}\n.open > a {\n  outline: 0;\n}\n.dropdown-menu-right {\n  right: 0;\n  left: auto;\n}\n.dropdown-menu-left {\n  right: auto;\n  left: 0;\n}\n.dropdown-header {\n  display: block;\n  padding: 3px 20px;\n  font-size: 12px;\n  line-height: 1.42857143;\n  color: #777;\n  white-space: nowrap;\n}\n.dropdown-backdrop {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 990;\n}\n.pull-right > .dropdown-menu {\n  right: 0;\n  left: auto;\n}\n.dropup .caret,\n.navbar-fixed-bottom .dropdown .caret {\n  content: \"\";\n  border-top: 0;\n  border-bottom: 4px dashed;\n  border-bottom: 4px solid \\9;\n}\n.dropup .dropdown-menu,\n.navbar-fixed-bottom .dropdown .dropdown-menu {\n  top: auto;\n  bottom: 100%;\n  margin-bottom: 2px;\n}\n@media (min-width: 768px) {\n  .navbar-right .dropdown-menu {\n    right: 0;\n    left: auto;\n  }\n  .navbar-right .dropdown-menu-left {\n    right: auto;\n    left: 0;\n  }\n}\n.btn-group,\n.btn-group-vertical {\n  position: relative;\n  display: inline-block;\n  vertical-align: middle;\n}\n.btn-group > .btn,\n.btn-group-vertical > .btn {\n  position: relative;\n  float: left;\n}\n.btn-group > .btn:hover,\n.btn-group-vertical > .btn:hover,\n.btn-group > .btn:focus,\n.btn-group-vertical > .btn:focus,\n.btn-group > .btn:active,\n.btn-group-vertical > .btn:active,\n.btn-group > .btn.active,\n.btn-group-vertical > .btn.active {\n  z-index: 2;\n}\n.btn-group .btn + .btn,\n.btn-group .btn + .btn-group,\n.btn-group .btn-group + .btn,\n.btn-group .btn-group + .btn-group {\n  margin-left: -1px;\n}\n.btn-toolbar {\n  margin-left: -5px;\n}\n.btn-toolbar .btn,\n.btn-toolbar .btn-group,\n.btn-toolbar .input-group {\n  float: left;\n}\n.btn-toolbar > .btn,\n.btn-toolbar > .btn-group,\n.btn-toolbar > .input-group {\n  margin-left: 5px;\n}\n.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {\n  border-radius: 0;\n}\n.btn-group > .btn:first-child {\n  margin-left: 0;\n}\n.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0;\n}\n.btn-group > .btn:last-child:not(:first-child),\n.btn-group > .dropdown-toggle:not(:first-child) {\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n}\n.btn-group > .btn-group {\n  float: left;\n}\n.btn-group > .btn-group:not(:first-child):not(:last-child) > .btn {\n  border-radius: 0;\n}\n.btn-group > .btn-group:first-child:not(:last-child) > .btn:last-child,\n.btn-group > .btn-group:first-child:not(:last-child) > .dropdown-toggle {\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0;\n}\n.btn-group > .btn-group:last-child:not(:first-child) > .btn:first-child {\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n}\n.btn-group .dropdown-toggle:active,\n.btn-group.open .dropdown-toggle {\n  outline: 0;\n}\n.btn-group > .btn + .dropdown-toggle {\n  padding-right: 8px;\n  padding-left: 8px;\n}\n.btn-group > .btn-lg + .dropdown-toggle {\n  padding-right: 12px;\n  padding-left: 12px;\n}\n.btn-group.open .dropdown-toggle {\n  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);\n          box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);\n}\n.btn-group.open .dropdown-toggle.btn-link {\n  -webkit-box-shadow: none;\n          box-shadow: none;\n}\n.btn .caret {\n  margin-left: 0;\n}\n.btn-lg .caret {\n  border-width: 5px 5px 0;\n  border-bottom-width: 0;\n}\n.dropup .btn-lg .caret {\n  border-width: 0 5px 5px;\n}\n.btn-group-vertical > .btn,\n.btn-group-vertical > .btn-group,\n.btn-group-vertical > .btn-group > .btn {\n  display: block;\n  float: none;\n  width: 100%;\n  max-width: 100%;\n}\n.btn-group-vertical > .btn-group > .btn {\n  float: none;\n}\n.btn-group-vertical > .btn + .btn,\n.btn-group-vertical > .btn + .btn-group,\n.btn-group-vertical > .btn-group + .btn,\n.btn-group-vertical > .btn-group + .btn-group {\n  margin-top: -1px;\n  margin-left: 0;\n}\n.btn-group-vertical > .btn:not(:first-child):not(:last-child) {\n  border-radius: 0;\n}\n.btn-group-vertical > .btn:first-child:not(:last-child) {\n  border-top-left-radius: 4px;\n  border-top-right-radius: 4px;\n  border-bottom-right-radius: 0;\n  border-bottom-left-radius: 0;\n}\n.btn-group-vertical > .btn:last-child:not(:first-child) {\n  border-top-left-radius: 0;\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 4px;\n  border-bottom-left-radius: 4px;\n}\n.btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .btn {\n  border-radius: 0;\n}\n.btn-group-vertical > .btn-group:first-child:not(:last-child) > .btn:last-child,\n.btn-group-vertical > .btn-group:first-child:not(:last-child) > .dropdown-toggle {\n  border-bottom-right-radius: 0;\n  border-bottom-left-radius: 0;\n}\n.btn-group-vertical > .btn-group:last-child:not(:first-child) > .btn:first-child {\n  border-top-left-radius: 0;\n  border-top-right-radius: 0;\n}\n.btn-group-justified {\n  display: table;\n  width: 100%;\n  table-layout: fixed;\n  border-collapse: separate;\n}\n.btn-group-justified > .btn,\n.btn-group-justified > .btn-group {\n  display: table-cell;\n  float: none;\n  width: 1%;\n}\n.btn-group-justified > .btn-group .btn {\n  width: 100%;\n}\n.btn-group-justified > .btn-group .dropdown-menu {\n  left: auto;\n}\n[data-toggle=\"buttons\"] > .btn input[type=\"radio\"],\n[data-toggle=\"buttons\"] > .btn-group > .btn input[type=\"radio\"],\n[data-toggle=\"buttons\"] > .btn input[type=\"checkbox\"],\n[data-toggle=\"buttons\"] > .btn-group > .btn input[type=\"checkbox\"] {\n  position: absolute;\n  clip: rect(0, 0, 0, 0);\n  pointer-events: none;\n}\n.input-group {\n  position: relative;\n  display: table;\n  border-collapse: separate;\n}\n.input-group[class*=\"col-\"] {\n  float: none;\n  padding-right: 0;\n  padding-left: 0;\n}\n.input-group .form-control {\n  position: relative;\n  z-index: 2;\n  float: left;\n  width: 100%;\n  margin-bottom: 0;\n}\n.input-group .form-control:focus {\n  z-index: 3;\n}\n.input-group-lg > .form-control,\n.input-group-lg > .input-group-addon,\n.input-group-lg > .input-group-btn > .btn {\n  height: 46px;\n  padding: 10px 16px;\n  font-size: 18px;\n  line-height: 1.3333333;\n  border-radius: 6px;\n}\nselect.input-group-lg > .form-control,\nselect.input-group-lg > .input-group-addon,\nselect.input-group-lg > .input-group-btn > .btn {\n  height: 46px;\n  line-height: 46px;\n}\ntextarea.input-group-lg > .form-control,\ntextarea.input-group-lg > .input-group-addon,\ntextarea.input-group-lg > .input-group-btn > .btn,\nselect[multiple].input-group-lg > .form-control,\nselect[multiple].input-group-lg > .input-group-addon,\nselect[multiple].input-group-lg > .input-group-btn > .btn {\n  height: auto;\n}\n.input-group-sm > .form-control,\n.input-group-sm > .input-group-addon,\n.input-group-sm > .input-group-btn > .btn {\n  height: 30px;\n  padding: 5px 10px;\n  font-size: 12px;\n  line-height: 1.5;\n  border-radius: 3px;\n}\nselect.input-group-sm > .form-control,\nselect.input-group-sm > .input-group-addon,\nselect.input-group-sm > .input-group-btn > .btn {\n  height: 30px;\n  line-height: 30px;\n}\ntextarea.input-group-sm > .form-control,\ntextarea.input-group-sm > .input-group-addon,\ntextarea.input-group-sm > .input-group-btn > .btn,\nselect[multiple].input-group-sm > .form-control,\nselect[multiple].input-group-sm > .input-group-addon,\nselect[multiple].input-group-sm > .input-group-btn > .btn {\n  height: auto;\n}\n.input-group-addon,\n.input-group-btn,\n.input-group .form-control {\n  display: table-cell;\n}\n.input-group-addon:not(:first-child):not(:last-child),\n.input-group-btn:not(:first-child):not(:last-child),\n.input-group .form-control:not(:first-child):not(:last-child) {\n  border-radius: 0;\n}\n.input-group-addon,\n.input-group-btn {\n  width: 1%;\n  white-space: nowrap;\n  vertical-align: middle;\n}\n.input-group-addon {\n  padding: 6px 12px;\n  font-size: 14px;\n  font-weight: normal;\n  line-height: 1;\n  color: #555;\n  text-align: center;\n  background-color: #eee;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n}\n.input-group-addon.input-sm {\n  padding: 5px 10px;\n  font-size: 12px;\n  border-radius: 3px;\n}\n.input-group-addon.input-lg {\n  padding: 10px 16px;\n  font-size: 18px;\n  border-radius: 6px;\n}\n.input-group-addon input[type=\"radio\"],\n.input-group-addon input[type=\"checkbox\"] {\n  margin-top: 0;\n}\n.input-group .form-control:first-child,\n.input-group-addon:first-child,\n.input-group-btn:first-child > .btn,\n.input-group-btn:first-child > .btn-group > .btn,\n.input-group-btn:first-child > .dropdown-toggle,\n.input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle),\n.input-group-btn:last-child > .btn-group:not(:last-child) > .btn {\n  border-top-right-radius: 0;\n  border-bottom-right-radius: 0;\n}\n.input-group-addon:first-child {\n  border-right: 0;\n}\n.input-group .form-control:last-child,\n.input-group-addon:last-child,\n.input-group-btn:last-child > .btn,\n.input-group-btn:last-child > .btn-group > .btn,\n.input-group-btn:last-child > .dropdown-toggle,\n.input-group-btn:first-child > .btn:not(:first-child),\n.input-group-btn:first-child > .btn-group:not(:first-child) > .btn {\n  border-top-left-radius: 0;\n  border-bottom-left-radius: 0;\n}\n.input-group-addon:last-child {\n  border-left: 0;\n}\n.input-group-btn {\n  position: relative;\n  font-size: 0;\n  white-space: nowrap;\n}\n.input-group-btn > .btn {\n  position: relative;\n}\n.input-group-btn > .btn + .btn {\n  margin-left: -1px;\n}\n.input-group-btn > .btn:hover,\n.input-group-btn > .btn:focus,\n.input-group-btn > .btn:active {\n  z-index: 2;\n}\n.input-group-btn:first-child > .btn,\n.input-group-btn:first-child > .btn-group {\n  margin-right: -1px;\n}\n.input-group-btn:last-child > .btn,\n.input-group-btn:last-child > .btn-group {\n  z-index: 2;\n  margin-left: -1px;\n}\n.nav {\n  padding-left: 0;\n  margin-bottom: 0;\n  list-style: none;\n}\n.nav > li {\n  position: relative;\n  display: block;\n}\n.nav > li > a {\n  position: relative;\n  display: block;\n  padding: 10px 15px;\n}\n.nav > li > a:hover,\n.nav > li > a:focus {\n  text-decoration: none;\n  background-color: #eee;\n}\n.nav > li.disabled > a {\n  color: #777;\n}\n.nav > li.disabled > a:hover,\n.nav > li.disabled > a:focus {\n  color: #777;\n  text-decoration: none;\n  cursor: not-allowed;\n  background-color: transparent;\n}\n.nav .open > a,\n.nav .open > a:hover,\n.nav .open > a:focus {\n  background-color: #eee;\n  border-color: #337ab7;\n}\n.nav .nav-divider {\n  height: 1px;\n  margin: 9px 0;\n  overflow: hidden;\n  background-color: #e5e5e5;\n}\n.nav > li > a > img {\n  max-width: none;\n}\n.nav-tabs {\n  border-bottom: 1px solid #ddd;\n}\n.nav-tabs > li {\n  float: left;\n  margin-bottom: -1px;\n}\n.nav-tabs > li > a {\n  margin-right: 2px;\n  line-height: 1.42857143;\n  border: 1px solid transparent;\n  border-radius: 4px 4px 0 0;\n}\n.nav-tabs > li > a:hover {\n  border-color: #eee #eee #ddd;\n}\n.nav-tabs > li.active > a,\n.nav-tabs > li.active > a:hover,\n.nav-tabs > li.active > a:focus {\n  color: #555;\n  cursor: default;\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-bottom-color: transparent;\n}\n.nav-tabs.nav-justified {\n  width: 100%;\n  border-bottom: 0;\n}\n.nav-tabs.nav-justified > li {\n  float: none;\n}\n.nav-tabs.nav-justified > li > a {\n  margin-bottom: 5px;\n  text-align: center;\n}\n.nav-tabs.nav-justified > .dropdown .dropdown-menu {\n  top: auto;\n  left: auto;\n}\n@media (min-width: 768px) {\n  .nav-tabs.nav-justified > li {\n    display: table-cell;\n    width: 1%;\n  }\n  .nav-tabs.nav-justified > li > a {\n    margin-bottom: 0;\n  }\n}\n.nav-tabs.nav-justified > li > a {\n  margin-right: 0;\n  border-radius: 4px;\n}\n.nav-tabs.nav-justified > .active > a,\n.nav-tabs.nav-justified > .active > a:hover,\n.nav-tabs.nav-justified > .active > a:focus {\n  border: 1px solid #ddd;\n}\n@media (min-width: 768px) {\n  .nav-tabs.nav-justified > li > a {\n    border-bottom: 1px solid #ddd;\n    border-radius: 4px 4px 0 0;\n  }\n  .nav-tabs.nav-justified > .active > a,\n  .nav-tabs.nav-justified > .active > a:hover,\n  .nav-tabs.nav-justified > .active > a:focus {\n    border-bottom-color: #fff;\n  }\n}\n.nav-pills > li {\n  float: left;\n}\n.nav-pills > li > a {\n  border-radius: 4px;\n}\n.nav-pills > li + li {\n  margin-left: 2px;\n}\n.nav-pills > li.active > a,\n.nav-pills > li.active > a:hover,\n.nav-pills > li.active > a:focus {\n  color: #fff;\n  background-color: #337ab7;\n}\n.nav-stacked > li {\n  float: none;\n}\n.nav-stacked > li + li {\n  margin-top: 2px;\n  margin-left: 0;\n}\n.nav-justified {\n  width: 100%;\n}\n.nav-justified > li {\n  float: none;\n}\n.nav-justified > li > a {\n  margin-bottom: 5px;\n  text-align: center;\n}\n.nav-justified > .dropdown .dropdown-menu {\n  top: auto;\n  left: auto;\n}\n@media (min-width: 768px) {\n  .nav-justified > li {\n    display: table-cell;\n    width: 1%;\n  }\n  .nav-justified > li > a {\n    margin-bottom: 0;\n  }\n}\n.nav-tabs-justified {\n  border-bottom: 0;\n}\n.nav-tabs-justified > li > a {\n  margin-right: 0;\n  border-radius: 4px;\n}\n.nav-tabs-justified > .active > a,\n.nav-tabs-justified > .active > a:hover,\n.nav-tabs-justified > .active > a:focus {\n  border: 1px solid #ddd;\n}\n@media (min-width: 768px) {\n  .nav-tabs-justified > li > a {\n    border-bottom: 1px solid #ddd;\n    border-radius: 4px 4px 0 0;\n  }\n  .nav-tabs-justified > .active > a,\n  .nav-tabs-justified > .active > a:hover,\n  .nav-tabs-justified > .active > a:focus {\n    border-bottom-color: #fff;\n  }\n}\n.tab-content > .tab-pane {\n  display: none;\n}\n.tab-content > .active {\n  display: block;\n}\n.nav-tabs .dropdown-menu {\n  margin-top: -1px;\n  border-top-left-radius: 0;\n  border-top-right-radius: 0;\n}\n.navbar {\n  position: relative;\n  min-height: 50px;\n  margin-bottom: 20px;\n  border: 1px solid transparent;\n}\n@media (min-width: 768px) {\n  .navbar {\n    border-radius: 4px;\n  }\n}\n@media (min-width: 768px) {\n  .navbar-header {\n    float: left;\n  }\n}\n.navbar-collapse {\n  padding-right: 15px;\n  padding-left: 15px;\n  overflow-x: visible;\n  -webkit-overflow-scrolling: touch;\n  border-top: 1px solid transparent;\n  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);\n          box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);\n}\n.navbar-collapse.in {\n  overflow-y: auto;\n}\n@media (min-width: 768px) {\n  .navbar-collapse {\n    width: auto;\n    border-top: 0;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n  }\n  .navbar-collapse.collapse {\n    display: block !important;\n    height: auto !important;\n    padding-bottom: 0;\n    overflow: visible !important;\n  }\n  .navbar-collapse.in {\n    overflow-y: visible;\n  }\n  .navbar-fixed-top .navbar-collapse,\n  .navbar-static-top .navbar-collapse,\n  .navbar-fixed-bottom .navbar-collapse {\n    padding-right: 0;\n    padding-left: 0;\n  }\n}\n.navbar-fixed-top .navbar-collapse,\n.navbar-fixed-bottom .navbar-collapse {\n  max-height: 340px;\n}\n@media (max-device-width: 480px) and (orientation: landscape) {\n  .navbar-fixed-top .navbar-collapse,\n  .navbar-fixed-bottom .navbar-collapse {\n    max-height: 200px;\n  }\n}\n.container > .navbar-header,\n.container-fluid > .navbar-header,\n.container > .navbar-collapse,\n.container-fluid > .navbar-collapse {\n  margin-right: -15px;\n  margin-left: -15px;\n}\n@media (min-width: 768px) {\n  .container > .navbar-header,\n  .container-fluid > .navbar-header,\n  .container > .navbar-collapse,\n  .container-fluid > .navbar-collapse {\n    margin-right: 0;\n    margin-left: 0;\n  }\n}\n.navbar-static-top {\n  z-index: 1000;\n  border-width: 0 0 1px;\n}\n@media (min-width: 768px) {\n  .navbar-static-top {\n    border-radius: 0;\n  }\n}\n.navbar-fixed-top,\n.navbar-fixed-bottom {\n  position: fixed;\n  right: 0;\n  left: 0;\n  z-index: 1030;\n}\n@media (min-width: 768px) {\n  .navbar-fixed-top,\n  .navbar-fixed-bottom {\n    border-radius: 0;\n  }\n}\n.navbar-fixed-top {\n  top: 0;\n  border-width: 0 0 1px;\n}\n.navbar-fixed-bottom {\n  bottom: 0;\n  margin-bottom: 0;\n  border-width: 1px 0 0;\n}\n.navbar-brand {\n  float: left;\n  height: 50px;\n  padding: 15px 15px;\n  font-size: 18px;\n  line-height: 20px;\n}\n.navbar-brand:hover,\n.navbar-brand:focus {\n  text-decoration: none;\n}\n.navbar-brand > img {\n  display: block;\n}\n@media (min-width: 768px) {\n  .navbar > .container .navbar-brand,\n  .navbar > .container-fluid .navbar-brand {\n    margin-left: -15px;\n  }\n}\n.navbar-toggle {\n  position: relative;\n  float: right;\n  padding: 9px 10px;\n  margin-top: 8px;\n  margin-right: 15px;\n  margin-bottom: 8px;\n  background-color: transparent;\n  background-image: none;\n  border: 1px solid transparent;\n  border-radius: 4px;\n}\n.navbar-toggle:focus {\n  outline: 0;\n}\n.navbar-toggle .icon-bar {\n  display: block;\n  width: 22px;\n  height: 2px;\n  border-radius: 1px;\n}\n.navbar-toggle .icon-bar + .icon-bar {\n  margin-top: 4px;\n}\n@media (min-width: 768px) {\n  .navbar-toggle {\n    display: none;\n  }\n}\n.navbar-nav {\n  margin: 7.5px -15px;\n}\n.navbar-nav > li > a {\n  padding-top: 10px;\n  padding-bottom: 10px;\n  line-height: 20px;\n}\n@media (max-width: 767px) {\n  .navbar-nav .open .dropdown-menu {\n    position: static;\n    float: none;\n    width: auto;\n    margin-top: 0;\n    background-color: transparent;\n    border: 0;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n  }\n  .navbar-nav .open .dropdown-menu > li > a,\n  .navbar-nav .open .dropdown-menu .dropdown-header {\n    padding: 5px 15px 5px 25px;\n  }\n  .navbar-nav .open .dropdown-menu > li > a {\n    line-height: 20px;\n  }\n  .navbar-nav .open .dropdown-menu > li > a:hover,\n  .navbar-nav .open .dropdown-menu > li > a:focus {\n    background-image: none;\n  }\n}\n@media (min-width: 768px) {\n  .navbar-nav {\n    float: left;\n    margin: 0;\n  }\n  .navbar-nav > li {\n    float: left;\n  }\n  .navbar-nav > li > a {\n    padding-top: 15px;\n    padding-bottom: 15px;\n  }\n}\n.navbar-form {\n  padding: 10px 15px;\n  margin-top: 8px;\n  margin-right: -15px;\n  margin-bottom: 8px;\n  margin-left: -15px;\n  border-top: 1px solid transparent;\n  border-bottom: 1px solid transparent;\n  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1), 0 1px 0 rgba(255, 255, 255, .1);\n          box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1), 0 1px 0 rgba(255, 255, 255, .1);\n}\n@media (min-width: 768px) {\n  .navbar-form .form-group {\n    display: inline-block;\n    margin-bottom: 0;\n    vertical-align: middle;\n  }\n  .navbar-form .form-control {\n    display: inline-block;\n    width: auto;\n    vertical-align: middle;\n  }\n  .navbar-form .form-control-static {\n    display: inline-block;\n  }\n  .navbar-form .input-group {\n    display: inline-table;\n    vertical-align: middle;\n  }\n  .navbar-form .input-group .input-group-addon,\n  .navbar-form .input-group .input-group-btn,\n  .navbar-form .input-group .form-control {\n    width: auto;\n  }\n  .navbar-form .input-group > .form-control {\n    width: 100%;\n  }\n  .navbar-form .control-label {\n    margin-bottom: 0;\n    vertical-align: middle;\n  }\n  .navbar-form .radio,\n  .navbar-form .checkbox {\n    display: inline-block;\n    margin-top: 0;\n    margin-bottom: 0;\n    vertical-align: middle;\n  }\n  .navbar-form .radio label,\n  .navbar-form .checkbox label {\n    padding-left: 0;\n  }\n  .navbar-form .radio input[type=\"radio\"],\n  .navbar-form .checkbox input[type=\"checkbox\"] {\n    position: relative;\n    margin-left: 0;\n  }\n  .navbar-form .has-feedback .form-control-feedback {\n    top: 0;\n  }\n}\n@media (max-width: 767px) {\n  .navbar-form .form-group {\n    margin-bottom: 5px;\n  }\n  .navbar-form .form-group:last-child {\n    margin-bottom: 0;\n  }\n}\n@media (min-width: 768px) {\n  .navbar-form {\n    width: auto;\n    padding-top: 0;\n    padding-bottom: 0;\n    margin-right: 0;\n    margin-left: 0;\n    border: 0;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n  }\n}\n.navbar-nav > li > .dropdown-menu {\n  margin-top: 0;\n  border-top-left-radius: 0;\n  border-top-right-radius: 0;\n}\n.navbar-fixed-bottom .navbar-nav > li > .dropdown-menu {\n  margin-bottom: 0;\n  border-top-left-radius: 4px;\n  border-top-right-radius: 4px;\n  border-bottom-right-radius: 0;\n  border-bottom-left-radius: 0;\n}\n.navbar-btn {\n  margin-top: 8px;\n  margin-bottom: 8px;\n}\n.navbar-btn.btn-sm {\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\n.navbar-btn.btn-xs {\n  margin-top: 14px;\n  margin-bottom: 14px;\n}\n.navbar-text {\n  margin-top: 15px;\n  margin-bottom: 15px;\n}\n@media (min-width: 768px) {\n  .navbar-text {\n    float: left;\n    margin-right: 15px;\n    margin-left: 15px;\n  }\n}\n@media (min-width: 768px) {\n  .navbar-left {\n    float: left !important;\n  }\n  .navbar-right {\n    float: right !important;\n    margin-right: -15px;\n  }\n  .navbar-right ~ .navbar-right {\n    margin-right: 0;\n  }\n}\n.navbar-default {\n  background-color: #f8f8f8;\n  border-color: #e7e7e7;\n}\n.navbar-default .navbar-brand {\n  color: #777;\n}\n.navbar-default .navbar-brand:hover,\n.navbar-default .navbar-brand:focus {\n  color: #5e5e5e;\n  background-color: transparent;\n}\n.navbar-default .navbar-text {\n  color: #777;\n}\n.navbar-default .navbar-nav > li > a {\n  color: #777;\n}\n.navbar-default .navbar-nav > li > a:hover,\n.navbar-default .navbar-nav > li > a:focus {\n  color: #333;\n  background-color: transparent;\n}\n.navbar-default .navbar-nav > .active > a,\n.navbar-default .navbar-nav > .active > a:hover,\n.navbar-default .navbar-nav > .active > a:focus {\n  color: #555;\n  background-color: #e7e7e7;\n}\n.navbar-default .navbar-nav > .disabled > a,\n.navbar-default .navbar-nav > .disabled > a:hover,\n.navbar-default .navbar-nav > .disabled > a:focus {\n  color: #ccc;\n  background-color: transparent;\n}\n.navbar-default .navbar-toggle {\n  border-color: #ddd;\n}\n.navbar-default .navbar-toggle:hover,\n.navbar-default .navbar-toggle:focus {\n  background-color: #ddd;\n}\n.navbar-default .navbar-toggle .icon-bar {\n  background-color: #888;\n}\n.navbar-default .navbar-collapse,\n.navbar-default .navbar-form {\n  border-color: #e7e7e7;\n}\n.navbar-default .navbar-nav > .open > a,\n.navbar-default .navbar-nav > .open > a:hover,\n.navbar-default .navbar-nav > .open > a:focus {\n  color: #555;\n  background-color: #e7e7e7;\n}\n@media (max-width: 767px) {\n  .navbar-default .navbar-nav .open .dropdown-menu > li > a {\n    color: #777;\n  }\n  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,\n  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {\n    color: #333;\n    background-color: transparent;\n  }\n  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,\n  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,\n  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {\n    color: #555;\n    background-color: #e7e7e7;\n  }\n  .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a,\n  .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:hover,\n  .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:focus {\n    color: #ccc;\n    background-color: transparent;\n  }\n}\n.navbar-default .navbar-link {\n  color: #777;\n}\n.navbar-default .navbar-link:hover {\n  color: #333;\n}\n.navbar-default .btn-link {\n  color: #777;\n}\n.navbar-default .btn-link:hover,\n.navbar-default .btn-link:focus {\n  color: #333;\n}\n.navbar-default .btn-link[disabled]:hover,\nfieldset[disabled] .navbar-default .btn-link:hover,\n.navbar-default .btn-link[disabled]:focus,\nfieldset[disabled] .navbar-default .btn-link:focus {\n  color: #ccc;\n}\n.navbar-inverse {\n  background-color: #222;\n  border-color: #080808;\n}\n.navbar-inverse .navbar-brand {\n  color: #9d9d9d;\n}\n.navbar-inverse .navbar-brand:hover,\n.navbar-inverse .navbar-brand:focus {\n  color: #fff;\n  background-color: transparent;\n}\n.navbar-inverse .navbar-text {\n  color: #9d9d9d;\n}\n.navbar-inverse .navbar-nav > li > a {\n  color: #9d9d9d;\n}\n.navbar-inverse .navbar-nav > li > a:hover,\n.navbar-inverse .navbar-nav > li > a:focus {\n  color: #fff;\n  background-color: transparent;\n}\n.navbar-inverse .navbar-nav > .active > a,\n.navbar-inverse .navbar-nav > .active > a:hover,\n.navbar-inverse .navbar-nav > .active > a:focus {\n  color: #fff;\n  background-color: #080808;\n}\n.navbar-inverse .navbar-nav > .disabled > a,\n.navbar-inverse .navbar-nav > .disabled > a:hover,\n.navbar-inverse .navbar-nav > .disabled > a:focus {\n  color: #444;\n  background-color: transparent;\n}\n.navbar-inverse .navbar-toggle {\n  border-color: #333;\n}\n.navbar-inverse .navbar-toggle:hover,\n.navbar-inverse .navbar-toggle:focus {\n  background-color: #333;\n}\n.navbar-inverse .navbar-toggle .icon-bar {\n  background-color: #fff;\n}\n.navbar-inverse .navbar-collapse,\n.navbar-inverse .navbar-form {\n  border-color: #101010;\n}\n.navbar-inverse .navbar-nav > .open > a,\n.navbar-inverse .navbar-nav > .open > a:hover,\n.navbar-inverse .navbar-nav > .open > a:focus {\n  color: #fff;\n  background-color: #080808;\n}\n@media (max-width: 767px) {\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .dropdown-header {\n    border-color: #080808;\n  }\n  .navbar-inverse .navbar-nav .open .dropdown-menu .divider {\n    background-color: #080808;\n  }\n  .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {\n    color: #9d9d9d;\n  }\n  .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover,\n  .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:focus {\n    color: #fff;\n    background-color: transparent;\n  }\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a,\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:hover,\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:focus {\n    color: #fff;\n    background-color: #080808;\n  }\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a,\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a:hover,\n  .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a:focus {\n    color: #444;\n    background-color: transparent;\n  }\n}\n.navbar-inverse .navbar-link {\n  color: #9d9d9d;\n}\n.navbar-inverse .navbar-link:hover {\n  color: #fff;\n}\n.navbar-inverse .btn-link {\n  color: #9d9d9d;\n}\n.navbar-inverse .btn-link:hover,\n.navbar-inverse .btn-link:focus {\n  color: #fff;\n}\n.navbar-inverse .btn-link[disabled]:hover,\nfieldset[disabled] .navbar-inverse .btn-link:hover,\n.navbar-inverse .btn-link[disabled]:focus,\nfieldset[disabled] .navbar-inverse .btn-link:focus {\n  color: #444;\n}\n.breadcrumb {\n  padding: 8px 15px;\n  margin-bottom: 20px;\n  list-style: none;\n  background-color: #f5f5f5;\n  border-radius: 4px;\n}\n.breadcrumb > li {\n  display: inline-block;\n}\n.breadcrumb > li + li:before {\n  padding: 0 5px;\n  color: #ccc;\n  content: \"/\\A0\";\n}\n.breadcrumb > .active {\n  color: #777;\n}\n.pagination {\n  display: inline-block;\n  padding-left: 0;\n  margin: 20px 0;\n  border-radius: 4px;\n}\n.pagination > li {\n  display: inline;\n}\n.pagination > li > a,\n.pagination > li > span {\n  position: relative;\n  float: left;\n  padding: 6px 12px;\n  margin-left: -1px;\n  line-height: 1.42857143;\n  color: #337ab7;\n  text-decoration: none;\n  background-color: #fff;\n  border: 1px solid #ddd;\n}\n.pagination > li:first-child > a,\n.pagination > li:first-child > span {\n  margin-left: 0;\n  border-top-left-radius: 4px;\n  border-bottom-left-radius: 4px;\n}\n.pagination > li:last-child > a,\n.pagination > li:last-child > span {\n  border-top-right-radius: 4px;\n  border-bottom-right-radius: 4px;\n}\n.pagination > li > a:hover,\n.pagination > li > span:hover,\n.pagination > li > a:focus,\n.pagination > li > span:focus {\n  z-index: 2;\n  color: #23527c;\n  background-color: #eee;\n  border-color: #ddd;\n}\n.pagination > .active > a,\n.pagination > .active > span,\n.pagination > .active > a:hover,\n.pagination > .active > span:hover,\n.pagination > .active > a:focus,\n.pagination > .active > span:focus {\n  z-index: 3;\n  color: #fff;\n  cursor: default;\n  background-color: #337ab7;\n  border-color: #337ab7;\n}\n.pagination > .disabled > span,\n.pagination > .disabled > span:hover,\n.pagination > .disabled > span:focus,\n.pagination > .disabled > a,\n.pagination > .disabled > a:hover,\n.pagination > .disabled > a:focus {\n  color: #777;\n  cursor: not-allowed;\n  background-color: #fff;\n  border-color: #ddd;\n}\n.pagination-lg > li > a,\n.pagination-lg > li > span {\n  padding: 10px 16px;\n  font-size: 18px;\n  line-height: 1.3333333;\n}\n.pagination-lg > li:first-child > a,\n.pagination-lg > li:first-child > span {\n  border-top-left-radius: 6px;\n  border-bottom-left-radius: 6px;\n}\n.pagination-lg > li:last-child > a,\n.pagination-lg > li:last-child > span {\n  border-top-right-radius: 6px;\n  border-bottom-right-radius: 6px;\n}\n.pagination-sm > li > a,\n.pagination-sm > li > span {\n  padding: 5px 10px;\n  font-size: 12px;\n  line-height: 1.5;\n}\n.pagination-sm > li:first-child > a,\n.pagination-sm > li:first-child > span {\n  border-top-left-radius: 3px;\n  border-bottom-left-radius: 3px;\n}\n.pagination-sm > li:last-child > a,\n.pagination-sm > li:last-child > span {\n  border-top-right-radius: 3px;\n  border-bottom-right-radius: 3px;\n}\n.pager {\n  padding-left: 0;\n  margin: 20px 0;\n  text-align: center;\n  list-style: none;\n}\n.pager li {\n  display: inline;\n}\n.pager li > a,\n.pager li > span {\n  display: inline-block;\n  padding: 5px 14px;\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 15px;\n}\n.pager li > a:hover,\n.pager li > a:focus {\n  text-decoration: none;\n  background-color: #eee;\n}\n.pager .next > a,\n.pager .next > span {\n  float: right;\n}\n.pager .previous > a,\n.pager .previous > span {\n  float: left;\n}\n.pager .disabled > a,\n.pager .disabled > a:hover,\n.pager .disabled > a:focus,\n.pager .disabled > span {\n  color: #777;\n  cursor: not-allowed;\n  background-color: #fff;\n}\n.label {\n  display: inline;\n  padding: .2em .6em .3em;\n  font-size: 75%;\n  font-weight: bold;\n  line-height: 1;\n  color: #fff;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: baseline;\n  border-radius: .25em;\n}\na.label:hover,\na.label:focus {\n  color: #fff;\n  text-decoration: none;\n  cursor: pointer;\n}\n.label:empty {\n  display: none;\n}\n.btn .label {\n  position: relative;\n  top: -1px;\n}\n.label-default {\n  background-color: #777;\n}\n.label-default[href]:hover,\n.label-default[href]:focus {\n  background-color: #5e5e5e;\n}\n.label-primary {\n  background-color: #337ab7;\n}\n.label-primary[href]:hover,\n.label-primary[href]:focus {\n  background-color: #286090;\n}\n.label-success {\n  background-color: #5cb85c;\n}\n.label-success[href]:hover,\n.label-success[href]:focus {\n  background-color: #449d44;\n}\n.label-info {\n  background-color: #5bc0de;\n}\n.label-info[href]:hover,\n.label-info[href]:focus {\n  background-color: #31b0d5;\n}\n.label-warning {\n  background-color: #f0ad4e;\n}\n.label-warning[href]:hover,\n.label-warning[href]:focus {\n  background-color: #ec971f;\n}\n.label-danger {\n  background-color: #d9534f;\n}\n.label-danger[href]:hover,\n.label-danger[href]:focus {\n  background-color: #c9302c;\n}\n.badge {\n  display: inline-block;\n  min-width: 10px;\n  padding: 3px 7px;\n  font-size: 12px;\n  font-weight: bold;\n  line-height: 1;\n  color: #fff;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: middle;\n  background-color: #777;\n  border-radius: 10px;\n}\n.badge:empty {\n  display: none;\n}\n.btn .badge {\n  position: relative;\n  top: -1px;\n}\n.btn-xs .badge,\n.btn-group-xs > .btn .badge {\n  top: 0;\n  padding: 1px 5px;\n}\na.badge:hover,\na.badge:focus {\n  color: #fff;\n  text-decoration: none;\n  cursor: pointer;\n}\n.list-group-item.active > .badge,\n.nav-pills > .active > a > .badge {\n  color: #337ab7;\n  background-color: #fff;\n}\n.list-group-item > .badge {\n  float: right;\n}\n.list-group-item > .badge + .badge {\n  margin-right: 5px;\n}\n.nav-pills > li > a > .badge {\n  margin-left: 3px;\n}\n.jumbotron {\n  padding-top: 30px;\n  padding-bottom: 30px;\n  margin-bottom: 30px;\n  color: inherit;\n  background-color: #eee;\n}\n.jumbotron h1,\n.jumbotron .h1 {\n  color: inherit;\n}\n.jumbotron p {\n  margin-bottom: 15px;\n  font-size: 21px;\n  font-weight: 200;\n}\n.jumbotron > hr {\n  border-top-color: #d5d5d5;\n}\n.container .jumbotron,\n.container-fluid .jumbotron {\n  padding-right: 15px;\n  padding-left: 15px;\n  border-radius: 6px;\n}\n.jumbotron .container {\n  max-width: 100%;\n}\n@media screen and (min-width: 768px) {\n  .jumbotron {\n    padding-top: 48px;\n    padding-bottom: 48px;\n  }\n  .container .jumbotron,\n  .container-fluid .jumbotron {\n    padding-right: 60px;\n    padding-left: 60px;\n  }\n  .jumbotron h1,\n  .jumbotron .h1 {\n    font-size: 63px;\n  }\n}\n.thumbnail {\n  display: block;\n  padding: 4px;\n  margin-bottom: 20px;\n  line-height: 1.42857143;\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  -webkit-transition: border .2s ease-in-out;\n       -o-transition: border .2s ease-in-out;\n          transition: border .2s ease-in-out;\n}\n.thumbnail > img,\n.thumbnail a > img {\n  margin-right: auto;\n  margin-left: auto;\n}\na.thumbnail:hover,\na.thumbnail:focus,\na.thumbnail.active {\n  border-color: #337ab7;\n}\n.thumbnail .caption {\n  padding: 9px;\n  color: #333;\n}\n.alert {\n  padding: 15px;\n  margin-bottom: 20px;\n  border: 1px solid transparent;\n  border-radius: 4px;\n}\n.alert h4 {\n  margin-top: 0;\n  color: inherit;\n}\n.alert .alert-link {\n  font-weight: bold;\n}\n.alert > p,\n.alert > ul {\n  margin-bottom: 0;\n}\n.alert > p + p {\n  margin-top: 5px;\n}\n.alert-dismissable,\n.alert-dismissible {\n  padding-right: 35px;\n}\n.alert-dismissable .close,\n.alert-dismissible .close {\n  position: relative;\n  top: -2px;\n  right: -21px;\n  color: inherit;\n}\n.alert-success {\n  color: #3c763d;\n  background-color: #dff0d8;\n  border-color: #d6e9c6;\n}\n.alert-success hr {\n  border-top-color: #c9e2b3;\n}\n.alert-success .alert-link {\n  color: #2b542c;\n}\n.alert-info {\n  color: #31708f;\n  background-color: #d9edf7;\n  border-color: #bce8f1;\n}\n.alert-info hr {\n  border-top-color: #a6e1ec;\n}\n.alert-info .alert-link {\n  color: #245269;\n}\n.alert-warning {\n  color: #8a6d3b;\n  background-color: #fcf8e3;\n  border-color: #faebcc;\n}\n.alert-warning hr {\n  border-top-color: #f7e1b5;\n}\n.alert-warning .alert-link {\n  color: #66512c;\n}\n.alert-danger {\n  color: #a94442;\n  background-color: #f2dede;\n  border-color: #ebccd1;\n}\n.alert-danger hr {\n  border-top-color: #e4b9c0;\n}\n.alert-danger .alert-link {\n  color: #843534;\n}\n@-webkit-keyframes progress-bar-stripes {\n  from {\n    background-position: 40px 0;\n  }\n  to {\n    background-position: 0 0;\n  }\n}\n@-o-keyframes progress-bar-stripes {\n  from {\n    background-position: 40px 0;\n  }\n  to {\n    background-position: 0 0;\n  }\n}\n@keyframes progress-bar-stripes {\n  from {\n    background-position: 40px 0;\n  }\n  to {\n    background-position: 0 0;\n  }\n}\n.progress {\n  height: 20px;\n  margin-bottom: 20px;\n  overflow: hidden;\n  background-color: #f5f5f5;\n  border-radius: 4px;\n  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);\n          box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);\n}\n.progress-bar {\n  float: left;\n  width: 0;\n  height: 100%;\n  font-size: 12px;\n  line-height: 20px;\n  color: #fff;\n  text-align: center;\n  background-color: #337ab7;\n  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);\n          box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);\n  -webkit-transition: width .6s ease;\n       -o-transition: width .6s ease;\n          transition: width .6s ease;\n}\n.progress-striped .progress-bar,\n.progress-bar-striped {\n  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:      -o-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:         linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  -webkit-background-size: 40px 40px;\n          background-size: 40px 40px;\n}\n.progress.active .progress-bar,\n.progress-bar.active {\n  -webkit-animation: progress-bar-stripes 2s linear infinite;\n       -o-animation: progress-bar-stripes 2s linear infinite;\n          animation: progress-bar-stripes 2s linear infinite;\n}\n.progress-bar-success {\n  background-color: #5cb85c;\n}\n.progress-striped .progress-bar-success {\n  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:      -o-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:         linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n}\n.progress-bar-info {\n  background-color: #5bc0de;\n}\n.progress-striped .progress-bar-info {\n  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:      -o-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:         linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n}\n.progress-bar-warning {\n  background-color: #f0ad4e;\n}\n.progress-striped .progress-bar-warning {\n  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:      -o-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:         linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n}\n.progress-bar-danger {\n  background-color: #d9534f;\n}\n.progress-striped .progress-bar-danger {\n  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:      -o-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n  background-image:         linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);\n}\n.media {\n  margin-top: 15px;\n}\n.media:first-child {\n  margin-top: 0;\n}\n.media,\n.media-body {\n  overflow: hidden;\n  zoom: 1;\n}\n.media-body {\n  width: 10000px;\n}\n.media-object {\n  display: block;\n}\n.media-object.img-thumbnail {\n  max-width: none;\n}\n.media-right,\n.media > .pull-right {\n  padding-left: 10px;\n}\n.media-left,\n.media > .pull-left {\n  padding-right: 10px;\n}\n.media-left,\n.media-right,\n.media-body {\n  display: table-cell;\n  vertical-align: top;\n}\n.media-middle {\n  vertical-align: middle;\n}\n.media-bottom {\n  vertical-align: bottom;\n}\n.media-heading {\n  margin-top: 0;\n  margin-bottom: 5px;\n}\n.media-list {\n  padding-left: 0;\n  list-style: none;\n}\n.list-group {\n  padding-left: 0;\n  margin-bottom: 20px;\n}\n.list-group-item {\n  position: relative;\n  display: block;\n  padding: 10px 15px;\n  margin-bottom: -1px;\n  background-color: #fff;\n  border: 1px solid #ddd;\n}\n.list-group-item:first-child {\n  border-top-left-radius: 4px;\n  border-top-right-radius: 4px;\n}\n.list-group-item:last-child {\n  margin-bottom: 0;\n  border-bottom-right-radius: 4px;\n  border-bottom-left-radius: 4px;\n}\na.list-group-item,\nbutton.list-group-item {\n  color: #555;\n}\na.list-group-item .list-group-item-heading,\nbutton.list-group-item .list-group-item-heading {\n  color: #333;\n}\na.list-group-item:hover,\nbutton.list-group-item:hover,\na.list-group-item:focus,\nbutton.list-group-item:focus {\n  color: #555;\n  text-decoration: none;\n  background-color: #f5f5f5;\n}\nbutton.list-group-item {\n  width: 100%;\n  text-align: left;\n}\n.list-group-item.disabled,\n.list-group-item.disabled:hover,\n.list-group-item.disabled:focus {\n  color: #777;\n  cursor: not-allowed;\n  background-color: #eee;\n}\n.list-group-item.disabled .list-group-item-heading,\n.list-group-item.disabled:hover .list-group-item-heading,\n.list-group-item.disabled:focus .list-group-item-heading {\n  color: inherit;\n}\n.list-group-item.disabled .list-group-item-text,\n.list-group-item.disabled:hover .list-group-item-text,\n.list-group-item.disabled:focus .list-group-item-text {\n  color: #777;\n}\n.list-group-item.active,\n.list-group-item.active:hover,\n.list-group-item.active:focus {\n  z-index: 2;\n  color: #fff;\n  background-color: #337ab7;\n  border-color: #337ab7;\n}\n.list-group-item.active .list-group-item-heading,\n.list-group-item.active:hover .list-group-item-heading,\n.list-group-item.active:focus .list-group-item-heading,\n.list-group-item.active .list-group-item-heading > small,\n.list-group-item.active:hover .list-group-item-heading > small,\n.list-group-item.active:focus .list-group-item-heading > small,\n.list-group-item.active .list-group-item-heading > .small,\n.list-group-item.active:hover .list-group-item-heading > .small,\n.list-group-item.active:focus .list-group-item-heading > .small {\n  color: inherit;\n}\n.list-group-item.active .list-group-item-text,\n.list-group-item.active:hover .list-group-item-text,\n.list-group-item.active:focus .list-group-item-text {\n  color: #c7ddef;\n}\n.list-group-item-success {\n  color: #3c763d;\n  background-color: #dff0d8;\n}\na.list-group-item-success,\nbutton.list-group-item-success {\n  color: #3c763d;\n}\na.list-group-item-success .list-group-item-heading,\nbutton.list-group-item-success .list-group-item-heading {\n  color: inherit;\n}\na.list-group-item-success:hover,\nbutton.list-group-item-success:hover,\na.list-group-item-success:focus,\nbutton.list-group-item-success:focus {\n  color: #3c763d;\n  background-color: #d0e9c6;\n}\na.list-group-item-success.active,\nbutton.list-group-item-success.active,\na.list-group-item-success.active:hover,\nbutton.list-group-item-success.active:hover,\na.list-group-item-success.active:focus,\nbutton.list-group-item-success.active:focus {\n  color: #fff;\n  background-color: #3c763d;\n  border-color: #3c763d;\n}\n.list-group-item-info {\n  color: #31708f;\n  background-color: #d9edf7;\n}\na.list-group-item-info,\nbutton.list-group-item-info {\n  color: #31708f;\n}\na.list-group-item-info .list-group-item-heading,\nbutton.list-group-item-info .list-group-item-heading {\n  color: inherit;\n}\na.list-group-item-info:hover,\nbutton.list-group-item-info:hover,\na.list-group-item-info:focus,\nbutton.list-group-item-info:focus {\n  color: #31708f;\n  background-color: #c4e3f3;\n}\na.list-group-item-info.active,\nbutton.list-group-item-info.active,\na.list-group-item-info.active:hover,\nbutton.list-group-item-info.active:hover,\na.list-group-item-info.active:focus,\nbutton.list-group-item-info.active:focus {\n  color: #fff;\n  background-color: #31708f;\n  border-color: #31708f;\n}\n.list-group-item-warning {\n  color: #8a6d3b;\n  background-color: #fcf8e3;\n}\na.list-group-item-warning,\nbutton.list-group-item-warning {\n  color: #8a6d3b;\n}\na.list-group-item-warning .list-group-item-heading,\nbutton.list-group-item-warning .list-group-item-heading {\n  color: inherit;\n}\na.list-group-item-warning:hover,\nbutton.list-group-item-warning:hover,\na.list-group-item-warning:focus,\nbutton.list-group-item-warning:focus {\n  color: #8a6d3b;\n  background-color: #faf2cc;\n}\na.list-group-item-warning.active,\nbutton.list-group-item-warning.active,\na.list-group-item-warning.active:hover,\nbutton.list-group-item-warning.active:hover,\na.list-group-item-warning.active:focus,\nbutton.list-group-item-warning.active:focus {\n  color: #fff;\n  background-color: #8a6d3b;\n  border-color: #8a6d3b;\n}\n.list-group-item-danger {\n  color: #a94442;\n  background-color: #f2dede;\n}\na.list-group-item-danger,\nbutton.list-group-item-danger {\n  color: #a94442;\n}\na.list-group-item-danger .list-group-item-heading,\nbutton.list-group-item-danger .list-group-item-heading {\n  color: inherit;\n}\na.list-group-item-danger:hover,\nbutton.list-group-item-danger:hover,\na.list-group-item-danger:focus,\nbutton.list-group-item-danger:focus {\n  color: #a94442;\n  background-color: #ebcccc;\n}\na.list-group-item-danger.active,\nbutton.list-group-item-danger.active,\na.list-group-item-danger.active:hover,\nbutton.list-group-item-danger.active:hover,\na.list-group-item-danger.active:focus,\nbutton.list-group-item-danger.active:focus {\n  color: #fff;\n  background-color: #a94442;\n  border-color: #a94442;\n}\n.list-group-item-heading {\n  margin-top: 0;\n  margin-bottom: 5px;\n}\n.list-group-item-text {\n  margin-bottom: 0;\n  line-height: 1.3;\n}\n.panel {\n  margin-bottom: 20px;\n  background-color: #fff;\n  border: 1px solid transparent;\n  border-radius: 4px;\n  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n          box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.panel-body {\n  padding: 15px;\n}\n.panel-heading {\n  padding: 10px 15px;\n  border-bottom: 1px solid transparent;\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px;\n}\n.panel-heading > .dropdown .dropdown-toggle {\n  color: inherit;\n}\n.panel-title {\n  margin-top: 0;\n  margin-bottom: 0;\n  font-size: 16px;\n  color: inherit;\n}\n.panel-title > a,\n.panel-title > small,\n.panel-title > .small,\n.panel-title > small > a,\n.panel-title > .small > a {\n  color: inherit;\n}\n.panel-footer {\n  padding: 10px 15px;\n  background-color: #f5f5f5;\n  border-top: 1px solid #ddd;\n  border-bottom-right-radius: 3px;\n  border-bottom-left-radius: 3px;\n}\n.panel > .list-group,\n.panel > .panel-collapse > .list-group {\n  margin-bottom: 0;\n}\n.panel > .list-group .list-group-item,\n.panel > .panel-collapse > .list-group .list-group-item {\n  border-width: 1px 0;\n  border-radius: 0;\n}\n.panel > .list-group:first-child .list-group-item:first-child,\n.panel > .panel-collapse > .list-group:first-child .list-group-item:first-child {\n  border-top: 0;\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px;\n}\n.panel > .list-group:last-child .list-group-item:last-child,\n.panel > .panel-collapse > .list-group:last-child .list-group-item:last-child {\n  border-bottom: 0;\n  border-bottom-right-radius: 3px;\n  border-bottom-left-radius: 3px;\n}\n.panel > .panel-heading + .panel-collapse > .list-group .list-group-item:first-child {\n  border-top-left-radius: 0;\n  border-top-right-radius: 0;\n}\n.panel-heading + .list-group .list-group-item:first-child {\n  border-top-width: 0;\n}\n.list-group + .panel-footer {\n  border-top-width: 0;\n}\n.panel > .table,\n.panel > .table-responsive > .table,\n.panel > .panel-collapse > .table {\n  margin-bottom: 0;\n}\n.panel > .table caption,\n.panel > .table-responsive > .table caption,\n.panel > .panel-collapse > .table caption {\n  padding-right: 15px;\n  padding-left: 15px;\n}\n.panel > .table:first-child,\n.panel > .table-responsive:first-child > .table:first-child {\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px;\n}\n.panel > .table:first-child > thead:first-child > tr:first-child,\n.panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child,\n.panel > .table:first-child > tbody:first-child > tr:first-child,\n.panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child {\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px;\n}\n.panel > .table:first-child > thead:first-child > tr:first-child td:first-child,\n.panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:first-child,\n.panel > .table:first-child > tbody:first-child > tr:first-child td:first-child,\n.panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:first-child,\n.panel > .table:first-child > thead:first-child > tr:first-child th:first-child,\n.panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:first-child,\n.panel > .table:first-child > tbody:first-child > tr:first-child th:first-child,\n.panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:first-child {\n  border-top-left-radius: 3px;\n}\n.panel > .table:first-child > thead:first-child > tr:first-child td:last-child,\n.panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:last-child,\n.panel > .table:first-child > tbody:first-child > tr:first-child td:last-child,\n.panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:last-child,\n.panel > .table:first-child > thead:first-child > tr:first-child th:last-child,\n.panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:last-child,\n.panel > .table:first-child > tbody:first-child > tr:first-child th:last-child,\n.panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:last-child {\n  border-top-right-radius: 3px;\n}\n.panel > .table:last-child,\n.panel > .table-responsive:last-child > .table:last-child {\n  border-bottom-right-radius: 3px;\n  border-bottom-left-radius: 3px;\n}\n.panel > .table:last-child > tbody:last-child > tr:last-child,\n.panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child,\n.panel > .table:last-child > tfoot:last-child > tr:last-child,\n.panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child {\n  border-bottom-right-radius: 3px;\n  border-bottom-left-radius: 3px;\n}\n.panel > .table:last-child > tbody:last-child > tr:last-child td:first-child,\n.panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:first-child,\n.panel > .table:last-child > tfoot:last-child > tr:last-child td:first-child,\n.panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:first-child,\n.panel > .table:last-child > tbody:last-child > tr:last-child th:first-child,\n.panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:first-child,\n.panel > .table:last-child > tfoot:last-child > tr:last-child th:first-child,\n.panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:first-child {\n  border-bottom-left-radius: 3px;\n}\n.panel > .table:last-child > tbody:last-child > tr:last-child td:last-child,\n.panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:last-child,\n.panel > .table:last-child > tfoot:last-child > tr:last-child td:last-child,\n.panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:last-child,\n.panel > .table:last-child > tbody:last-child > tr:last-child th:last-child,\n.panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:last-child,\n.panel > .table:last-child > tfoot:last-child > tr:last-child th:last-child,\n.panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:last-child {\n  border-bottom-right-radius: 3px;\n}\n.panel > .panel-body + .table,\n.panel > .panel-body + .table-responsive,\n.panel > .table + .panel-body,\n.panel > .table-responsive + .panel-body {\n  border-top: 1px solid #ddd;\n}\n.panel > .table > tbody:first-child > tr:first-child th,\n.panel > .table > tbody:first-child > tr:first-child td {\n  border-top: 0;\n}\n.panel > .table-bordered,\n.panel > .table-responsive > .table-bordered {\n  border: 0;\n}\n.panel > .table-bordered > thead > tr > th:first-child,\n.panel > .table-responsive > .table-bordered > thead > tr > th:first-child,\n.panel > .table-bordered > tbody > tr > th:first-child,\n.panel > .table-responsive > .table-bordered > tbody > tr > th:first-child,\n.panel > .table-bordered > tfoot > tr > th:first-child,\n.panel > .table-responsive > .table-bordered > tfoot > tr > th:first-child,\n.panel > .table-bordered > thead > tr > td:first-child,\n.panel > .table-responsive > .table-bordered > thead > tr > td:first-child,\n.panel > .table-bordered > tbody > tr > td:first-child,\n.panel > .table-responsive > .table-bordered > tbody > tr > td:first-child,\n.panel > .table-bordered > tfoot > tr > td:first-child,\n.panel > .table-responsive > .table-bordered > tfoot > tr > td:first-child {\n  border-left: 0;\n}\n.panel > .table-bordered > thead > tr > th:last-child,\n.panel > .table-responsive > .table-bordered > thead > tr > th:last-child,\n.panel > .table-bordered > tbody > tr > th:last-child,\n.panel > .table-responsive > .table-bordered > tbody > tr > th:last-child,\n.panel > .table-bordered > tfoot > tr > th:last-child,\n.panel > .table-responsive > .table-bordered > tfoot > tr > th:last-child,\n.panel > .table-bordered > thead > tr > td:last-child,\n.panel > .table-responsive > .table-bordered > thead > tr > td:last-child,\n.panel > .table-bordered > tbody > tr > td:last-child,\n.panel > .table-responsive > .table-bordered > tbody > tr > td:last-child,\n.panel > .table-bordered > tfoot > tr > td:last-child,\n.panel > .table-responsive > .table-bordered > tfoot > tr > td:last-child {\n  border-right: 0;\n}\n.panel > .table-bordered > thead > tr:first-child > td,\n.panel > .table-responsive > .table-bordered > thead > tr:first-child > td,\n.panel > .table-bordered > tbody > tr:first-child > td,\n.panel > .table-responsive > .table-bordered > tbody > tr:first-child > td,\n.panel > .table-bordered > thead > tr:first-child > th,\n.panel > .table-responsive > .table-bordered > thead > tr:first-child > th,\n.panel > .table-bordered > tbody > tr:first-child > th,\n.panel > .table-responsive > .table-bordered > tbody > tr:first-child > th {\n  border-bottom: 0;\n}\n.panel > .table-bordered > tbody > tr:last-child > td,\n.panel > .table-responsive > .table-bordered > tbody > tr:last-child > td,\n.panel > .table-bordered > tfoot > tr:last-child > td,\n.panel > .table-responsive > .table-bordered > tfoot > tr:last-child > td,\n.panel > .table-bordered > tbody > tr:last-child > th,\n.panel > .table-responsive > .table-bordered > tbody > tr:last-child > th,\n.panel > .table-bordered > tfoot > tr:last-child > th,\n.panel > .table-responsive > .table-bordered > tfoot > tr:last-child > th {\n  border-bottom: 0;\n}\n.panel > .table-responsive {\n  margin-bottom: 0;\n  border: 0;\n}\n.panel-group {\n  margin-bottom: 20px;\n}\n.panel-group .panel {\n  margin-bottom: 0;\n  border-radius: 4px;\n}\n.panel-group .panel + .panel {\n  margin-top: 5px;\n}\n.panel-group .panel-heading {\n  border-bottom: 0;\n}\n.panel-group .panel-heading + .panel-collapse > .panel-body,\n.panel-group .panel-heading + .panel-collapse > .list-group {\n  border-top: 1px solid #ddd;\n}\n.panel-group .panel-footer {\n  border-top: 0;\n}\n.panel-group .panel-footer + .panel-collapse .panel-body {\n  border-bottom: 1px solid #ddd;\n}\n.panel-default {\n  border-color: #ddd;\n}\n.panel-default > .panel-heading {\n  color: #333;\n  background-color: #f5f5f5;\n  border-color: #ddd;\n}\n.panel-default > .panel-heading + .panel-collapse > .panel-body {\n  border-top-color: #ddd;\n}\n.panel-default > .panel-heading .badge {\n  color: #f5f5f5;\n  background-color: #333;\n}\n.panel-default > .panel-footer + .panel-collapse > .panel-body {\n  border-bottom-color: #ddd;\n}\n.panel-primary {\n  border-color: #337ab7;\n}\n.panel-primary > .panel-heading {\n  color: #fff;\n  background-color: #337ab7;\n  border-color: #337ab7;\n}\n.panel-primary > .panel-heading + .panel-collapse > .panel-body {\n  border-top-color: #337ab7;\n}\n.panel-primary > .panel-heading .badge {\n  color: #337ab7;\n  background-color: #fff;\n}\n.panel-primary > .panel-footer + .panel-collapse > .panel-body {\n  border-bottom-color: #337ab7;\n}\n.panel-success {\n  border-color: #d6e9c6;\n}\n.panel-success > .panel-heading {\n  color: #3c763d;\n  background-color: #dff0d8;\n  border-color: #d6e9c6;\n}\n.panel-success > .panel-heading + .panel-collapse > .panel-body {\n  border-top-color: #d6e9c6;\n}\n.panel-success > .panel-heading .badge {\n  color: #dff0d8;\n  background-color: #3c763d;\n}\n.panel-success > .panel-footer + .panel-collapse > .panel-body {\n  border-bottom-color: #d6e9c6;\n}\n.panel-info {\n  border-color: #bce8f1;\n}\n.panel-info > .panel-heading {\n  color: #31708f;\n  background-color: #d9edf7;\n  border-color: #bce8f1;\n}\n.panel-info > .panel-heading + .panel-collapse > .panel-body {\n  border-top-color: #bce8f1;\n}\n.panel-info > .panel-heading .badge {\n  color: #d9edf7;\n  background-color: #31708f;\n}\n.panel-info > .panel-footer + .panel-collapse > .panel-body {\n  border-bottom-color: #bce8f1;\n}\n.panel-warning {\n  border-color: #faebcc;\n}\n.panel-warning > .panel-heading {\n  color: #8a6d3b;\n  background-color: #fcf8e3;\n  border-color: #faebcc;\n}\n.panel-warning > .panel-heading + .panel-collapse > .panel-body {\n  border-top-color: #faebcc;\n}\n.panel-warning > .panel-heading .badge {\n  color: #fcf8e3;\n  background-color: #8a6d3b;\n}\n.panel-warning > .panel-footer + .panel-collapse > .panel-body {\n  border-bottom-color: #faebcc;\n}\n.panel-danger {\n  border-color: #ebccd1;\n}\n.panel-danger > .panel-heading {\n  color: #a94442;\n  background-color: #f2dede;\n  border-color: #ebccd1;\n}\n.panel-danger > .panel-heading + .panel-collapse > .panel-body {\n  border-top-color: #ebccd1;\n}\n.panel-danger > .panel-heading .badge {\n  color: #f2dede;\n  background-color: #a94442;\n}\n.panel-danger > .panel-footer + .panel-collapse > .panel-body {\n  border-bottom-color: #ebccd1;\n}\n.embed-responsive {\n  position: relative;\n  display: block;\n  height: 0;\n  padding: 0;\n  overflow: hidden;\n}\n.embed-responsive .embed-responsive-item,\n.embed-responsive iframe,\n.embed-responsive embed,\n.embed-responsive object,\n.embed-responsive video {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  border: 0;\n}\n.embed-responsive-16by9 {\n  padding-bottom: 56.25%;\n}\n.embed-responsive-4by3 {\n  padding-bottom: 75%;\n}\n.well {\n  min-height: 20px;\n  padding: 19px;\n  margin-bottom: 20px;\n  background-color: #f5f5f5;\n  border: 1px solid #e3e3e3;\n  border-radius: 4px;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);\n}\n.well blockquote {\n  border-color: #ddd;\n  border-color: rgba(0, 0, 0, .15);\n}\n.well-lg {\n  padding: 24px;\n  border-radius: 6px;\n}\n.well-sm {\n  padding: 9px;\n  border-radius: 3px;\n}\n.close {\n  float: right;\n  font-size: 21px;\n  font-weight: bold;\n  line-height: 1;\n  color: #000;\n  text-shadow: 0 1px 0 #fff;\n  filter: alpha(opacity=20);\n  opacity: .2;\n}\n.close:hover,\n.close:focus {\n  color: #000;\n  text-decoration: none;\n  cursor: pointer;\n  filter: alpha(opacity=50);\n  opacity: .5;\n}\nbutton.close {\n  -webkit-appearance: none;\n  padding: 0;\n  cursor: pointer;\n  background: transparent;\n  border: 0;\n}\n.modal-open {\n  overflow: hidden;\n}\n.modal {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 1050;\n  display: none;\n  overflow: hidden;\n  -webkit-overflow-scrolling: touch;\n  outline: 0;\n}\n.modal.fade .modal-dialog {\n  -webkit-transition: -webkit-transform .3s ease-out;\n       -o-transition:      -o-transform .3s ease-out;\n          transition:         transform .3s ease-out;\n  -webkit-transform: translate(0, -25%);\n      -ms-transform: translate(0, -25%);\n       -o-transform: translate(0, -25%);\n          transform: translate(0, -25%);\n}\n.modal.in .modal-dialog {\n  -webkit-transform: translate(0, 0);\n      -ms-transform: translate(0, 0);\n       -o-transform: translate(0, 0);\n          transform: translate(0, 0);\n}\n.modal-open .modal {\n  overflow-x: hidden;\n  overflow-y: auto;\n}\n.modal-dialog {\n  position: relative;\n  width: auto;\n  margin: 10px;\n}\n.modal-content {\n  position: relative;\n  background-color: #fff;\n  -webkit-background-clip: padding-box;\n          background-clip: padding-box;\n  border: 1px solid #999;\n  border: 1px solid rgba(0, 0, 0, .2);\n  border-radius: 6px;\n  outline: 0;\n  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);\n          box-shadow: 0 3px 9px rgba(0, 0, 0, .5);\n}\n.modal-backdrop {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 1040;\n  background-color: #000;\n}\n.modal-backdrop.fade {\n  filter: alpha(opacity=0);\n  opacity: 0;\n}\n.modal-backdrop.in {\n  filter: alpha(opacity=50);\n  opacity: .5;\n}\n.modal-header {\n  padding: 15px;\n  border-bottom: 1px solid #e5e5e5;\n}\n.modal-header .close {\n  margin-top: -2px;\n}\n.modal-title {\n  margin: 0;\n  line-height: 1.42857143;\n}\n.modal-body {\n  position: relative;\n  padding: 15px;\n}\n.modal-footer {\n  padding: 15px;\n  text-align: right;\n  border-top: 1px solid #e5e5e5;\n}\n.modal-footer .btn + .btn {\n  margin-bottom: 0;\n  margin-left: 5px;\n}\n.modal-footer .btn-group .btn + .btn {\n  margin-left: -1px;\n}\n.modal-footer .btn-block + .btn-block {\n  margin-left: 0;\n}\n.modal-scrollbar-measure {\n  position: absolute;\n  top: -9999px;\n  width: 50px;\n  height: 50px;\n  overflow: scroll;\n}\n@media (min-width: 768px) {\n  .modal-dialog {\n    width: 600px;\n    margin: 30px auto;\n  }\n  .modal-content {\n    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);\n            box-shadow: 0 5px 15px rgba(0, 0, 0, .5);\n  }\n  .modal-sm {\n    width: 300px;\n  }\n}\n@media (min-width: 992px) {\n  .modal-lg {\n    width: 900px;\n  }\n}\n.tooltip {\n  position: absolute;\n  z-index: 1070;\n  display: block;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 12px;\n  font-style: normal;\n  font-weight: normal;\n  line-height: 1.42857143;\n  text-align: left;\n  text-align: start;\n  text-decoration: none;\n  text-shadow: none;\n  text-transform: none;\n  letter-spacing: normal;\n  word-break: normal;\n  word-spacing: normal;\n  word-wrap: normal;\n  white-space: normal;\n  filter: alpha(opacity=0);\n  opacity: 0;\n\n  line-break: auto;\n}\n.tooltip.in {\n  filter: alpha(opacity=90);\n  opacity: .9;\n}\n.tooltip.top {\n  padding: 5px 0;\n  margin-top: -3px;\n}\n.tooltip.right {\n  padding: 0 5px;\n  margin-left: 3px;\n}\n.tooltip.bottom {\n  padding: 5px 0;\n  margin-top: 3px;\n}\n.tooltip.left {\n  padding: 0 5px;\n  margin-left: -3px;\n}\n.tooltip-inner {\n  max-width: 200px;\n  padding: 3px 8px;\n  color: #fff;\n  text-align: center;\n  background-color: #000;\n  border-radius: 4px;\n}\n.tooltip-arrow {\n  position: absolute;\n  width: 0;\n  height: 0;\n  border-color: transparent;\n  border-style: solid;\n}\n.tooltip.top .tooltip-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-width: 5px 5px 0;\n  border-top-color: #000;\n}\n.tooltip.top-left .tooltip-arrow {\n  right: 5px;\n  bottom: 0;\n  margin-bottom: -5px;\n  border-width: 5px 5px 0;\n  border-top-color: #000;\n}\n.tooltip.top-right .tooltip-arrow {\n  bottom: 0;\n  left: 5px;\n  margin-bottom: -5px;\n  border-width: 5px 5px 0;\n  border-top-color: #000;\n}\n.tooltip.right .tooltip-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-width: 5px 5px 5px 0;\n  border-right-color: #000;\n}\n.tooltip.left .tooltip-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-width: 5px 0 5px 5px;\n  border-left-color: #000;\n}\n.tooltip.bottom .tooltip-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-width: 0 5px 5px;\n  border-bottom-color: #000;\n}\n.tooltip.bottom-left .tooltip-arrow {\n  top: 0;\n  right: 5px;\n  margin-top: -5px;\n  border-width: 0 5px 5px;\n  border-bottom-color: #000;\n}\n.tooltip.bottom-right .tooltip-arrow {\n  top: 0;\n  left: 5px;\n  margin-top: -5px;\n  border-width: 0 5px 5px;\n  border-bottom-color: #000;\n}\n.popover {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 1060;\n  display: none;\n  max-width: 276px;\n  padding: 1px;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 14px;\n  font-style: normal;\n  font-weight: normal;\n  line-height: 1.42857143;\n  text-align: left;\n  text-align: start;\n  text-decoration: none;\n  text-shadow: none;\n  text-transform: none;\n  letter-spacing: normal;\n  word-break: normal;\n  word-spacing: normal;\n  word-wrap: normal;\n  white-space: normal;\n  background-color: #fff;\n  -webkit-background-clip: padding-box;\n          background-clip: padding-box;\n  border: 1px solid #ccc;\n  border: 1px solid rgba(0, 0, 0, .2);\n  border-radius: 6px;\n  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);\n          box-shadow: 0 5px 10px rgba(0, 0, 0, .2);\n\n  line-break: auto;\n}\n.popover.top {\n  margin-top: -10px;\n}\n.popover.right {\n  margin-left: 10px;\n}\n.popover.bottom {\n  margin-top: 10px;\n}\n.popover.left {\n  margin-left: -10px;\n}\n.popover-title {\n  padding: 8px 14px;\n  margin: 0;\n  font-size: 14px;\n  background-color: #f7f7f7;\n  border-bottom: 1px solid #ebebeb;\n  border-radius: 5px 5px 0 0;\n}\n.popover-content {\n  padding: 9px 14px;\n}\n.popover > .arrow,\n.popover > .arrow:after {\n  position: absolute;\n  display: block;\n  width: 0;\n  height: 0;\n  border-color: transparent;\n  border-style: solid;\n}\n.popover > .arrow {\n  border-width: 11px;\n}\n.popover > .arrow:after {\n  content: \"\";\n  border-width: 10px;\n}\n.popover.top > .arrow {\n  bottom: -11px;\n  left: 50%;\n  margin-left: -11px;\n  border-top-color: #999;\n  border-top-color: rgba(0, 0, 0, .25);\n  border-bottom-width: 0;\n}\n.popover.top > .arrow:after {\n  bottom: 1px;\n  margin-left: -10px;\n  content: \" \";\n  border-top-color: #fff;\n  border-bottom-width: 0;\n}\n.popover.right > .arrow {\n  top: 50%;\n  left: -11px;\n  margin-top: -11px;\n  border-right-color: #999;\n  border-right-color: rgba(0, 0, 0, .25);\n  border-left-width: 0;\n}\n.popover.right > .arrow:after {\n  bottom: -10px;\n  left: 1px;\n  content: \" \";\n  border-right-color: #fff;\n  border-left-width: 0;\n}\n.popover.bottom > .arrow {\n  top: -11px;\n  left: 50%;\n  margin-left: -11px;\n  border-top-width: 0;\n  border-bottom-color: #999;\n  border-bottom-color: rgba(0, 0, 0, .25);\n}\n.popover.bottom > .arrow:after {\n  top: 1px;\n  margin-left: -10px;\n  content: \" \";\n  border-top-width: 0;\n  border-bottom-color: #fff;\n}\n.popover.left > .arrow {\n  top: 50%;\n  right: -11px;\n  margin-top: -11px;\n  border-right-width: 0;\n  border-left-color: #999;\n  border-left-color: rgba(0, 0, 0, .25);\n}\n.popover.left > .arrow:after {\n  right: 1px;\n  bottom: -10px;\n  content: \" \";\n  border-right-width: 0;\n  border-left-color: #fff;\n}\n.carousel {\n  position: relative;\n}\n.carousel-inner {\n  position: relative;\n  width: 100%;\n  overflow: hidden;\n}\n.carousel-inner > .item {\n  position: relative;\n  display: none;\n  -webkit-transition: .6s ease-in-out left;\n       -o-transition: .6s ease-in-out left;\n          transition: .6s ease-in-out left;\n}\n.carousel-inner > .item > img,\n.carousel-inner > .item > a > img {\n  line-height: 1;\n}\n@media all and (transform-3d), (-webkit-transform-3d) {\n  .carousel-inner > .item {\n    -webkit-transition: -webkit-transform .6s ease-in-out;\n         -o-transition:      -o-transform .6s ease-in-out;\n            transition:         transform .6s ease-in-out;\n\n    -webkit-backface-visibility: hidden;\n            backface-visibility: hidden;\n    -webkit-perspective: 1000px;\n            perspective: 1000px;\n  }\n  .carousel-inner > .item.next,\n  .carousel-inner > .item.active.right {\n    left: 0;\n    -webkit-transform: translate3d(100%, 0, 0);\n            transform: translate3d(100%, 0, 0);\n  }\n  .carousel-inner > .item.prev,\n  .carousel-inner > .item.active.left {\n    left: 0;\n    -webkit-transform: translate3d(-100%, 0, 0);\n            transform: translate3d(-100%, 0, 0);\n  }\n  .carousel-inner > .item.next.left,\n  .carousel-inner > .item.prev.right,\n  .carousel-inner > .item.active {\n    left: 0;\n    -webkit-transform: translate3d(0, 0, 0);\n            transform: translate3d(0, 0, 0);\n  }\n}\n.carousel-inner > .active,\n.carousel-inner > .next,\n.carousel-inner > .prev {\n  display: block;\n}\n.carousel-inner > .active {\n  left: 0;\n}\n.carousel-inner > .next,\n.carousel-inner > .prev {\n  position: absolute;\n  top: 0;\n  width: 100%;\n}\n.carousel-inner > .next {\n  left: 100%;\n}\n.carousel-inner > .prev {\n  left: -100%;\n}\n.carousel-inner > .next.left,\n.carousel-inner > .prev.right {\n  left: 0;\n}\n.carousel-inner > .active.left {\n  left: -100%;\n}\n.carousel-inner > .active.right {\n  left: 100%;\n}\n.carousel-control {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  width: 15%;\n  font-size: 20px;\n  color: #fff;\n  text-align: center;\n  text-shadow: 0 1px 2px rgba(0, 0, 0, .6);\n  background-color: rgba(0, 0, 0, 0);\n  filter: alpha(opacity=50);\n  opacity: .5;\n}\n.carousel-control.left {\n  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);\n  background-image:      -o-linear-gradient(left, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);\n  background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .5)), to(rgba(0, 0, 0, .0001)));\n  background-image:         linear-gradient(to right, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);\n  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);\n  background-repeat: repeat-x;\n}\n.carousel-control.right {\n  right: 0;\n  left: auto;\n  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);\n  background-image:      -o-linear-gradient(left, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);\n  background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .0001)), to(rgba(0, 0, 0, .5)));\n  background-image:         linear-gradient(to right, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);\n  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);\n  background-repeat: repeat-x;\n}\n.carousel-control:hover,\n.carousel-control:focus {\n  color: #fff;\n  text-decoration: none;\n  filter: alpha(opacity=90);\n  outline: 0;\n  opacity: .9;\n}\n.carousel-control .icon-prev,\n.carousel-control .icon-next,\n.carousel-control .glyphicon-chevron-left,\n.carousel-control .glyphicon-chevron-right {\n  position: absolute;\n  top: 50%;\n  z-index: 5;\n  display: inline-block;\n  margin-top: -10px;\n}\n.carousel-control .icon-prev,\n.carousel-control .glyphicon-chevron-left {\n  left: 50%;\n  margin-left: -10px;\n}\n.carousel-control .icon-next,\n.carousel-control .glyphicon-chevron-right {\n  right: 50%;\n  margin-right: -10px;\n}\n.carousel-control .icon-prev,\n.carousel-control .icon-next {\n  width: 20px;\n  height: 20px;\n  font-family: serif;\n  line-height: 1;\n}\n.carousel-control .icon-prev:before {\n  content: '\\2039';\n}\n.carousel-control .icon-next:before {\n  content: '\\203A';\n}\n.carousel-indicators {\n  position: absolute;\n  bottom: 10px;\n  left: 50%;\n  z-index: 15;\n  width: 60%;\n  padding-left: 0;\n  margin-left: -30%;\n  text-align: center;\n  list-style: none;\n}\n.carousel-indicators li {\n  display: inline-block;\n  width: 10px;\n  height: 10px;\n  margin: 1px;\n  text-indent: -999px;\n  cursor: pointer;\n  background-color: #000 \\9;\n  background-color: rgba(0, 0, 0, 0);\n  border: 1px solid #fff;\n  border-radius: 10px;\n}\n.carousel-indicators .active {\n  width: 12px;\n  height: 12px;\n  margin: 0;\n  background-color: #fff;\n}\n.carousel-caption {\n  position: absolute;\n  right: 15%;\n  bottom: 20px;\n  left: 15%;\n  z-index: 10;\n  padding-top: 20px;\n  padding-bottom: 20px;\n  color: #fff;\n  text-align: center;\n  text-shadow: 0 1px 2px rgba(0, 0, 0, .6);\n}\n.carousel-caption .btn {\n  text-shadow: none;\n}\n@media screen and (min-width: 768px) {\n  .carousel-control .glyphicon-chevron-left,\n  .carousel-control .glyphicon-chevron-right,\n  .carousel-control .icon-prev,\n  .carousel-control .icon-next {\n    width: 30px;\n    height: 30px;\n    margin-top: -10px;\n    font-size: 30px;\n  }\n  .carousel-control .glyphicon-chevron-left,\n  .carousel-control .icon-prev {\n    margin-left: -10px;\n  }\n  .carousel-control .glyphicon-chevron-right,\n  .carousel-control .icon-next {\n    margin-right: -10px;\n  }\n  .carousel-caption {\n    right: 20%;\n    left: 20%;\n    padding-bottom: 30px;\n  }\n  .carousel-indicators {\n    bottom: 20px;\n  }\n}\n.clearfix:before,\n.clearfix:after,\n.dl-horizontal dd:before,\n.dl-horizontal dd:after,\n.container:before,\n.container:after,\n.container-fluid:before,\n.container-fluid:after,\n.row:before,\n.row:after,\n.form-horizontal .form-group:before,\n.form-horizontal .form-group:after,\n.btn-toolbar:before,\n.btn-toolbar:after,\n.btn-group-vertical > .btn-group:before,\n.btn-group-vertical > .btn-group:after,\n.nav:before,\n.nav:after,\n.navbar:before,\n.navbar:after,\n.navbar-header:before,\n.navbar-header:after,\n.navbar-collapse:before,\n.navbar-collapse:after,\n.pager:before,\n.pager:after,\n.panel-body:before,\n.panel-body:after,\n.modal-header:before,\n.modal-header:after,\n.modal-footer:before,\n.modal-footer:after {\n  display: table;\n  content: \" \";\n}\n.clearfix:after,\n.dl-horizontal dd:after,\n.container:after,\n.container-fluid:after,\n.row:after,\n.form-horizontal .form-group:after,\n.btn-toolbar:after,\n.btn-group-vertical > .btn-group:after,\n.nav:after,\n.navbar:after,\n.navbar-header:after,\n.navbar-collapse:after,\n.pager:after,\n.panel-body:after,\n.modal-header:after,\n.modal-footer:after {\n  clear: both;\n}\n.center-block {\n  display: block;\n  margin-right: auto;\n  margin-left: auto;\n}\n.pull-right {\n  float: right !important;\n}\n.pull-left {\n  float: left !important;\n}\n.hide {\n  display: none !important;\n}\n.show {\n  display: block !important;\n}\n.invisible {\n  visibility: hidden;\n}\n.text-hide {\n  font: 0/0 a;\n  color: transparent;\n  text-shadow: none;\n  background-color: transparent;\n  border: 0;\n}\n.hidden {\n  display: none !important;\n}\n.affix {\n  position: fixed;\n}\n@-ms-viewport {\n  width: device-width;\n}\n.visible-xs,\n.visible-sm,\n.visible-md,\n.visible-lg {\n  display: none !important;\n}\n.visible-xs-block,\n.visible-xs-inline,\n.visible-xs-inline-block,\n.visible-sm-block,\n.visible-sm-inline,\n.visible-sm-inline-block,\n.visible-md-block,\n.visible-md-inline,\n.visible-md-inline-block,\n.visible-lg-block,\n.visible-lg-inline,\n.visible-lg-inline-block {\n  display: none !important;\n}\n@media (max-width: 767px) {\n  .visible-xs {\n    display: block !important;\n  }\n  table.visible-xs {\n    display: table !important;\n  }\n  tr.visible-xs {\n    display: table-row !important;\n  }\n  th.visible-xs,\n  td.visible-xs {\n    display: table-cell !important;\n  }\n}\n@media (max-width: 767px) {\n  .visible-xs-block {\n    display: block !important;\n  }\n}\n@media (max-width: 767px) {\n  .visible-xs-inline {\n    display: inline !important;\n  }\n}\n@media (max-width: 767px) {\n  .visible-xs-inline-block {\n    display: inline-block !important;\n  }\n}\n@media (min-width: 768px) and (max-width: 991px) {\n  .visible-sm {\n    display: block !important;\n  }\n  table.visible-sm {\n    display: table !important;\n  }\n  tr.visible-sm {\n    display: table-row !important;\n  }\n  th.visible-sm,\n  td.visible-sm {\n    display: table-cell !important;\n  }\n}\n@media (min-width: 768px) and (max-width: 991px) {\n  .visible-sm-block {\n    display: block !important;\n  }\n}\n@media (min-width: 768px) and (max-width: 991px) {\n  .visible-sm-inline {\n    display: inline !important;\n  }\n}\n@media (min-width: 768px) and (max-width: 991px) {\n  .visible-sm-inline-block {\n    display: inline-block !important;\n  }\n}\n@media (min-width: 992px) and (max-width: 1199px) {\n  .visible-md {\n    display: block !important;\n  }\n  table.visible-md {\n    display: table !important;\n  }\n  tr.visible-md {\n    display: table-row !important;\n  }\n  th.visible-md,\n  td.visible-md {\n    display: table-cell !important;\n  }\n}\n@media (min-width: 992px) and (max-width: 1199px) {\n  .visible-md-block {\n    display: block !important;\n  }\n}\n@media (min-width: 992px) and (max-width: 1199px) {\n  .visible-md-inline {\n    display: inline !important;\n  }\n}\n@media (min-width: 992px) and (max-width: 1199px) {\n  .visible-md-inline-block {\n    display: inline-block !important;\n  }\n}\n@media (min-width: 1200px) {\n  .visible-lg {\n    display: block !important;\n  }\n  table.visible-lg {\n    display: table !important;\n  }\n  tr.visible-lg {\n    display: table-row !important;\n  }\n  th.visible-lg,\n  td.visible-lg {\n    display: table-cell !important;\n  }\n}\n@media (min-width: 1200px) {\n  .visible-lg-block {\n    display: block !important;\n  }\n}\n@media (min-width: 1200px) {\n  .visible-lg-inline {\n    display: inline !important;\n  }\n}\n@media (min-width: 1200px) {\n  .visible-lg-inline-block {\n    display: inline-block !important;\n  }\n}\n@media (max-width: 767px) {\n  .hidden-xs {\n    display: none !important;\n  }\n}\n@media (min-width: 768px) and (max-width: 991px) {\n  .hidden-sm {\n    display: none !important;\n  }\n}\n@media (min-width: 992px) and (max-width: 1199px) {\n  .hidden-md {\n    display: none !important;\n  }\n}\n@media (min-width: 1200px) {\n  .hidden-lg {\n    display: none !important;\n  }\n}\n.visible-print {\n  display: none !important;\n}\n@media print {\n  .visible-print {\n    display: block !important;\n  }\n  table.visible-print {\n    display: table !important;\n  }\n  tr.visible-print {\n    display: table-row !important;\n  }\n  th.visible-print,\n  td.visible-print {\n    display: table-cell !important;\n  }\n}\n.visible-print-block {\n  display: none !important;\n}\n@media print {\n  .visible-print-block {\n    display: block !important;\n  }\n}\n.visible-print-inline {\n  display: none !important;\n}\n@media print {\n  .visible-print-inline {\n    display: inline !important;\n  }\n}\n.visible-print-inline-block {\n  display: none !important;\n}\n@media print {\n  .visible-print-inline-block {\n    display: inline-block !important;\n  }\n}\n@media print {\n  .hidden-print {\n    display: none !important;\n  }\n}\n/*# sourceMappingURL=bootstrap.css.map */\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 5 */
+/* 62 */
 /***/ function(module, exports) {
 
 	/*
@@ -31040,37 +36371,37 @@
 
 
 /***/ },
-/* 6 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "f4769f9bdb7466be65088239c12046d1.eot";
 
 /***/ },
-/* 7 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "448c34a56d699c29117adc64c43affeb.woff2";
 
 /***/ },
-/* 8 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "fa2772327f55d8198301fdb8bcfc8158.woff";
 
 /***/ },
-/* 9 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "e18bbf611f2a2e43afc071aa2f4e1512.ttf";
 
 /***/ },
-/* 10 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "89889688147bd7575d6327160d64e760.svg";
 
 /***/ },
-/* 11 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -31320,6 +36651,4657 @@
 			URL.revokeObjectURL(oldSrc);
 	}
 
+
+/***/ },
+/* 69 */
+/***/ function(module, exports) {
+
+	/**
+	 * State-based routing for AngularJS
+	 * @version v0.2.18
+	 * @link http://angular-ui.github.com/
+	 * @license MIT License, http://www.opensource.org/licenses/MIT
+	 */
+
+	/* commonjs package manager support (eg componentjs) */
+	if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports){
+	  module.exports = 'ui.router';
+	}
+
+	(function (window, angular, undefined) {
+	/*jshint globalstrict:true*/
+	/*global angular:false*/
+	'use strict';
+
+	var isDefined = angular.isDefined,
+	    isFunction = angular.isFunction,
+	    isString = angular.isString,
+	    isObject = angular.isObject,
+	    isArray = angular.isArray,
+	    forEach = angular.forEach,
+	    extend = angular.extend,
+	    copy = angular.copy,
+	    toJson = angular.toJson;
+
+	function inherit(parent, extra) {
+	  return extend(new (extend(function() {}, { prototype: parent }))(), extra);
+	}
+
+	function merge(dst) {
+	  forEach(arguments, function(obj) {
+	    if (obj !== dst) {
+	      forEach(obj, function(value, key) {
+	        if (!dst.hasOwnProperty(key)) dst[key] = value;
+	      });
+	    }
+	  });
+	  return dst;
+	}
+
+	/**
+	 * Finds the common ancestor path between two states.
+	 *
+	 * @param {Object} first The first state.
+	 * @param {Object} second The second state.
+	 * @return {Array} Returns an array of state names in descending order, not including the root.
+	 */
+	function ancestors(first, second) {
+	  var path = [];
+
+	  for (var n in first.path) {
+	    if (first.path[n] !== second.path[n]) break;
+	    path.push(first.path[n]);
+	  }
+	  return path;
+	}
+
+	/**
+	 * IE8-safe wrapper for `Object.keys()`.
+	 *
+	 * @param {Object} object A JavaScript object.
+	 * @return {Array} Returns the keys of the object as an array.
+	 */
+	function objectKeys(object) {
+	  if (Object.keys) {
+	    return Object.keys(object);
+	  }
+	  var result = [];
+
+	  forEach(object, function(val, key) {
+	    result.push(key);
+	  });
+	  return result;
+	}
+
+	/**
+	 * IE8-safe wrapper for `Array.prototype.indexOf()`.
+	 *
+	 * @param {Array} array A JavaScript array.
+	 * @param {*} value A value to search the array for.
+	 * @return {Number} Returns the array index value of `value`, or `-1` if not present.
+	 */
+	function indexOf(array, value) {
+	  if (Array.prototype.indexOf) {
+	    return array.indexOf(value, Number(arguments[2]) || 0);
+	  }
+	  var len = array.length >>> 0, from = Number(arguments[2]) || 0;
+	  from = (from < 0) ? Math.ceil(from) : Math.floor(from);
+
+	  if (from < 0) from += len;
+
+	  for (; from < len; from++) {
+	    if (from in array && array[from] === value) return from;
+	  }
+	  return -1;
+	}
+
+	/**
+	 * Merges a set of parameters with all parameters inherited between the common parents of the
+	 * current state and a given destination state.
+	 *
+	 * @param {Object} currentParams The value of the current state parameters ($stateParams).
+	 * @param {Object} newParams The set of parameters which will be composited with inherited params.
+	 * @param {Object} $current Internal definition of object representing the current state.
+	 * @param {Object} $to Internal definition of object representing state to transition to.
+	 */
+	function inheritParams(currentParams, newParams, $current, $to) {
+	  var parents = ancestors($current, $to), parentParams, inherited = {}, inheritList = [];
+
+	  for (var i in parents) {
+	    if (!parents[i] || !parents[i].params) continue;
+	    parentParams = objectKeys(parents[i].params);
+	    if (!parentParams.length) continue;
+
+	    for (var j in parentParams) {
+	      if (indexOf(inheritList, parentParams[j]) >= 0) continue;
+	      inheritList.push(parentParams[j]);
+	      inherited[parentParams[j]] = currentParams[parentParams[j]];
+	    }
+	  }
+	  return extend({}, inherited, newParams);
+	}
+
+	/**
+	 * Performs a non-strict comparison of the subset of two objects, defined by a list of keys.
+	 *
+	 * @param {Object} a The first object.
+	 * @param {Object} b The second object.
+	 * @param {Array} keys The list of keys within each object to compare. If the list is empty or not specified,
+	 *                     it defaults to the list of keys in `a`.
+	 * @return {Boolean} Returns `true` if the keys match, otherwise `false`.
+	 */
+	function equalForKeys(a, b, keys) {
+	  if (!keys) {
+	    keys = [];
+	    for (var n in a) keys.push(n); // Used instead of Object.keys() for IE8 compatibility
+	  }
+
+	  for (var i=0; i<keys.length; i++) {
+	    var k = keys[i];
+	    if (a[k] != b[k]) return false; // Not '===', values aren't necessarily normalized
+	  }
+	  return true;
+	}
+
+	/**
+	 * Returns the subset of an object, based on a list of keys.
+	 *
+	 * @param {Array} keys
+	 * @param {Object} values
+	 * @return {Boolean} Returns a subset of `values`.
+	 */
+	function filterByKeys(keys, values) {
+	  var filtered = {};
+
+	  forEach(keys, function (name) {
+	    filtered[name] = values[name];
+	  });
+	  return filtered;
+	}
+
+	// like _.indexBy
+	// when you know that your index values will be unique, or you want last-one-in to win
+	function indexBy(array, propName) {
+	  var result = {};
+	  forEach(array, function(item) {
+	    result[item[propName]] = item;
+	  });
+	  return result;
+	}
+
+	// extracted from underscore.js
+	// Return a copy of the object only containing the whitelisted properties.
+	function pick(obj) {
+	  var copy = {};
+	  var keys = Array.prototype.concat.apply(Array.prototype, Array.prototype.slice.call(arguments, 1));
+	  forEach(keys, function(key) {
+	    if (key in obj) copy[key] = obj[key];
+	  });
+	  return copy;
+	}
+
+	// extracted from underscore.js
+	// Return a copy of the object omitting the blacklisted properties.
+	function omit(obj) {
+	  var copy = {};
+	  var keys = Array.prototype.concat.apply(Array.prototype, Array.prototype.slice.call(arguments, 1));
+	  for (var key in obj) {
+	    if (indexOf(keys, key) == -1) copy[key] = obj[key];
+	  }
+	  return copy;
+	}
+
+	function pluck(collection, key) {
+	  var result = isArray(collection) ? [] : {};
+
+	  forEach(collection, function(val, i) {
+	    result[i] = isFunction(key) ? key(val) : val[key];
+	  });
+	  return result;
+	}
+
+	function filter(collection, callback) {
+	  var array = isArray(collection);
+	  var result = array ? [] : {};
+	  forEach(collection, function(val, i) {
+	    if (callback(val, i)) {
+	      result[array ? result.length : i] = val;
+	    }
+	  });
+	  return result;
+	}
+
+	function map(collection, callback) {
+	  var result = isArray(collection) ? [] : {};
+
+	  forEach(collection, function(val, i) {
+	    result[i] = callback(val, i);
+	  });
+	  return result;
+	}
+
+	/**
+	 * @ngdoc overview
+	 * @name ui.router.util
+	 *
+	 * @description
+	 * # ui.router.util sub-module
+	 *
+	 * This module is a dependency of other sub-modules. Do not include this module as a dependency
+	 * in your angular app (use {@link ui.router} module instead).
+	 *
+	 */
+	angular.module('ui.router.util', ['ng']);
+
+	/**
+	 * @ngdoc overview
+	 * @name ui.router.router
+	 * 
+	 * @requires ui.router.util
+	 *
+	 * @description
+	 * # ui.router.router sub-module
+	 *
+	 * This module is a dependency of other sub-modules. Do not include this module as a dependency
+	 * in your angular app (use {@link ui.router} module instead).
+	 */
+	angular.module('ui.router.router', ['ui.router.util']);
+
+	/**
+	 * @ngdoc overview
+	 * @name ui.router.state
+	 * 
+	 * @requires ui.router.router
+	 * @requires ui.router.util
+	 *
+	 * @description
+	 * # ui.router.state sub-module
+	 *
+	 * This module is a dependency of the main ui.router module. Do not include this module as a dependency
+	 * in your angular app (use {@link ui.router} module instead).
+	 * 
+	 */
+	angular.module('ui.router.state', ['ui.router.router', 'ui.router.util']);
+
+	/**
+	 * @ngdoc overview
+	 * @name ui.router
+	 *
+	 * @requires ui.router.state
+	 *
+	 * @description
+	 * # ui.router
+	 * 
+	 * ## The main module for ui.router 
+	 * There are several sub-modules included with the ui.router module, however only this module is needed
+	 * as a dependency within your angular app. The other modules are for organization purposes. 
+	 *
+	 * The modules are:
+	 * * ui.router - the main "umbrella" module
+	 * * ui.router.router - 
+	 * 
+	 * *You'll need to include **only** this module as the dependency within your angular app.*
+	 * 
+	 * <pre>
+	 * <!doctype html>
+	 * <html ng-app="myApp">
+	 * <head>
+	 *   <script src="js/angular.js"></script>
+	 *   <!-- Include the ui-router script -->
+	 *   <script src="js/angular-ui-router.min.js"></script>
+	 *   <script>
+	 *     // ...and add 'ui.router' as a dependency
+	 *     var myApp = angular.module('myApp', ['ui.router']);
+	 *   </script>
+	 * </head>
+	 * <body>
+	 * </body>
+	 * </html>
+	 * </pre>
+	 */
+	angular.module('ui.router', ['ui.router.state']);
+
+	angular.module('ui.router.compat', ['ui.router']);
+
+	/**
+	 * @ngdoc object
+	 * @name ui.router.util.$resolve
+	 *
+	 * @requires $q
+	 * @requires $injector
+	 *
+	 * @description
+	 * Manages resolution of (acyclic) graphs of promises.
+	 */
+	$Resolve.$inject = ['$q', '$injector'];
+	function $Resolve(  $q,    $injector) {
+	  
+	  var VISIT_IN_PROGRESS = 1,
+	      VISIT_DONE = 2,
+	      NOTHING = {},
+	      NO_DEPENDENCIES = [],
+	      NO_LOCALS = NOTHING,
+	      NO_PARENT = extend($q.when(NOTHING), { $$promises: NOTHING, $$values: NOTHING });
+	  
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.util.$resolve#study
+	   * @methodOf ui.router.util.$resolve
+	   *
+	   * @description
+	   * Studies a set of invocables that are likely to be used multiple times.
+	   * <pre>
+	   * $resolve.study(invocables)(locals, parent, self)
+	   * </pre>
+	   * is equivalent to
+	   * <pre>
+	   * $resolve.resolve(invocables, locals, parent, self)
+	   * </pre>
+	   * but the former is more efficient (in fact `resolve` just calls `study` 
+	   * internally).
+	   *
+	   * @param {object} invocables Invocable objects
+	   * @return {function} a function to pass in locals, parent and self
+	   */
+	  this.study = function (invocables) {
+	    if (!isObject(invocables)) throw new Error("'invocables' must be an object");
+	    var invocableKeys = objectKeys(invocables || {});
+	    
+	    // Perform a topological sort of invocables to build an ordered plan
+	    var plan = [], cycle = [], visited = {};
+	    function visit(value, key) {
+	      if (visited[key] === VISIT_DONE) return;
+	      
+	      cycle.push(key);
+	      if (visited[key] === VISIT_IN_PROGRESS) {
+	        cycle.splice(0, indexOf(cycle, key));
+	        throw new Error("Cyclic dependency: " + cycle.join(" -> "));
+	      }
+	      visited[key] = VISIT_IN_PROGRESS;
+	      
+	      if (isString(value)) {
+	        plan.push(key, [ function() { return $injector.get(value); }], NO_DEPENDENCIES);
+	      } else {
+	        var params = $injector.annotate(value);
+	        forEach(params, function (param) {
+	          if (param !== key && invocables.hasOwnProperty(param)) visit(invocables[param], param);
+	        });
+	        plan.push(key, value, params);
+	      }
+	      
+	      cycle.pop();
+	      visited[key] = VISIT_DONE;
+	    }
+	    forEach(invocables, visit);
+	    invocables = cycle = visited = null; // plan is all that's required
+	    
+	    function isResolve(value) {
+	      return isObject(value) && value.then && value.$$promises;
+	    }
+	    
+	    return function (locals, parent, self) {
+	      if (isResolve(locals) && self === undefined) {
+	        self = parent; parent = locals; locals = null;
+	      }
+	      if (!locals) locals = NO_LOCALS;
+	      else if (!isObject(locals)) {
+	        throw new Error("'locals' must be an object");
+	      }       
+	      if (!parent) parent = NO_PARENT;
+	      else if (!isResolve(parent)) {
+	        throw new Error("'parent' must be a promise returned by $resolve.resolve()");
+	      }
+	      
+	      // To complete the overall resolution, we have to wait for the parent
+	      // promise and for the promise for each invokable in our plan.
+	      var resolution = $q.defer(),
+	          result = resolution.promise,
+	          promises = result.$$promises = {},
+	          values = extend({}, locals),
+	          wait = 1 + plan.length/3,
+	          merged = false;
+	          
+	      function done() {
+	        // Merge parent values we haven't got yet and publish our own $$values
+	        if (!--wait) {
+	          if (!merged) merge(values, parent.$$values); 
+	          result.$$values = values;
+	          result.$$promises = result.$$promises || true; // keep for isResolve()
+	          delete result.$$inheritedValues;
+	          resolution.resolve(values);
+	        }
+	      }
+	      
+	      function fail(reason) {
+	        result.$$failure = reason;
+	        resolution.reject(reason);
+	      }
+
+	      // Short-circuit if parent has already failed
+	      if (isDefined(parent.$$failure)) {
+	        fail(parent.$$failure);
+	        return result;
+	      }
+	      
+	      if (parent.$$inheritedValues) {
+	        merge(values, omit(parent.$$inheritedValues, invocableKeys));
+	      }
+
+	      // Merge parent values if the parent has already resolved, or merge
+	      // parent promises and wait if the parent resolve is still in progress.
+	      extend(promises, parent.$$promises);
+	      if (parent.$$values) {
+	        merged = merge(values, omit(parent.$$values, invocableKeys));
+	        result.$$inheritedValues = omit(parent.$$values, invocableKeys);
+	        done();
+	      } else {
+	        if (parent.$$inheritedValues) {
+	          result.$$inheritedValues = omit(parent.$$inheritedValues, invocableKeys);
+	        }        
+	        parent.then(done, fail);
+	      }
+	      
+	      // Process each invocable in the plan, but ignore any where a local of the same name exists.
+	      for (var i=0, ii=plan.length; i<ii; i+=3) {
+	        if (locals.hasOwnProperty(plan[i])) done();
+	        else invoke(plan[i], plan[i+1], plan[i+2]);
+	      }
+	      
+	      function invoke(key, invocable, params) {
+	        // Create a deferred for this invocation. Failures will propagate to the resolution as well.
+	        var invocation = $q.defer(), waitParams = 0;
+	        function onfailure(reason) {
+	          invocation.reject(reason);
+	          fail(reason);
+	        }
+	        // Wait for any parameter that we have a promise for (either from parent or from this
+	        // resolve; in that case study() will have made sure it's ordered before us in the plan).
+	        forEach(params, function (dep) {
+	          if (promises.hasOwnProperty(dep) && !locals.hasOwnProperty(dep)) {
+	            waitParams++;
+	            promises[dep].then(function (result) {
+	              values[dep] = result;
+	              if (!(--waitParams)) proceed();
+	            }, onfailure);
+	          }
+	        });
+	        if (!waitParams) proceed();
+	        function proceed() {
+	          if (isDefined(result.$$failure)) return;
+	          try {
+	            invocation.resolve($injector.invoke(invocable, self, values));
+	            invocation.promise.then(function (result) {
+	              values[key] = result;
+	              done();
+	            }, onfailure);
+	          } catch (e) {
+	            onfailure(e);
+	          }
+	        }
+	        // Publish promise synchronously; invocations further down in the plan may depend on it.
+	        promises[key] = invocation.promise;
+	      }
+	      
+	      return result;
+	    };
+	  };
+	  
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.util.$resolve#resolve
+	   * @methodOf ui.router.util.$resolve
+	   *
+	   * @description
+	   * Resolves a set of invocables. An invocable is a function to be invoked via 
+	   * `$injector.invoke()`, and can have an arbitrary number of dependencies. 
+	   * An invocable can either return a value directly,
+	   * or a `$q` promise. If a promise is returned it will be resolved and the 
+	   * resulting value will be used instead. Dependencies of invocables are resolved 
+	   * (in this order of precedence)
+	   *
+	   * - from the specified `locals`
+	   * - from another invocable that is part of this `$resolve` call
+	   * - from an invocable that is inherited from a `parent` call to `$resolve` 
+	   *   (or recursively
+	   * - from any ancestor `$resolve` of that parent).
+	   *
+	   * The return value of `$resolve` is a promise for an object that contains 
+	   * (in this order of precedence)
+	   *
+	   * - any `locals` (if specified)
+	   * - the resolved return values of all injectables
+	   * - any values inherited from a `parent` call to `$resolve` (if specified)
+	   *
+	   * The promise will resolve after the `parent` promise (if any) and all promises 
+	   * returned by injectables have been resolved. If any invocable 
+	   * (or `$injector.invoke`) throws an exception, or if a promise returned by an 
+	   * invocable is rejected, the `$resolve` promise is immediately rejected with the 
+	   * same error. A rejection of a `parent` promise (if specified) will likewise be 
+	   * propagated immediately. Once the `$resolve` promise has been rejected, no 
+	   * further invocables will be called.
+	   * 
+	   * Cyclic dependencies between invocables are not permitted and will cause `$resolve`
+	   * to throw an error. As a special case, an injectable can depend on a parameter 
+	   * with the same name as the injectable, which will be fulfilled from the `parent` 
+	   * injectable of the same name. This allows inherited values to be decorated. 
+	   * Note that in this case any other injectable in the same `$resolve` with the same
+	   * dependency would see the decorated value, not the inherited value.
+	   *
+	   * Note that missing dependencies -- unlike cyclic dependencies -- will cause an 
+	   * (asynchronous) rejection of the `$resolve` promise rather than a (synchronous) 
+	   * exception.
+	   *
+	   * Invocables are invoked eagerly as soon as all dependencies are available. 
+	   * This is true even for dependencies inherited from a `parent` call to `$resolve`.
+	   *
+	   * As a special case, an invocable can be a string, in which case it is taken to 
+	   * be a service name to be passed to `$injector.get()`. This is supported primarily 
+	   * for backwards-compatibility with the `resolve` property of `$routeProvider` 
+	   * routes.
+	   *
+	   * @param {object} invocables functions to invoke or 
+	   * `$injector` services to fetch.
+	   * @param {object} locals  values to make available to the injectables
+	   * @param {object} parent  a promise returned by another call to `$resolve`.
+	   * @param {object} self  the `this` for the invoked methods
+	   * @return {object} Promise for an object that contains the resolved return value
+	   * of all invocables, as well as any inherited and local values.
+	   */
+	  this.resolve = function (invocables, locals, parent, self) {
+	    return this.study(invocables)(locals, parent, self);
+	  };
+	}
+
+	angular.module('ui.router.util').service('$resolve', $Resolve);
+
+
+	/**
+	 * @ngdoc object
+	 * @name ui.router.util.$templateFactory
+	 *
+	 * @requires $http
+	 * @requires $templateCache
+	 * @requires $injector
+	 *
+	 * @description
+	 * Service. Manages loading of templates.
+	 */
+	$TemplateFactory.$inject = ['$http', '$templateCache', '$injector'];
+	function $TemplateFactory(  $http,   $templateCache,   $injector) {
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.util.$templateFactory#fromConfig
+	   * @methodOf ui.router.util.$templateFactory
+	   *
+	   * @description
+	   * Creates a template from a configuration object. 
+	   *
+	   * @param {object} config Configuration object for which to load a template. 
+	   * The following properties are search in the specified order, and the first one 
+	   * that is defined is used to create the template:
+	   *
+	   * @param {string|object} config.template html string template or function to 
+	   * load via {@link ui.router.util.$templateFactory#fromString fromString}.
+	   * @param {string|object} config.templateUrl url to load or a function returning 
+	   * the url to load via {@link ui.router.util.$templateFactory#fromUrl fromUrl}.
+	   * @param {Function} config.templateProvider function to invoke via 
+	   * {@link ui.router.util.$templateFactory#fromProvider fromProvider}.
+	   * @param {object} params  Parameters to pass to the template function.
+	   * @param {object} locals Locals to pass to `invoke` if the template is loaded 
+	   * via a `templateProvider`. Defaults to `{ params: params }`.
+	   *
+	   * @return {string|object}  The template html as a string, or a promise for 
+	   * that string,or `null` if no template is configured.
+	   */
+	  this.fromConfig = function (config, params, locals) {
+	    return (
+	      isDefined(config.template) ? this.fromString(config.template, params) :
+	      isDefined(config.templateUrl) ? this.fromUrl(config.templateUrl, params) :
+	      isDefined(config.templateProvider) ? this.fromProvider(config.templateProvider, params, locals) :
+	      null
+	    );
+	  };
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.util.$templateFactory#fromString
+	   * @methodOf ui.router.util.$templateFactory
+	   *
+	   * @description
+	   * Creates a template from a string or a function returning a string.
+	   *
+	   * @param {string|object} template html template as a string or function that 
+	   * returns an html template as a string.
+	   * @param {object} params Parameters to pass to the template function.
+	   *
+	   * @return {string|object} The template html as a string, or a promise for that 
+	   * string.
+	   */
+	  this.fromString = function (template, params) {
+	    return isFunction(template) ? template(params) : template;
+	  };
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.util.$templateFactory#fromUrl
+	   * @methodOf ui.router.util.$templateFactory
+	   * 
+	   * @description
+	   * Loads a template from the a URL via `$http` and `$templateCache`.
+	   *
+	   * @param {string|Function} url url of the template to load, or a function 
+	   * that returns a url.
+	   * @param {Object} params Parameters to pass to the url function.
+	   * @return {string|Promise.<string>} The template html as a string, or a promise 
+	   * for that string.
+	   */
+	  this.fromUrl = function (url, params) {
+	    if (isFunction(url)) url = url(params);
+	    if (url == null) return null;
+	    else return $http
+	        .get(url, { cache: $templateCache, headers: { Accept: 'text/html' }})
+	        .then(function(response) { return response.data; });
+	  };
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.util.$templateFactory#fromProvider
+	   * @methodOf ui.router.util.$templateFactory
+	   *
+	   * @description
+	   * Creates a template by invoking an injectable provider function.
+	   *
+	   * @param {Function} provider Function to invoke via `$injector.invoke`
+	   * @param {Object} params Parameters for the template.
+	   * @param {Object} locals Locals to pass to `invoke`. Defaults to 
+	   * `{ params: params }`.
+	   * @return {string|Promise.<string>} The template html as a string, or a promise 
+	   * for that string.
+	   */
+	  this.fromProvider = function (provider, params, locals) {
+	    return $injector.invoke(provider, null, locals || { params: params });
+	  };
+	}
+
+	angular.module('ui.router.util').service('$templateFactory', $TemplateFactory);
+
+	var $$UMFP; // reference to $UrlMatcherFactoryProvider
+
+	/**
+	 * @ngdoc object
+	 * @name ui.router.util.type:UrlMatcher
+	 *
+	 * @description
+	 * Matches URLs against patterns and extracts named parameters from the path or the search
+	 * part of the URL. A URL pattern consists of a path pattern, optionally followed by '?' and a list
+	 * of search parameters. Multiple search parameter names are separated by '&'. Search parameters
+	 * do not influence whether or not a URL is matched, but their values are passed through into
+	 * the matched parameters returned by {@link ui.router.util.type:UrlMatcher#methods_exec exec}.
+	 *
+	 * Path parameter placeholders can be specified using simple colon/catch-all syntax or curly brace
+	 * syntax, which optionally allows a regular expression for the parameter to be specified:
+	 *
+	 * * `':'` name - colon placeholder
+	 * * `'*'` name - catch-all placeholder
+	 * * `'{' name '}'` - curly placeholder
+	 * * `'{' name ':' regexp|type '}'` - curly placeholder with regexp or type name. Should the
+	 *   regexp itself contain curly braces, they must be in matched pairs or escaped with a backslash.
+	 *
+	 * Parameter names may contain only word characters (latin letters, digits, and underscore) and
+	 * must be unique within the pattern (across both path and search parameters). For colon
+	 * placeholders or curly placeholders without an explicit regexp, a path parameter matches any
+	 * number of characters other than '/'. For catch-all placeholders the path parameter matches
+	 * any number of characters.
+	 *
+	 * Examples:
+	 *
+	 * * `'/hello/'` - Matches only if the path is exactly '/hello/'. There is no special treatment for
+	 *   trailing slashes, and patterns have to match the entire path, not just a prefix.
+	 * * `'/user/:id'` - Matches '/user/bob' or '/user/1234!!!' or even '/user/' but not '/user' or
+	 *   '/user/bob/details'. The second path segment will be captured as the parameter 'id'.
+	 * * `'/user/{id}'` - Same as the previous example, but using curly brace syntax.
+	 * * `'/user/{id:[^/]*}'` - Same as the previous example.
+	 * * `'/user/{id:[0-9a-fA-F]{1,8}}'` - Similar to the previous example, but only matches if the id
+	 *   parameter consists of 1 to 8 hex digits.
+	 * * `'/files/{path:.*}'` - Matches any URL starting with '/files/' and captures the rest of the
+	 *   path into the parameter 'path'.
+	 * * `'/files/*path'` - ditto.
+	 * * `'/calendar/{start:date}'` - Matches "/calendar/2014-11-12" (because the pattern defined
+	 *   in the built-in  `date` Type matches `2014-11-12`) and provides a Date object in $stateParams.start
+	 *
+	 * @param {string} pattern  The pattern to compile into a matcher.
+	 * @param {Object} config  A configuration object hash:
+	 * @param {Object=} parentMatcher Used to concatenate the pattern/config onto
+	 *   an existing UrlMatcher
+	 *
+	 * * `caseInsensitive` - `true` if URL matching should be case insensitive, otherwise `false`, the default value (for backward compatibility) is `false`.
+	 * * `strict` - `false` if matching against a URL with a trailing slash should be treated as equivalent to a URL without a trailing slash, the default value is `true`.
+	 *
+	 * @property {string} prefix  A static prefix of this pattern. The matcher guarantees that any
+	 *   URL matching this matcher (i.e. any string for which {@link ui.router.util.type:UrlMatcher#methods_exec exec()} returns
+	 *   non-null) will start with this prefix.
+	 *
+	 * @property {string} source  The pattern that was passed into the constructor
+	 *
+	 * @property {string} sourcePath  The path portion of the source property
+	 *
+	 * @property {string} sourceSearch  The search portion of the source property
+	 *
+	 * @property {string} regex  The constructed regex that will be used to match against the url when
+	 *   it is time to determine which url will match.
+	 *
+	 * @returns {Object}  New `UrlMatcher` object
+	 */
+	function UrlMatcher(pattern, config, parentMatcher) {
+	  config = extend({ params: {} }, isObject(config) ? config : {});
+
+	  // Find all placeholders and create a compiled pattern, using either classic or curly syntax:
+	  //   '*' name
+	  //   ':' name
+	  //   '{' name '}'
+	  //   '{' name ':' regexp '}'
+	  // The regular expression is somewhat complicated due to the need to allow curly braces
+	  // inside the regular expression. The placeholder regexp breaks down as follows:
+	  //    ([:*])([\w\[\]]+)              - classic placeholder ($1 / $2) (search version has - for snake-case)
+	  //    \{([\w\[\]]+)(?:\:\s*( ... ))?\}  - curly brace placeholder ($3) with optional regexp/type ... ($4) (search version has - for snake-case
+	  //    (?: ... | ... | ... )+         - the regexp consists of any number of atoms, an atom being either
+	  //    [^{}\\]+                       - anything other than curly braces or backslash
+	  //    \\.                            - a backslash escape
+	  //    \{(?:[^{}\\]+|\\.)*\}          - a matched set of curly braces containing other atoms
+	  var placeholder       = /([:*])([\w\[\]]+)|\{([\w\[\]]+)(?:\:\s*((?:[^{}\\]+|\\.|\{(?:[^{}\\]+|\\.)*\})+))?\}/g,
+	      searchPlaceholder = /([:]?)([\w\[\].-]+)|\{([\w\[\].-]+)(?:\:\s*((?:[^{}\\]+|\\.|\{(?:[^{}\\]+|\\.)*\})+))?\}/g,
+	      compiled = '^', last = 0, m,
+	      segments = this.segments = [],
+	      parentParams = parentMatcher ? parentMatcher.params : {},
+	      params = this.params = parentMatcher ? parentMatcher.params.$$new() : new $$UMFP.ParamSet(),
+	      paramNames = [];
+
+	  function addParameter(id, type, config, location) {
+	    paramNames.push(id);
+	    if (parentParams[id]) return parentParams[id];
+	    if (!/^\w+([-.]+\w+)*(?:\[\])?$/.test(id)) throw new Error("Invalid parameter name '" + id + "' in pattern '" + pattern + "'");
+	    if (params[id]) throw new Error("Duplicate parameter name '" + id + "' in pattern '" + pattern + "'");
+	    params[id] = new $$UMFP.Param(id, type, config, location);
+	    return params[id];
+	  }
+
+	  function quoteRegExp(string, pattern, squash, optional) {
+	    var surroundPattern = ['',''], result = string.replace(/[\\\[\]\^$*+?.()|{}]/g, "\\$&");
+	    if (!pattern) return result;
+	    switch(squash) {
+	      case false: surroundPattern = ['(', ')' + (optional ? "?" : "")]; break;
+	      case true:
+	        result = result.replace(/\/$/, '');
+	        surroundPattern = ['(?:\/(', ')|\/)?'];
+	      break;
+	      default:    surroundPattern = ['(' + squash + "|", ')?']; break;
+	    }
+	    return result + surroundPattern[0] + pattern + surroundPattern[1];
+	  }
+
+	  this.source = pattern;
+
+	  // Split into static segments separated by path parameter placeholders.
+	  // The number of segments is always 1 more than the number of parameters.
+	  function matchDetails(m, isSearch) {
+	    var id, regexp, segment, type, cfg, arrayMode;
+	    id          = m[2] || m[3]; // IE[78] returns '' for unmatched groups instead of null
+	    cfg         = config.params[id];
+	    segment     = pattern.substring(last, m.index);
+	    regexp      = isSearch ? m[4] : m[4] || (m[1] == '*' ? '.*' : null);
+
+	    if (regexp) {
+	      type      = $$UMFP.type(regexp) || inherit($$UMFP.type("string"), { pattern: new RegExp(regexp, config.caseInsensitive ? 'i' : undefined) });
+	    }
+
+	    return {
+	      id: id, regexp: regexp, segment: segment, type: type, cfg: cfg
+	    };
+	  }
+
+	  var p, param, segment;
+	  while ((m = placeholder.exec(pattern))) {
+	    p = matchDetails(m, false);
+	    if (p.segment.indexOf('?') >= 0) break; // we're into the search part
+
+	    param = addParameter(p.id, p.type, p.cfg, "path");
+	    compiled += quoteRegExp(p.segment, param.type.pattern.source, param.squash, param.isOptional);
+	    segments.push(p.segment);
+	    last = placeholder.lastIndex;
+	  }
+	  segment = pattern.substring(last);
+
+	  // Find any search parameter names and remove them from the last segment
+	  var i = segment.indexOf('?');
+
+	  if (i >= 0) {
+	    var search = this.sourceSearch = segment.substring(i);
+	    segment = segment.substring(0, i);
+	    this.sourcePath = pattern.substring(0, last + i);
+
+	    if (search.length > 0) {
+	      last = 0;
+	      while ((m = searchPlaceholder.exec(search))) {
+	        p = matchDetails(m, true);
+	        param = addParameter(p.id, p.type, p.cfg, "search");
+	        last = placeholder.lastIndex;
+	        // check if ?&
+	      }
+	    }
+	  } else {
+	    this.sourcePath = pattern;
+	    this.sourceSearch = '';
+	  }
+
+	  compiled += quoteRegExp(segment) + (config.strict === false ? '\/?' : '') + '$';
+	  segments.push(segment);
+
+	  this.regexp = new RegExp(compiled, config.caseInsensitive ? 'i' : undefined);
+	  this.prefix = segments[0];
+	  this.$$paramNames = paramNames;
+	}
+
+	/**
+	 * @ngdoc function
+	 * @name ui.router.util.type:UrlMatcher#concat
+	 * @methodOf ui.router.util.type:UrlMatcher
+	 *
+	 * @description
+	 * Returns a new matcher for a pattern constructed by appending the path part and adding the
+	 * search parameters of the specified pattern to this pattern. The current pattern is not
+	 * modified. This can be understood as creating a pattern for URLs that are relative to (or
+	 * suffixes of) the current pattern.
+	 *
+	 * @example
+	 * The following two matchers are equivalent:
+	 * <pre>
+	 * new UrlMatcher('/user/{id}?q').concat('/details?date');
+	 * new UrlMatcher('/user/{id}/details?q&date');
+	 * </pre>
+	 *
+	 * @param {string} pattern  The pattern to append.
+	 * @param {Object} config  An object hash of the configuration for the matcher.
+	 * @returns {UrlMatcher}  A matcher for the concatenated pattern.
+	 */
+	UrlMatcher.prototype.concat = function (pattern, config) {
+	  // Because order of search parameters is irrelevant, we can add our own search
+	  // parameters to the end of the new pattern. Parse the new pattern by itself
+	  // and then join the bits together, but it's much easier to do this on a string level.
+	  var defaultConfig = {
+	    caseInsensitive: $$UMFP.caseInsensitive(),
+	    strict: $$UMFP.strictMode(),
+	    squash: $$UMFP.defaultSquashPolicy()
+	  };
+	  return new UrlMatcher(this.sourcePath + pattern + this.sourceSearch, extend(defaultConfig, config), this);
+	};
+
+	UrlMatcher.prototype.toString = function () {
+	  return this.source;
+	};
+
+	/**
+	 * @ngdoc function
+	 * @name ui.router.util.type:UrlMatcher#exec
+	 * @methodOf ui.router.util.type:UrlMatcher
+	 *
+	 * @description
+	 * Tests the specified path against this matcher, and returns an object containing the captured
+	 * parameter values, or null if the path does not match. The returned object contains the values
+	 * of any search parameters that are mentioned in the pattern, but their value may be null if
+	 * they are not present in `searchParams`. This means that search parameters are always treated
+	 * as optional.
+	 *
+	 * @example
+	 * <pre>
+	 * new UrlMatcher('/user/{id}?q&r').exec('/user/bob', {
+	 *   x: '1', q: 'hello'
+	 * });
+	 * // returns { id: 'bob', q: 'hello', r: null }
+	 * </pre>
+	 *
+	 * @param {string} path  The URL path to match, e.g. `$location.path()`.
+	 * @param {Object} searchParams  URL search parameters, e.g. `$location.search()`.
+	 * @returns {Object}  The captured parameter values.
+	 */
+	UrlMatcher.prototype.exec = function (path, searchParams) {
+	  var m = this.regexp.exec(path);
+	  if (!m) return null;
+	  searchParams = searchParams || {};
+
+	  var paramNames = this.parameters(), nTotal = paramNames.length,
+	    nPath = this.segments.length - 1,
+	    values = {}, i, j, cfg, paramName;
+
+	  if (nPath !== m.length - 1) throw new Error("Unbalanced capture group in route '" + this.source + "'");
+
+	  function decodePathArray(string) {
+	    function reverseString(str) { return str.split("").reverse().join(""); }
+	    function unquoteDashes(str) { return str.replace(/\\-/g, "-"); }
+
+	    var split = reverseString(string).split(/-(?!\\)/);
+	    var allReversed = map(split, reverseString);
+	    return map(allReversed, unquoteDashes).reverse();
+	  }
+
+	  var param, paramVal;
+	  for (i = 0; i < nPath; i++) {
+	    paramName = paramNames[i];
+	    param = this.params[paramName];
+	    paramVal = m[i+1];
+	    // if the param value matches a pre-replace pair, replace the value before decoding.
+	    for (j = 0; j < param.replace.length; j++) {
+	      if (param.replace[j].from === paramVal) paramVal = param.replace[j].to;
+	    }
+	    if (paramVal && param.array === true) paramVal = decodePathArray(paramVal);
+	    if (isDefined(paramVal)) paramVal = param.type.decode(paramVal);
+	    values[paramName] = param.value(paramVal);
+	  }
+	  for (/**/; i < nTotal; i++) {
+	    paramName = paramNames[i];
+	    values[paramName] = this.params[paramName].value(searchParams[paramName]);
+	    param = this.params[paramName];
+	    paramVal = searchParams[paramName];
+	    for (j = 0; j < param.replace.length; j++) {
+	      if (param.replace[j].from === paramVal) paramVal = param.replace[j].to;
+	    }
+	    if (isDefined(paramVal)) paramVal = param.type.decode(paramVal);
+	    values[paramName] = param.value(paramVal);
+	  }
+
+	  return values;
+	};
+
+	/**
+	 * @ngdoc function
+	 * @name ui.router.util.type:UrlMatcher#parameters
+	 * @methodOf ui.router.util.type:UrlMatcher
+	 *
+	 * @description
+	 * Returns the names of all path and search parameters of this pattern in an unspecified order.
+	 *
+	 * @returns {Array.<string>}  An array of parameter names. Must be treated as read-only. If the
+	 *    pattern has no parameters, an empty array is returned.
+	 */
+	UrlMatcher.prototype.parameters = function (param) {
+	  if (!isDefined(param)) return this.$$paramNames;
+	  return this.params[param] || null;
+	};
+
+	/**
+	 * @ngdoc function
+	 * @name ui.router.util.type:UrlMatcher#validates
+	 * @methodOf ui.router.util.type:UrlMatcher
+	 *
+	 * @description
+	 * Checks an object hash of parameters to validate their correctness according to the parameter
+	 * types of this `UrlMatcher`.
+	 *
+	 * @param {Object} params The object hash of parameters to validate.
+	 * @returns {boolean} Returns `true` if `params` validates, otherwise `false`.
+	 */
+	UrlMatcher.prototype.validates = function (params) {
+	  return this.params.$$validates(params);
+	};
+
+	/**
+	 * @ngdoc function
+	 * @name ui.router.util.type:UrlMatcher#format
+	 * @methodOf ui.router.util.type:UrlMatcher
+	 *
+	 * @description
+	 * Creates a URL that matches this pattern by substituting the specified values
+	 * for the path and search parameters. Null values for path parameters are
+	 * treated as empty strings.
+	 *
+	 * @example
+	 * <pre>
+	 * new UrlMatcher('/user/{id}?q').format({ id:'bob', q:'yes' });
+	 * // returns '/user/bob?q=yes'
+	 * </pre>
+	 *
+	 * @param {Object} values  the values to substitute for the parameters in this pattern.
+	 * @returns {string}  the formatted URL (path and optionally search part).
+	 */
+	UrlMatcher.prototype.format = function (values) {
+	  values = values || {};
+	  var segments = this.segments, params = this.parameters(), paramset = this.params;
+	  if (!this.validates(values)) return null;
+
+	  var i, search = false, nPath = segments.length - 1, nTotal = params.length, result = segments[0];
+
+	  function encodeDashes(str) { // Replace dashes with encoded "\-"
+	    return encodeURIComponent(str).replace(/-/g, function(c) { return '%5C%' + c.charCodeAt(0).toString(16).toUpperCase(); });
+	  }
+
+	  for (i = 0; i < nTotal; i++) {
+	    var isPathParam = i < nPath;
+	    var name = params[i], param = paramset[name], value = param.value(values[name]);
+	    var isDefaultValue = param.isOptional && param.type.equals(param.value(), value);
+	    var squash = isDefaultValue ? param.squash : false;
+	    var encoded = param.type.encode(value);
+
+	    if (isPathParam) {
+	      var nextSegment = segments[i + 1];
+	      var isFinalPathParam = i + 1 === nPath;
+
+	      if (squash === false) {
+	        if (encoded != null) {
+	          if (isArray(encoded)) {
+	            result += map(encoded, encodeDashes).join("-");
+	          } else {
+	            result += encodeURIComponent(encoded);
+	          }
+	        }
+	        result += nextSegment;
+	      } else if (squash === true) {
+	        var capture = result.match(/\/$/) ? /\/?(.*)/ : /(.*)/;
+	        result += nextSegment.match(capture)[1];
+	      } else if (isString(squash)) {
+	        result += squash + nextSegment;
+	      }
+
+	      if (isFinalPathParam && param.squash === true && result.slice(-1) === '/') result = result.slice(0, -1);
+	    } else {
+	      if (encoded == null || (isDefaultValue && squash !== false)) continue;
+	      if (!isArray(encoded)) encoded = [ encoded ];
+	      if (encoded.length === 0) continue;
+	      encoded = map(encoded, encodeURIComponent).join('&' + name + '=');
+	      result += (search ? '&' : '?') + (name + '=' + encoded);
+	      search = true;
+	    }
+	  }
+
+	  return result;
+	};
+
+	/**
+	 * @ngdoc object
+	 * @name ui.router.util.type:Type
+	 *
+	 * @description
+	 * Implements an interface to define custom parameter types that can be decoded from and encoded to
+	 * string parameters matched in a URL. Used by {@link ui.router.util.type:UrlMatcher `UrlMatcher`}
+	 * objects when matching or formatting URLs, or comparing or validating parameter values.
+	 *
+	 * See {@link ui.router.util.$urlMatcherFactory#methods_type `$urlMatcherFactory#type()`} for more
+	 * information on registering custom types.
+	 *
+	 * @param {Object} config  A configuration object which contains the custom type definition.  The object's
+	 *        properties will override the default methods and/or pattern in `Type`'s public interface.
+	 * @example
+	 * <pre>
+	 * {
+	 *   decode: function(val) { return parseInt(val, 10); },
+	 *   encode: function(val) { return val && val.toString(); },
+	 *   equals: function(a, b) { return this.is(a) && a === b; },
+	 *   is: function(val) { return angular.isNumber(val) isFinite(val) && val % 1 === 0; },
+	 *   pattern: /\d+/
+	 * }
+	 * </pre>
+	 *
+	 * @property {RegExp} pattern The regular expression pattern used to match values of this type when
+	 *           coming from a substring of a URL.
+	 *
+	 * @returns {Object}  Returns a new `Type` object.
+	 */
+	function Type(config) {
+	  extend(this, config);
+	}
+
+	/**
+	 * @ngdoc function
+	 * @name ui.router.util.type:Type#is
+	 * @methodOf ui.router.util.type:Type
+	 *
+	 * @description
+	 * Detects whether a value is of a particular type. Accepts a native (decoded) value
+	 * and determines whether it matches the current `Type` object.
+	 *
+	 * @param {*} val  The value to check.
+	 * @param {string} key  Optional. If the type check is happening in the context of a specific
+	 *        {@link ui.router.util.type:UrlMatcher `UrlMatcher`} object, this is the name of the
+	 *        parameter in which `val` is stored. Can be used for meta-programming of `Type` objects.
+	 * @returns {Boolean}  Returns `true` if the value matches the type, otherwise `false`.
+	 */
+	Type.prototype.is = function(val, key) {
+	  return true;
+	};
+
+	/**
+	 * @ngdoc function
+	 * @name ui.router.util.type:Type#encode
+	 * @methodOf ui.router.util.type:Type
+	 *
+	 * @description
+	 * Encodes a custom/native type value to a string that can be embedded in a URL. Note that the
+	 * return value does *not* need to be URL-safe (i.e. passed through `encodeURIComponent()`), it
+	 * only needs to be a representation of `val` that has been coerced to a string.
+	 *
+	 * @param {*} val  The value to encode.
+	 * @param {string} key  The name of the parameter in which `val` is stored. Can be used for
+	 *        meta-programming of `Type` objects.
+	 * @returns {string}  Returns a string representation of `val` that can be encoded in a URL.
+	 */
+	Type.prototype.encode = function(val, key) {
+	  return val;
+	};
+
+	/**
+	 * @ngdoc function
+	 * @name ui.router.util.type:Type#decode
+	 * @methodOf ui.router.util.type:Type
+	 *
+	 * @description
+	 * Converts a parameter value (from URL string or transition param) to a custom/native value.
+	 *
+	 * @param {string} val  The URL parameter value to decode.
+	 * @param {string} key  The name of the parameter in which `val` is stored. Can be used for
+	 *        meta-programming of `Type` objects.
+	 * @returns {*}  Returns a custom representation of the URL parameter value.
+	 */
+	Type.prototype.decode = function(val, key) {
+	  return val;
+	};
+
+	/**
+	 * @ngdoc function
+	 * @name ui.router.util.type:Type#equals
+	 * @methodOf ui.router.util.type:Type
+	 *
+	 * @description
+	 * Determines whether two decoded values are equivalent.
+	 *
+	 * @param {*} a  A value to compare against.
+	 * @param {*} b  A value to compare against.
+	 * @returns {Boolean}  Returns `true` if the values are equivalent/equal, otherwise `false`.
+	 */
+	Type.prototype.equals = function(a, b) {
+	  return a == b;
+	};
+
+	Type.prototype.$subPattern = function() {
+	  var sub = this.pattern.toString();
+	  return sub.substr(1, sub.length - 2);
+	};
+
+	Type.prototype.pattern = /.*/;
+
+	Type.prototype.toString = function() { return "{Type:" + this.name + "}"; };
+
+	/** Given an encoded string, or a decoded object, returns a decoded object */
+	Type.prototype.$normalize = function(val) {
+	  return this.is(val) ? val : this.decode(val);
+	};
+
+	/*
+	 * Wraps an existing custom Type as an array of Type, depending on 'mode'.
+	 * e.g.:
+	 * - urlmatcher pattern "/path?{queryParam[]:int}"
+	 * - url: "/path?queryParam=1&queryParam=2
+	 * - $stateParams.queryParam will be [1, 2]
+	 * if `mode` is "auto", then
+	 * - url: "/path?queryParam=1 will create $stateParams.queryParam: 1
+	 * - url: "/path?queryParam=1&queryParam=2 will create $stateParams.queryParam: [1, 2]
+	 */
+	Type.prototype.$asArray = function(mode, isSearch) {
+	  if (!mode) return this;
+	  if (mode === "auto" && !isSearch) throw new Error("'auto' array mode is for query parameters only");
+
+	  function ArrayType(type, mode) {
+	    function bindTo(type, callbackName) {
+	      return function() {
+	        return type[callbackName].apply(type, arguments);
+	      };
+	    }
+
+	    // Wrap non-array value as array
+	    function arrayWrap(val) { return isArray(val) ? val : (isDefined(val) ? [ val ] : []); }
+	    // Unwrap array value for "auto" mode. Return undefined for empty array.
+	    function arrayUnwrap(val) {
+	      switch(val.length) {
+	        case 0: return undefined;
+	        case 1: return mode === "auto" ? val[0] : val;
+	        default: return val;
+	      }
+	    }
+	    function falsey(val) { return !val; }
+
+	    // Wraps type (.is/.encode/.decode) functions to operate on each value of an array
+	    function arrayHandler(callback, allTruthyMode) {
+	      return function handleArray(val) {
+	        if (isArray(val) && val.length === 0) return val;
+	        val = arrayWrap(val);
+	        var result = map(val, callback);
+	        if (allTruthyMode === true)
+	          return filter(result, falsey).length === 0;
+	        return arrayUnwrap(result);
+	      };
+	    }
+
+	    // Wraps type (.equals) functions to operate on each value of an array
+	    function arrayEqualsHandler(callback) {
+	      return function handleArray(val1, val2) {
+	        var left = arrayWrap(val1), right = arrayWrap(val2);
+	        if (left.length !== right.length) return false;
+	        for (var i = 0; i < left.length; i++) {
+	          if (!callback(left[i], right[i])) return false;
+	        }
+	        return true;
+	      };
+	    }
+
+	    this.encode = arrayHandler(bindTo(type, 'encode'));
+	    this.decode = arrayHandler(bindTo(type, 'decode'));
+	    this.is     = arrayHandler(bindTo(type, 'is'), true);
+	    this.equals = arrayEqualsHandler(bindTo(type, 'equals'));
+	    this.pattern = type.pattern;
+	    this.$normalize = arrayHandler(bindTo(type, '$normalize'));
+	    this.name = type.name;
+	    this.$arrayMode = mode;
+	  }
+
+	  return new ArrayType(this, mode);
+	};
+
+
+
+	/**
+	 * @ngdoc object
+	 * @name ui.router.util.$urlMatcherFactory
+	 *
+	 * @description
+	 * Factory for {@link ui.router.util.type:UrlMatcher `UrlMatcher`} instances. The factory
+	 * is also available to providers under the name `$urlMatcherFactoryProvider`.
+	 */
+	function $UrlMatcherFactory() {
+	  $$UMFP = this;
+
+	  var isCaseInsensitive = false, isStrictMode = true, defaultSquashPolicy = false;
+
+	  // Use tildes to pre-encode slashes.
+	  // If the slashes are simply URLEncoded, the browser can choose to pre-decode them,
+	  // and bidirectional encoding/decoding fails.
+	  // Tilde was chosen because it's not a RFC 3986 section 2.2 Reserved Character
+	  function valToString(val) { return val != null ? val.toString().replace(/~/g, "~~").replace(/\//g, "~2F") : val; }
+	  function valFromString(val) { return val != null ? val.toString().replace(/~2F/g, "/").replace(/~~/g, "~") : val; }
+
+	  var $types = {}, enqueue = true, typeQueue = [], injector, defaultTypes = {
+	    "string": {
+	      encode: valToString,
+	      decode: valFromString,
+	      // TODO: in 1.0, make string .is() return false if value is undefined/null by default.
+	      // In 0.2.x, string params are optional by default for backwards compat
+	      is: function(val) { return val == null || !isDefined(val) || typeof val === "string"; },
+	      pattern: /[^/]*/
+	    },
+	    "int": {
+	      encode: valToString,
+	      decode: function(val) { return parseInt(val, 10); },
+	      is: function(val) { return isDefined(val) && this.decode(val.toString()) === val; },
+	      pattern: /\d+/
+	    },
+	    "bool": {
+	      encode: function(val) { return val ? 1 : 0; },
+	      decode: function(val) { return parseInt(val, 10) !== 0; },
+	      is: function(val) { return val === true || val === false; },
+	      pattern: /0|1/
+	    },
+	    "date": {
+	      encode: function (val) {
+	        if (!this.is(val))
+	          return undefined;
+	        return [ val.getFullYear(),
+	          ('0' + (val.getMonth() + 1)).slice(-2),
+	          ('0' + val.getDate()).slice(-2)
+	        ].join("-");
+	      },
+	      decode: function (val) {
+	        if (this.is(val)) return val;
+	        var match = this.capture.exec(val);
+	        return match ? new Date(match[1], match[2] - 1, match[3]) : undefined;
+	      },
+	      is: function(val) { return val instanceof Date && !isNaN(val.valueOf()); },
+	      equals: function (a, b) { return this.is(a) && this.is(b) && a.toISOString() === b.toISOString(); },
+	      pattern: /[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])/,
+	      capture: /([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/
+	    },
+	    "json": {
+	      encode: angular.toJson,
+	      decode: angular.fromJson,
+	      is: angular.isObject,
+	      equals: angular.equals,
+	      pattern: /[^/]*/
+	    },
+	    "any": { // does not encode/decode
+	      encode: angular.identity,
+	      decode: angular.identity,
+	      equals: angular.equals,
+	      pattern: /.*/
+	    }
+	  };
+
+	  function getDefaultConfig() {
+	    return {
+	      strict: isStrictMode,
+	      caseInsensitive: isCaseInsensitive
+	    };
+	  }
+
+	  function isInjectable(value) {
+	    return (isFunction(value) || (isArray(value) && isFunction(value[value.length - 1])));
+	  }
+
+	  /**
+	   * [Internal] Get the default value of a parameter, which may be an injectable function.
+	   */
+	  $UrlMatcherFactory.$$getDefaultValue = function(config) {
+	    if (!isInjectable(config.value)) return config.value;
+	    if (!injector) throw new Error("Injectable functions cannot be called at configuration time");
+	    return injector.invoke(config.value);
+	  };
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.util.$urlMatcherFactory#caseInsensitive
+	   * @methodOf ui.router.util.$urlMatcherFactory
+	   *
+	   * @description
+	   * Defines whether URL matching should be case sensitive (the default behavior), or not.
+	   *
+	   * @param {boolean} value `false` to match URL in a case sensitive manner; otherwise `true`;
+	   * @returns {boolean} the current value of caseInsensitive
+	   */
+	  this.caseInsensitive = function(value) {
+	    if (isDefined(value))
+	      isCaseInsensitive = value;
+	    return isCaseInsensitive;
+	  };
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.util.$urlMatcherFactory#strictMode
+	   * @methodOf ui.router.util.$urlMatcherFactory
+	   *
+	   * @description
+	   * Defines whether URLs should match trailing slashes, or not (the default behavior).
+	   *
+	   * @param {boolean=} value `false` to match trailing slashes in URLs, otherwise `true`.
+	   * @returns {boolean} the current value of strictMode
+	   */
+	  this.strictMode = function(value) {
+	    if (isDefined(value))
+	      isStrictMode = value;
+	    return isStrictMode;
+	  };
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.util.$urlMatcherFactory#defaultSquashPolicy
+	   * @methodOf ui.router.util.$urlMatcherFactory
+	   *
+	   * @description
+	   * Sets the default behavior when generating or matching URLs with default parameter values.
+	   *
+	   * @param {string} value A string that defines the default parameter URL squashing behavior.
+	   *    `nosquash`: When generating an href with a default parameter value, do not squash the parameter value from the URL
+	   *    `slash`: When generating an href with a default parameter value, squash (remove) the parameter value, and, if the
+	   *             parameter is surrounded by slashes, squash (remove) one slash from the URL
+	   *    any other string, e.g. "~": When generating an href with a default parameter value, squash (remove)
+	   *             the parameter value from the URL and replace it with this string.
+	   */
+	  this.defaultSquashPolicy = function(value) {
+	    if (!isDefined(value)) return defaultSquashPolicy;
+	    if (value !== true && value !== false && !isString(value))
+	      throw new Error("Invalid squash policy: " + value + ". Valid policies: false, true, arbitrary-string");
+	    defaultSquashPolicy = value;
+	    return value;
+	  };
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.util.$urlMatcherFactory#compile
+	   * @methodOf ui.router.util.$urlMatcherFactory
+	   *
+	   * @description
+	   * Creates a {@link ui.router.util.type:UrlMatcher `UrlMatcher`} for the specified pattern.
+	   *
+	   * @param {string} pattern  The URL pattern.
+	   * @param {Object} config  The config object hash.
+	   * @returns {UrlMatcher}  The UrlMatcher.
+	   */
+	  this.compile = function (pattern, config) {
+	    return new UrlMatcher(pattern, extend(getDefaultConfig(), config));
+	  };
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.util.$urlMatcherFactory#isMatcher
+	   * @methodOf ui.router.util.$urlMatcherFactory
+	   *
+	   * @description
+	   * Returns true if the specified object is a `UrlMatcher`, or false otherwise.
+	   *
+	   * @param {Object} object  The object to perform the type check against.
+	   * @returns {Boolean}  Returns `true` if the object matches the `UrlMatcher` interface, by
+	   *          implementing all the same methods.
+	   */
+	  this.isMatcher = function (o) {
+	    if (!isObject(o)) return false;
+	    var result = true;
+
+	    forEach(UrlMatcher.prototype, function(val, name) {
+	      if (isFunction(val)) {
+	        result = result && (isDefined(o[name]) && isFunction(o[name]));
+	      }
+	    });
+	    return result;
+	  };
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.util.$urlMatcherFactory#type
+	   * @methodOf ui.router.util.$urlMatcherFactory
+	   *
+	   * @description
+	   * Registers a custom {@link ui.router.util.type:Type `Type`} object that can be used to
+	   * generate URLs with typed parameters.
+	   *
+	   * @param {string} name  The type name.
+	   * @param {Object|Function} definition   The type definition. See
+	   *        {@link ui.router.util.type:Type `Type`} for information on the values accepted.
+	   * @param {Object|Function} definitionFn (optional) A function that is injected before the app
+	   *        runtime starts.  The result of this function is merged into the existing `definition`.
+	   *        See {@link ui.router.util.type:Type `Type`} for information on the values accepted.
+	   *
+	   * @returns {Object}  Returns `$urlMatcherFactoryProvider`.
+	   *
+	   * @example
+	   * This is a simple example of a custom type that encodes and decodes items from an
+	   * array, using the array index as the URL-encoded value:
+	   *
+	   * <pre>
+	   * var list = ['John', 'Paul', 'George', 'Ringo'];
+	   *
+	   * $urlMatcherFactoryProvider.type('listItem', {
+	   *   encode: function(item) {
+	   *     // Represent the list item in the URL using its corresponding index
+	   *     return list.indexOf(item);
+	   *   },
+	   *   decode: function(item) {
+	   *     // Look up the list item by index
+	   *     return list[parseInt(item, 10)];
+	   *   },
+	   *   is: function(item) {
+	   *     // Ensure the item is valid by checking to see that it appears
+	   *     // in the list
+	   *     return list.indexOf(item) > -1;
+	   *   }
+	   * });
+	   *
+	   * $stateProvider.state('list', {
+	   *   url: "/list/{item:listItem}",
+	   *   controller: function($scope, $stateParams) {
+	   *     console.log($stateParams.item);
+	   *   }
+	   * });
+	   *
+	   * // ...
+	   *
+	   * // Changes URL to '/list/3', logs "Ringo" to the console
+	   * $state.go('list', { item: "Ringo" });
+	   * </pre>
+	   *
+	   * This is a more complex example of a type that relies on dependency injection to
+	   * interact with services, and uses the parameter name from the URL to infer how to
+	   * handle encoding and decoding parameter values:
+	   *
+	   * <pre>
+	   * // Defines a custom type that gets a value from a service,
+	   * // where each service gets different types of values from
+	   * // a backend API:
+	   * $urlMatcherFactoryProvider.type('dbObject', {}, function(Users, Posts) {
+	   *
+	   *   // Matches up services to URL parameter names
+	   *   var services = {
+	   *     user: Users,
+	   *     post: Posts
+	   *   };
+	   *
+	   *   return {
+	   *     encode: function(object) {
+	   *       // Represent the object in the URL using its unique ID
+	   *       return object.id;
+	   *     },
+	   *     decode: function(value, key) {
+	   *       // Look up the object by ID, using the parameter
+	   *       // name (key) to call the correct service
+	   *       return services[key].findById(value);
+	   *     },
+	   *     is: function(object, key) {
+	   *       // Check that object is a valid dbObject
+	   *       return angular.isObject(object) && object.id && services[key];
+	   *     }
+	   *     equals: function(a, b) {
+	   *       // Check the equality of decoded objects by comparing
+	   *       // their unique IDs
+	   *       return a.id === b.id;
+	   *     }
+	   *   };
+	   * });
+	   *
+	   * // In a config() block, you can then attach URLs with
+	   * // type-annotated parameters:
+	   * $stateProvider.state('users', {
+	   *   url: "/users",
+	   *   // ...
+	   * }).state('users.item', {
+	   *   url: "/{user:dbObject}",
+	   *   controller: function($scope, $stateParams) {
+	   *     // $stateParams.user will now be an object returned from
+	   *     // the Users service
+	   *   },
+	   *   // ...
+	   * });
+	   * </pre>
+	   */
+	  this.type = function (name, definition, definitionFn) {
+	    if (!isDefined(definition)) return $types[name];
+	    if ($types.hasOwnProperty(name)) throw new Error("A type named '" + name + "' has already been defined.");
+
+	    $types[name] = new Type(extend({ name: name }, definition));
+	    if (definitionFn) {
+	      typeQueue.push({ name: name, def: definitionFn });
+	      if (!enqueue) flushTypeQueue();
+	    }
+	    return this;
+	  };
+
+	  // `flushTypeQueue()` waits until `$urlMatcherFactory` is injected before invoking the queued `definitionFn`s
+	  function flushTypeQueue() {
+	    while(typeQueue.length) {
+	      var type = typeQueue.shift();
+	      if (type.pattern) throw new Error("You cannot override a type's .pattern at runtime.");
+	      angular.extend($types[type.name], injector.invoke(type.def));
+	    }
+	  }
+
+	  // Register default types. Store them in the prototype of $types.
+	  forEach(defaultTypes, function(type, name) { $types[name] = new Type(extend({name: name}, type)); });
+	  $types = inherit($types, {});
+
+	  /* No need to document $get, since it returns this */
+	  this.$get = ['$injector', function ($injector) {
+	    injector = $injector;
+	    enqueue = false;
+	    flushTypeQueue();
+
+	    forEach(defaultTypes, function(type, name) {
+	      if (!$types[name]) $types[name] = new Type(type);
+	    });
+	    return this;
+	  }];
+
+	  this.Param = function Param(id, type, config, location) {
+	    var self = this;
+	    config = unwrapShorthand(config);
+	    type = getType(config, type, location);
+	    var arrayMode = getArrayMode();
+	    type = arrayMode ? type.$asArray(arrayMode, location === "search") : type;
+	    if (type.name === "string" && !arrayMode && location === "path" && config.value === undefined)
+	      config.value = ""; // for 0.2.x; in 0.3.0+ do not automatically default to ""
+	    var isOptional = config.value !== undefined;
+	    var squash = getSquashPolicy(config, isOptional);
+	    var replace = getReplace(config, arrayMode, isOptional, squash);
+
+	    function unwrapShorthand(config) {
+	      var keys = isObject(config) ? objectKeys(config) : [];
+	      var isShorthand = indexOf(keys, "value") === -1 && indexOf(keys, "type") === -1 &&
+	                        indexOf(keys, "squash") === -1 && indexOf(keys, "array") === -1;
+	      if (isShorthand) config = { value: config };
+	      config.$$fn = isInjectable(config.value) ? config.value : function () { return config.value; };
+	      return config;
+	    }
+
+	    function getType(config, urlType, location) {
+	      if (config.type && urlType) throw new Error("Param '"+id+"' has two type configurations.");
+	      if (urlType) return urlType;
+	      if (!config.type) return (location === "config" ? $types.any : $types.string);
+
+	      if (angular.isString(config.type))
+	        return $types[config.type];
+	      if (config.type instanceof Type)
+	        return config.type;
+	      return new Type(config.type);
+	    }
+
+	    // array config: param name (param[]) overrides default settings.  explicit config overrides param name.
+	    function getArrayMode() {
+	      var arrayDefaults = { array: (location === "search" ? "auto" : false) };
+	      var arrayParamNomenclature = id.match(/\[\]$/) ? { array: true } : {};
+	      return extend(arrayDefaults, arrayParamNomenclature, config).array;
+	    }
+
+	    /**
+	     * returns false, true, or the squash value to indicate the "default parameter url squash policy".
+	     */
+	    function getSquashPolicy(config, isOptional) {
+	      var squash = config.squash;
+	      if (!isOptional || squash === false) return false;
+	      if (!isDefined(squash) || squash == null) return defaultSquashPolicy;
+	      if (squash === true || isString(squash)) return squash;
+	      throw new Error("Invalid squash policy: '" + squash + "'. Valid policies: false, true, or arbitrary string");
+	    }
+
+	    function getReplace(config, arrayMode, isOptional, squash) {
+	      var replace, configuredKeys, defaultPolicy = [
+	        { from: "",   to: (isOptional || arrayMode ? undefined : "") },
+	        { from: null, to: (isOptional || arrayMode ? undefined : "") }
+	      ];
+	      replace = isArray(config.replace) ? config.replace : [];
+	      if (isString(squash))
+	        replace.push({ from: squash, to: undefined });
+	      configuredKeys = map(replace, function(item) { return item.from; } );
+	      return filter(defaultPolicy, function(item) { return indexOf(configuredKeys, item.from) === -1; }).concat(replace);
+	    }
+
+	    /**
+	     * [Internal] Get the default value of a parameter, which may be an injectable function.
+	     */
+	    function $$getDefaultValue() {
+	      if (!injector) throw new Error("Injectable functions cannot be called at configuration time");
+	      var defaultValue = injector.invoke(config.$$fn);
+	      if (defaultValue !== null && defaultValue !== undefined && !self.type.is(defaultValue))
+	        throw new Error("Default value (" + defaultValue + ") for parameter '" + self.id + "' is not an instance of Type (" + self.type.name + ")");
+	      return defaultValue;
+	    }
+
+	    /**
+	     * [Internal] Gets the decoded representation of a value if the value is defined, otherwise, returns the
+	     * default value, which may be the result of an injectable function.
+	     */
+	    function $value(value) {
+	      function hasReplaceVal(val) { return function(obj) { return obj.from === val; }; }
+	      function $replace(value) {
+	        var replacement = map(filter(self.replace, hasReplaceVal(value)), function(obj) { return obj.to; });
+	        return replacement.length ? replacement[0] : value;
+	      }
+	      value = $replace(value);
+	      return !isDefined(value) ? $$getDefaultValue() : self.type.$normalize(value);
+	    }
+
+	    function toString() { return "{Param:" + id + " " + type + " squash: '" + squash + "' optional: " + isOptional + "}"; }
+
+	    extend(this, {
+	      id: id,
+	      type: type,
+	      location: location,
+	      array: arrayMode,
+	      squash: squash,
+	      replace: replace,
+	      isOptional: isOptional,
+	      value: $value,
+	      dynamic: undefined,
+	      config: config,
+	      toString: toString
+	    });
+	  };
+
+	  function ParamSet(params) {
+	    extend(this, params || {});
+	  }
+
+	  ParamSet.prototype = {
+	    $$new: function() {
+	      return inherit(this, extend(new ParamSet(), { $$parent: this}));
+	    },
+	    $$keys: function () {
+	      var keys = [], chain = [], parent = this,
+	        ignore = objectKeys(ParamSet.prototype);
+	      while (parent) { chain.push(parent); parent = parent.$$parent; }
+	      chain.reverse();
+	      forEach(chain, function(paramset) {
+	        forEach(objectKeys(paramset), function(key) {
+	            if (indexOf(keys, key) === -1 && indexOf(ignore, key) === -1) keys.push(key);
+	        });
+	      });
+	      return keys;
+	    },
+	    $$values: function(paramValues) {
+	      var values = {}, self = this;
+	      forEach(self.$$keys(), function(key) {
+	        values[key] = self[key].value(paramValues && paramValues[key]);
+	      });
+	      return values;
+	    },
+	    $$equals: function(paramValues1, paramValues2) {
+	      var equal = true, self = this;
+	      forEach(self.$$keys(), function(key) {
+	        var left = paramValues1 && paramValues1[key], right = paramValues2 && paramValues2[key];
+	        if (!self[key].type.equals(left, right)) equal = false;
+	      });
+	      return equal;
+	    },
+	    $$validates: function $$validate(paramValues) {
+	      var keys = this.$$keys(), i, param, rawVal, normalized, encoded;
+	      for (i = 0; i < keys.length; i++) {
+	        param = this[keys[i]];
+	        rawVal = paramValues[keys[i]];
+	        if ((rawVal === undefined || rawVal === null) && param.isOptional)
+	          break; // There was no parameter value, but the param is optional
+	        normalized = param.type.$normalize(rawVal);
+	        if (!param.type.is(normalized))
+	          return false; // The value was not of the correct Type, and could not be decoded to the correct Type
+	        encoded = param.type.encode(normalized);
+	        if (angular.isString(encoded) && !param.type.pattern.exec(encoded))
+	          return false; // The value was of the correct type, but when encoded, did not match the Type's regexp
+	      }
+	      return true;
+	    },
+	    $$parent: undefined
+	  };
+
+	  this.ParamSet = ParamSet;
+	}
+
+	// Register as a provider so it's available to other providers
+	angular.module('ui.router.util').provider('$urlMatcherFactory', $UrlMatcherFactory);
+	angular.module('ui.router.util').run(['$urlMatcherFactory', function($urlMatcherFactory) { }]);
+
+	/**
+	 * @ngdoc object
+	 * @name ui.router.router.$urlRouterProvider
+	 *
+	 * @requires ui.router.util.$urlMatcherFactoryProvider
+	 * @requires $locationProvider
+	 *
+	 * @description
+	 * `$urlRouterProvider` has the responsibility of watching `$location`. 
+	 * When `$location` changes it runs through a list of rules one by one until a 
+	 * match is found. `$urlRouterProvider` is used behind the scenes anytime you specify 
+	 * a url in a state configuration. All urls are compiled into a UrlMatcher object.
+	 *
+	 * There are several methods on `$urlRouterProvider` that make it useful to use directly
+	 * in your module config.
+	 */
+	$UrlRouterProvider.$inject = ['$locationProvider', '$urlMatcherFactoryProvider'];
+	function $UrlRouterProvider(   $locationProvider,   $urlMatcherFactory) {
+	  var rules = [], otherwise = null, interceptDeferred = false, listener;
+
+	  // Returns a string that is a prefix of all strings matching the RegExp
+	  function regExpPrefix(re) {
+	    var prefix = /^\^((?:\\[^a-zA-Z0-9]|[^\\\[\]\^$*+?.()|{}]+)*)/.exec(re.source);
+	    return (prefix != null) ? prefix[1].replace(/\\(.)/g, "$1") : '';
+	  }
+
+	  // Interpolates matched values into a String.replace()-style pattern
+	  function interpolate(pattern, match) {
+	    return pattern.replace(/\$(\$|\d{1,2})/, function (m, what) {
+	      return match[what === '$' ? 0 : Number(what)];
+	    });
+	  }
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.router.$urlRouterProvider#rule
+	   * @methodOf ui.router.router.$urlRouterProvider
+	   *
+	   * @description
+	   * Defines rules that are used by `$urlRouterProvider` to find matches for
+	   * specific URLs.
+	   *
+	   * @example
+	   * <pre>
+	   * var app = angular.module('app', ['ui.router.router']);
+	   *
+	   * app.config(function ($urlRouterProvider) {
+	   *   // Here's an example of how you might allow case insensitive urls
+	   *   $urlRouterProvider.rule(function ($injector, $location) {
+	   *     var path = $location.path(),
+	   *         normalized = path.toLowerCase();
+	   *
+	   *     if (path !== normalized) {
+	   *       return normalized;
+	   *     }
+	   *   });
+	   * });
+	   * </pre>
+	   *
+	   * @param {function} rule Handler function that takes `$injector` and `$location`
+	   * services as arguments. You can use them to return a valid path as a string.
+	   *
+	   * @return {object} `$urlRouterProvider` - `$urlRouterProvider` instance
+	   */
+	  this.rule = function (rule) {
+	    if (!isFunction(rule)) throw new Error("'rule' must be a function");
+	    rules.push(rule);
+	    return this;
+	  };
+
+	  /**
+	   * @ngdoc object
+	   * @name ui.router.router.$urlRouterProvider#otherwise
+	   * @methodOf ui.router.router.$urlRouterProvider
+	   *
+	   * @description
+	   * Defines a path that is used when an invalid route is requested.
+	   *
+	   * @example
+	   * <pre>
+	   * var app = angular.module('app', ['ui.router.router']);
+	   *
+	   * app.config(function ($urlRouterProvider) {
+	   *   // if the path doesn't match any of the urls you configured
+	   *   // otherwise will take care of routing the user to the
+	   *   // specified url
+	   *   $urlRouterProvider.otherwise('/index');
+	   *
+	   *   // Example of using function rule as param
+	   *   $urlRouterProvider.otherwise(function ($injector, $location) {
+	   *     return '/a/valid/url';
+	   *   });
+	   * });
+	   * </pre>
+	   *
+	   * @param {string|function} rule The url path you want to redirect to or a function 
+	   * rule that returns the url path. The function version is passed two params: 
+	   * `$injector` and `$location` services, and must return a url string.
+	   *
+	   * @return {object} `$urlRouterProvider` - `$urlRouterProvider` instance
+	   */
+	  this.otherwise = function (rule) {
+	    if (isString(rule)) {
+	      var redirect = rule;
+	      rule = function () { return redirect; };
+	    }
+	    else if (!isFunction(rule)) throw new Error("'rule' must be a function");
+	    otherwise = rule;
+	    return this;
+	  };
+
+
+	  function handleIfMatch($injector, handler, match) {
+	    if (!match) return false;
+	    var result = $injector.invoke(handler, handler, { $match: match });
+	    return isDefined(result) ? result : true;
+	  }
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.router.$urlRouterProvider#when
+	   * @methodOf ui.router.router.$urlRouterProvider
+	   *
+	   * @description
+	   * Registers a handler for a given url matching. 
+	   * 
+	   * If the handler is a string, it is
+	   * treated as a redirect, and is interpolated according to the syntax of match
+	   * (i.e. like `String.replace()` for `RegExp`, or like a `UrlMatcher` pattern otherwise).
+	   *
+	   * If the handler is a function, it is injectable. It gets invoked if `$location`
+	   * matches. You have the option of inject the match object as `$match`.
+	   *
+	   * The handler can return
+	   *
+	   * - **falsy** to indicate that the rule didn't match after all, then `$urlRouter`
+	   *   will continue trying to find another one that matches.
+	   * - **string** which is treated as a redirect and passed to `$location.url()`
+	   * - **void** or any **truthy** value tells `$urlRouter` that the url was handled.
+	   *
+	   * @example
+	   * <pre>
+	   * var app = angular.module('app', ['ui.router.router']);
+	   *
+	   * app.config(function ($urlRouterProvider) {
+	   *   $urlRouterProvider.when($state.url, function ($match, $stateParams) {
+	   *     if ($state.$current.navigable !== state ||
+	   *         !equalForKeys($match, $stateParams) {
+	   *      $state.transitionTo(state, $match, false);
+	   *     }
+	   *   });
+	   * });
+	   * </pre>
+	   *
+	   * @param {string|object} what The incoming path that you want to redirect.
+	   * @param {string|function} handler The path you want to redirect your user to.
+	   */
+	  this.when = function (what, handler) {
+	    var redirect, handlerIsString = isString(handler);
+	    if (isString(what)) what = $urlMatcherFactory.compile(what);
+
+	    if (!handlerIsString && !isFunction(handler) && !isArray(handler))
+	      throw new Error("invalid 'handler' in when()");
+
+	    var strategies = {
+	      matcher: function (what, handler) {
+	        if (handlerIsString) {
+	          redirect = $urlMatcherFactory.compile(handler);
+	          handler = ['$match', function ($match) { return redirect.format($match); }];
+	        }
+	        return extend(function ($injector, $location) {
+	          return handleIfMatch($injector, handler, what.exec($location.path(), $location.search()));
+	        }, {
+	          prefix: isString(what.prefix) ? what.prefix : ''
+	        });
+	      },
+	      regex: function (what, handler) {
+	        if (what.global || what.sticky) throw new Error("when() RegExp must not be global or sticky");
+
+	        if (handlerIsString) {
+	          redirect = handler;
+	          handler = ['$match', function ($match) { return interpolate(redirect, $match); }];
+	        }
+	        return extend(function ($injector, $location) {
+	          return handleIfMatch($injector, handler, what.exec($location.path()));
+	        }, {
+	          prefix: regExpPrefix(what)
+	        });
+	      }
+	    };
+
+	    var check = { matcher: $urlMatcherFactory.isMatcher(what), regex: what instanceof RegExp };
+
+	    for (var n in check) {
+	      if (check[n]) return this.rule(strategies[n](what, handler));
+	    }
+
+	    throw new Error("invalid 'what' in when()");
+	  };
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.router.$urlRouterProvider#deferIntercept
+	   * @methodOf ui.router.router.$urlRouterProvider
+	   *
+	   * @description
+	   * Disables (or enables) deferring location change interception.
+	   *
+	   * If you wish to customize the behavior of syncing the URL (for example, if you wish to
+	   * defer a transition but maintain the current URL), call this method at configuration time.
+	   * Then, at run time, call `$urlRouter.listen()` after you have configured your own
+	   * `$locationChangeSuccess` event handler.
+	   *
+	   * @example
+	   * <pre>
+	   * var app = angular.module('app', ['ui.router.router']);
+	   *
+	   * app.config(function ($urlRouterProvider) {
+	   *
+	   *   // Prevent $urlRouter from automatically intercepting URL changes;
+	   *   // this allows you to configure custom behavior in between
+	   *   // location changes and route synchronization:
+	   *   $urlRouterProvider.deferIntercept();
+	   *
+	   * }).run(function ($rootScope, $urlRouter, UserService) {
+	   *
+	   *   $rootScope.$on('$locationChangeSuccess', function(e) {
+	   *     // UserService is an example service for managing user state
+	   *     if (UserService.isLoggedIn()) return;
+	   *
+	   *     // Prevent $urlRouter's default handler from firing
+	   *     e.preventDefault();
+	   *
+	   *     UserService.handleLogin().then(function() {
+	   *       // Once the user has logged in, sync the current URL
+	   *       // to the router:
+	   *       $urlRouter.sync();
+	   *     });
+	   *   });
+	   *
+	   *   // Configures $urlRouter's listener *after* your custom listener
+	   *   $urlRouter.listen();
+	   * });
+	   * </pre>
+	   *
+	   * @param {boolean} defer Indicates whether to defer location change interception. Passing
+	            no parameter is equivalent to `true`.
+	   */
+	  this.deferIntercept = function (defer) {
+	    if (defer === undefined) defer = true;
+	    interceptDeferred = defer;
+	  };
+
+	  /**
+	   * @ngdoc object
+	   * @name ui.router.router.$urlRouter
+	   *
+	   * @requires $location
+	   * @requires $rootScope
+	   * @requires $injector
+	   * @requires $browser
+	   *
+	   * @description
+	   *
+	   */
+	  this.$get = $get;
+	  $get.$inject = ['$location', '$rootScope', '$injector', '$browser', '$sniffer'];
+	  function $get(   $location,   $rootScope,   $injector,   $browser,   $sniffer) {
+
+	    var baseHref = $browser.baseHref(), location = $location.url(), lastPushedUrl;
+
+	    function appendBasePath(url, isHtml5, absolute) {
+	      if (baseHref === '/') return url;
+	      if (isHtml5) return baseHref.slice(0, -1) + url;
+	      if (absolute) return baseHref.slice(1) + url;
+	      return url;
+	    }
+
+	    // TODO: Optimize groups of rules with non-empty prefix into some sort of decision tree
+	    function update(evt) {
+	      if (evt && evt.defaultPrevented) return;
+	      var ignoreUpdate = lastPushedUrl && $location.url() === lastPushedUrl;
+	      lastPushedUrl = undefined;
+	      // TODO: Re-implement this in 1.0 for https://github.com/angular-ui/ui-router/issues/1573
+	      //if (ignoreUpdate) return true;
+
+	      function check(rule) {
+	        var handled = rule($injector, $location);
+
+	        if (!handled) return false;
+	        if (isString(handled)) $location.replace().url(handled);
+	        return true;
+	      }
+	      var n = rules.length, i;
+
+	      for (i = 0; i < n; i++) {
+	        if (check(rules[i])) return;
+	      }
+	      // always check otherwise last to allow dynamic updates to the set of rules
+	      if (otherwise) check(otherwise);
+	    }
+
+	    function listen() {
+	      listener = listener || $rootScope.$on('$locationChangeSuccess', update);
+	      return listener;
+	    }
+
+	    if (!interceptDeferred) listen();
+
+	    return {
+	      /**
+	       * @ngdoc function
+	       * @name ui.router.router.$urlRouter#sync
+	       * @methodOf ui.router.router.$urlRouter
+	       *
+	       * @description
+	       * Triggers an update; the same update that happens when the address bar url changes, aka `$locationChangeSuccess`.
+	       * This method is useful when you need to use `preventDefault()` on the `$locationChangeSuccess` event,
+	       * perform some custom logic (route protection, auth, config, redirection, etc) and then finally proceed
+	       * with the transition by calling `$urlRouter.sync()`.
+	       *
+	       * @example
+	       * <pre>
+	       * angular.module('app', ['ui.router'])
+	       *   .run(function($rootScope, $urlRouter) {
+	       *     $rootScope.$on('$locationChangeSuccess', function(evt) {
+	       *       // Halt state change from even starting
+	       *       evt.preventDefault();
+	       *       // Perform custom logic
+	       *       var meetsRequirement = ...
+	       *       // Continue with the update and state transition if logic allows
+	       *       if (meetsRequirement) $urlRouter.sync();
+	       *     });
+	       * });
+	       * </pre>
+	       */
+	      sync: function() {
+	        update();
+	      },
+
+	      listen: function() {
+	        return listen();
+	      },
+
+	      update: function(read) {
+	        if (read) {
+	          location = $location.url();
+	          return;
+	        }
+	        if ($location.url() === location) return;
+
+	        $location.url(location);
+	        $location.replace();
+	      },
+
+	      push: function(urlMatcher, params, options) {
+	         var url = urlMatcher.format(params || {});
+
+	        // Handle the special hash param, if needed
+	        if (url !== null && params && params['#']) {
+	            url += '#' + params['#'];
+	        }
+
+	        $location.url(url);
+	        lastPushedUrl = options && options.$$avoidResync ? $location.url() : undefined;
+	        if (options && options.replace) $location.replace();
+	      },
+
+	      /**
+	       * @ngdoc function
+	       * @name ui.router.router.$urlRouter#href
+	       * @methodOf ui.router.router.$urlRouter
+	       *
+	       * @description
+	       * A URL generation method that returns the compiled URL for a given
+	       * {@link ui.router.util.type:UrlMatcher `UrlMatcher`}, populated with the provided parameters.
+	       *
+	       * @example
+	       * <pre>
+	       * $bob = $urlRouter.href(new UrlMatcher("/about/:person"), {
+	       *   person: "bob"
+	       * });
+	       * // $bob == "/about/bob";
+	       * </pre>
+	       *
+	       * @param {UrlMatcher} urlMatcher The `UrlMatcher` object which is used as the template of the URL to generate.
+	       * @param {object=} params An object of parameter values to fill the matcher's required parameters.
+	       * @param {object=} options Options object. The options are:
+	       *
+	       * - **`absolute`** - {boolean=false},  If true will generate an absolute url, e.g. "http://www.example.com/fullurl".
+	       *
+	       * @returns {string} Returns the fully compiled URL, or `null` if `params` fail validation against `urlMatcher`
+	       */
+	      href: function(urlMatcher, params, options) {
+	        if (!urlMatcher.validates(params)) return null;
+
+	        var isHtml5 = $locationProvider.html5Mode();
+	        if (angular.isObject(isHtml5)) {
+	          isHtml5 = isHtml5.enabled;
+	        }
+
+	        isHtml5 = isHtml5 && $sniffer.history;
+	        
+	        var url = urlMatcher.format(params);
+	        options = options || {};
+
+	        if (!isHtml5 && url !== null) {
+	          url = "#" + $locationProvider.hashPrefix() + url;
+	        }
+
+	        // Handle special hash param, if needed
+	        if (url !== null && params && params['#']) {
+	          url += '#' + params['#'];
+	        }
+
+	        url = appendBasePath(url, isHtml5, options.absolute);
+
+	        if (!options.absolute || !url) {
+	          return url;
+	        }
+
+	        var slash = (!isHtml5 && url ? '/' : ''), port = $location.port();
+	        port = (port === 80 || port === 443 ? '' : ':' + port);
+
+	        return [$location.protocol(), '://', $location.host(), port, slash, url].join('');
+	      }
+	    };
+	  }
+	}
+
+	angular.module('ui.router.router').provider('$urlRouter', $UrlRouterProvider);
+
+	/**
+	 * @ngdoc object
+	 * @name ui.router.state.$stateProvider
+	 *
+	 * @requires ui.router.router.$urlRouterProvider
+	 * @requires ui.router.util.$urlMatcherFactoryProvider
+	 *
+	 * @description
+	 * The new `$stateProvider` works similar to Angular's v1 router, but it focuses purely
+	 * on state.
+	 *
+	 * A state corresponds to a "place" in the application in terms of the overall UI and
+	 * navigation. A state describes (via the controller / template / view properties) what
+	 * the UI looks like and does at that place.
+	 *
+	 * States often have things in common, and the primary way of factoring out these
+	 * commonalities in this model is via the state hierarchy, i.e. parent/child states aka
+	 * nested states.
+	 *
+	 * The `$stateProvider` provides interfaces to declare these states for your app.
+	 */
+	$StateProvider.$inject = ['$urlRouterProvider', '$urlMatcherFactoryProvider'];
+	function $StateProvider(   $urlRouterProvider,   $urlMatcherFactory) {
+
+	  var root, states = {}, $state, queue = {}, abstractKey = 'abstract';
+
+	  // Builds state properties from definition passed to registerState()
+	  var stateBuilder = {
+
+	    // Derive parent state from a hierarchical name only if 'parent' is not explicitly defined.
+	    // state.children = [];
+	    // if (parent) parent.children.push(state);
+	    parent: function(state) {
+	      if (isDefined(state.parent) && state.parent) return findState(state.parent);
+	      // regex matches any valid composite state name
+	      // would match "contact.list" but not "contacts"
+	      var compositeName = /^(.+)\.[^.]+$/.exec(state.name);
+	      return compositeName ? findState(compositeName[1]) : root;
+	    },
+
+	    // inherit 'data' from parent and override by own values (if any)
+	    data: function(state) {
+	      if (state.parent && state.parent.data) {
+	        state.data = state.self.data = inherit(state.parent.data, state.data);
+	      }
+	      return state.data;
+	    },
+
+	    // Build a URLMatcher if necessary, either via a relative or absolute URL
+	    url: function(state) {
+	      var url = state.url, config = { params: state.params || {} };
+
+	      if (isString(url)) {
+	        if (url.charAt(0) == '^') return $urlMatcherFactory.compile(url.substring(1), config);
+	        return (state.parent.navigable || root).url.concat(url, config);
+	      }
+
+	      if (!url || $urlMatcherFactory.isMatcher(url)) return url;
+	      throw new Error("Invalid url '" + url + "' in state '" + state + "'");
+	    },
+
+	    // Keep track of the closest ancestor state that has a URL (i.e. is navigable)
+	    navigable: function(state) {
+	      return state.url ? state : (state.parent ? state.parent.navigable : null);
+	    },
+
+	    // Own parameters for this state. state.url.params is already built at this point. Create and add non-url params
+	    ownParams: function(state) {
+	      var params = state.url && state.url.params || new $$UMFP.ParamSet();
+	      forEach(state.params || {}, function(config, id) {
+	        if (!params[id]) params[id] = new $$UMFP.Param(id, null, config, "config");
+	      });
+	      return params;
+	    },
+
+	    // Derive parameters for this state and ensure they're a super-set of parent's parameters
+	    params: function(state) {
+	      var ownParams = pick(state.ownParams, state.ownParams.$$keys());
+	      return state.parent && state.parent.params ? extend(state.parent.params.$$new(), ownParams) : new $$UMFP.ParamSet();
+	    },
+
+	    // If there is no explicit multi-view configuration, make one up so we don't have
+	    // to handle both cases in the view directive later. Note that having an explicit
+	    // 'views' property will mean the default unnamed view properties are ignored. This
+	    // is also a good time to resolve view names to absolute names, so everything is a
+	    // straight lookup at link time.
+	    views: function(state) {
+	      var views = {};
+
+	      forEach(isDefined(state.views) ? state.views : { '': state }, function (view, name) {
+	        if (name.indexOf('@') < 0) name += '@' + state.parent.name;
+	        views[name] = view;
+	      });
+	      return views;
+	    },
+
+	    // Keep a full path from the root down to this state as this is needed for state activation.
+	    path: function(state) {
+	      return state.parent ? state.parent.path.concat(state) : []; // exclude root from path
+	    },
+
+	    // Speed up $state.contains() as it's used a lot
+	    includes: function(state) {
+	      var includes = state.parent ? extend({}, state.parent.includes) : {};
+	      includes[state.name] = true;
+	      return includes;
+	    },
+
+	    $delegates: {}
+	  };
+
+	  function isRelative(stateName) {
+	    return stateName.indexOf(".") === 0 || stateName.indexOf("^") === 0;
+	  }
+
+	  function findState(stateOrName, base) {
+	    if (!stateOrName) return undefined;
+
+	    var isStr = isString(stateOrName),
+	        name  = isStr ? stateOrName : stateOrName.name,
+	        path  = isRelative(name);
+
+	    if (path) {
+	      if (!base) throw new Error("No reference point given for path '"  + name + "'");
+	      base = findState(base);
+	      
+	      var rel = name.split("."), i = 0, pathLength = rel.length, current = base;
+
+	      for (; i < pathLength; i++) {
+	        if (rel[i] === "" && i === 0) {
+	          current = base;
+	          continue;
+	        }
+	        if (rel[i] === "^") {
+	          if (!current.parent) throw new Error("Path '" + name + "' not valid for state '" + base.name + "'");
+	          current = current.parent;
+	          continue;
+	        }
+	        break;
+	      }
+	      rel = rel.slice(i).join(".");
+	      name = current.name + (current.name && rel ? "." : "") + rel;
+	    }
+	    var state = states[name];
+
+	    if (state && (isStr || (!isStr && (state === stateOrName || state.self === stateOrName)))) {
+	      return state;
+	    }
+	    return undefined;
+	  }
+
+	  function queueState(parentName, state) {
+	    if (!queue[parentName]) {
+	      queue[parentName] = [];
+	    }
+	    queue[parentName].push(state);
+	  }
+
+	  function flushQueuedChildren(parentName) {
+	    var queued = queue[parentName] || [];
+	    while(queued.length) {
+	      registerState(queued.shift());
+	    }
+	  }
+
+	  function registerState(state) {
+	    // Wrap a new object around the state so we can store our private details easily.
+	    state = inherit(state, {
+	      self: state,
+	      resolve: state.resolve || {},
+	      toString: function() { return this.name; }
+	    });
+
+	    var name = state.name;
+	    if (!isString(name) || name.indexOf('@') >= 0) throw new Error("State must have a valid name");
+	    if (states.hasOwnProperty(name)) throw new Error("State '" + name + "' is already defined");
+
+	    // Get parent name
+	    var parentName = (name.indexOf('.') !== -1) ? name.substring(0, name.lastIndexOf('.'))
+	        : (isString(state.parent)) ? state.parent
+	        : (isObject(state.parent) && isString(state.parent.name)) ? state.parent.name
+	        : '';
+
+	    // If parent is not registered yet, add state to queue and register later
+	    if (parentName && !states[parentName]) {
+	      return queueState(parentName, state.self);
+	    }
+
+	    for (var key in stateBuilder) {
+	      if (isFunction(stateBuilder[key])) state[key] = stateBuilder[key](state, stateBuilder.$delegates[key]);
+	    }
+	    states[name] = state;
+
+	    // Register the state in the global state list and with $urlRouter if necessary.
+	    if (!state[abstractKey] && state.url) {
+	      $urlRouterProvider.when(state.url, ['$match', '$stateParams', function ($match, $stateParams) {
+	        if ($state.$current.navigable != state || !equalForKeys($match, $stateParams)) {
+	          $state.transitionTo(state, $match, { inherit: true, location: false });
+	        }
+	      }]);
+	    }
+
+	    // Register any queued children
+	    flushQueuedChildren(name);
+
+	    return state;
+	  }
+
+	  // Checks text to see if it looks like a glob.
+	  function isGlob (text) {
+	    return text.indexOf('*') > -1;
+	  }
+
+	  // Returns true if glob matches current $state name.
+	  function doesStateMatchGlob (glob) {
+	    var globSegments = glob.split('.'),
+	        segments = $state.$current.name.split('.');
+
+	    //match single stars
+	    for (var i = 0, l = globSegments.length; i < l; i++) {
+	      if (globSegments[i] === '*') {
+	        segments[i] = '*';
+	      }
+	    }
+
+	    //match greedy starts
+	    if (globSegments[0] === '**') {
+	       segments = segments.slice(indexOf(segments, globSegments[1]));
+	       segments.unshift('**');
+	    }
+	    //match greedy ends
+	    if (globSegments[globSegments.length - 1] === '**') {
+	       segments.splice(indexOf(segments, globSegments[globSegments.length - 2]) + 1, Number.MAX_VALUE);
+	       segments.push('**');
+	    }
+
+	    if (globSegments.length != segments.length) {
+	      return false;
+	    }
+
+	    return segments.join('') === globSegments.join('');
+	  }
+
+
+	  // Implicit root state that is always active
+	  root = registerState({
+	    name: '',
+	    url: '^',
+	    views: null,
+	    'abstract': true
+	  });
+	  root.navigable = null;
+
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.state.$stateProvider#decorator
+	   * @methodOf ui.router.state.$stateProvider
+	   *
+	   * @description
+	   * Allows you to extend (carefully) or override (at your own peril) the 
+	   * `stateBuilder` object used internally by `$stateProvider`. This can be used 
+	   * to add custom functionality to ui-router, for example inferring templateUrl 
+	   * based on the state name.
+	   *
+	   * When passing only a name, it returns the current (original or decorated) builder
+	   * function that matches `name`.
+	   *
+	   * The builder functions that can be decorated are listed below. Though not all
+	   * necessarily have a good use case for decoration, that is up to you to decide.
+	   *
+	   * In addition, users can attach custom decorators, which will generate new 
+	   * properties within the state's internal definition. There is currently no clear 
+	   * use-case for this beyond accessing internal states (i.e. $state.$current), 
+	   * however, expect this to become increasingly relevant as we introduce additional 
+	   * meta-programming features.
+	   *
+	   * **Warning**: Decorators should not be interdependent because the order of 
+	   * execution of the builder functions in non-deterministic. Builder functions 
+	   * should only be dependent on the state definition object and super function.
+	   *
+	   *
+	   * Existing builder functions and current return values:
+	   *
+	   * - **parent** `{object}` - returns the parent state object.
+	   * - **data** `{object}` - returns state data, including any inherited data that is not
+	   *   overridden by own values (if any).
+	   * - **url** `{object}` - returns a {@link ui.router.util.type:UrlMatcher UrlMatcher}
+	   *   or `null`.
+	   * - **navigable** `{object}` - returns closest ancestor state that has a URL (aka is 
+	   *   navigable).
+	   * - **params** `{object}` - returns an array of state params that are ensured to 
+	   *   be a super-set of parent's params.
+	   * - **views** `{object}` - returns a views object where each key is an absolute view 
+	   *   name (i.e. "viewName@stateName") and each value is the config object 
+	   *   (template, controller) for the view. Even when you don't use the views object 
+	   *   explicitly on a state config, one is still created for you internally.
+	   *   So by decorating this builder function you have access to decorating template 
+	   *   and controller properties.
+	   * - **ownParams** `{object}` - returns an array of params that belong to the state, 
+	   *   not including any params defined by ancestor states.
+	   * - **path** `{string}` - returns the full path from the root down to this state. 
+	   *   Needed for state activation.
+	   * - **includes** `{object}` - returns an object that includes every state that 
+	   *   would pass a `$state.includes()` test.
+	   *
+	   * @example
+	   * <pre>
+	   * // Override the internal 'views' builder with a function that takes the state
+	   * // definition, and a reference to the internal function being overridden:
+	   * $stateProvider.decorator('views', function (state, parent) {
+	   *   var result = {},
+	   *       views = parent(state);
+	   *
+	   *   angular.forEach(views, function (config, name) {
+	   *     var autoName = (state.name + '.' + name).replace('.', '/');
+	   *     config.templateUrl = config.templateUrl || '/partials/' + autoName + '.html';
+	   *     result[name] = config;
+	   *   });
+	   *   return result;
+	   * });
+	   *
+	   * $stateProvider.state('home', {
+	   *   views: {
+	   *     'contact.list': { controller: 'ListController' },
+	   *     'contact.item': { controller: 'ItemController' }
+	   *   }
+	   * });
+	   *
+	   * // ...
+	   *
+	   * $state.go('home');
+	   * // Auto-populates list and item views with /partials/home/contact/list.html,
+	   * // and /partials/home/contact/item.html, respectively.
+	   * </pre>
+	   *
+	   * @param {string} name The name of the builder function to decorate. 
+	   * @param {object} func A function that is responsible for decorating the original 
+	   * builder function. The function receives two parameters:
+	   *
+	   *   - `{object}` - state - The state config object.
+	   *   - `{object}` - super - The original builder function.
+	   *
+	   * @return {object} $stateProvider - $stateProvider instance
+	   */
+	  this.decorator = decorator;
+	  function decorator(name, func) {
+	    /*jshint validthis: true */
+	    if (isString(name) && !isDefined(func)) {
+	      return stateBuilder[name];
+	    }
+	    if (!isFunction(func) || !isString(name)) {
+	      return this;
+	    }
+	    if (stateBuilder[name] && !stateBuilder.$delegates[name]) {
+	      stateBuilder.$delegates[name] = stateBuilder[name];
+	    }
+	    stateBuilder[name] = func;
+	    return this;
+	  }
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.state.$stateProvider#state
+	   * @methodOf ui.router.state.$stateProvider
+	   *
+	   * @description
+	   * Registers a state configuration under a given state name. The stateConfig object
+	   * has the following acceptable properties.
+	   *
+	   * @param {string} name A unique state name, e.g. "home", "about", "contacts".
+	   * To create a parent/child state use a dot, e.g. "about.sales", "home.newest".
+	   * @param {object} stateConfig State configuration object.
+	   * @param {string|function=} stateConfig.template
+	   * <a id='template'></a>
+	   *   html template as a string or a function that returns
+	   *   an html template as a string which should be used by the uiView directives. This property 
+	   *   takes precedence over templateUrl.
+	   *   
+	   *   If `template` is a function, it will be called with the following parameters:
+	   *
+	   *   - {array.&lt;object&gt;} - state parameters extracted from the current $location.path() by
+	   *     applying the current state
+	   *
+	   * <pre>template:
+	   *   "<h1>inline template definition</h1>" +
+	   *   "<div ui-view></div>"</pre>
+	   * <pre>template: function(params) {
+	   *       return "<h1>generated template</h1>"; }</pre>
+	   * </div>
+	   *
+	   * @param {string|function=} stateConfig.templateUrl
+	   * <a id='templateUrl'></a>
+	   *
+	   *   path or function that returns a path to an html
+	   *   template that should be used by uiView.
+	   *   
+	   *   If `templateUrl` is a function, it will be called with the following parameters:
+	   *
+	   *   - {array.&lt;object&gt;} - state parameters extracted from the current $location.path() by 
+	   *     applying the current state
+	   *
+	   * <pre>templateUrl: "home.html"</pre>
+	   * <pre>templateUrl: function(params) {
+	   *     return myTemplates[params.pageId]; }</pre>
+	   *
+	   * @param {function=} stateConfig.templateProvider
+	   * <a id='templateProvider'></a>
+	   *    Provider function that returns HTML content string.
+	   * <pre> templateProvider:
+	   *       function(MyTemplateService, params) {
+	   *         return MyTemplateService.getTemplate(params.pageId);
+	   *       }</pre>
+	   *
+	   * @param {string|function=} stateConfig.controller
+	   * <a id='controller'></a>
+	   *
+	   *  Controller fn that should be associated with newly
+	   *   related scope or the name of a registered controller if passed as a string.
+	   *   Optionally, the ControllerAs may be declared here.
+	   * <pre>controller: "MyRegisteredController"</pre>
+	   * <pre>controller:
+	   *     "MyRegisteredController as fooCtrl"}</pre>
+	   * <pre>controller: function($scope, MyService) {
+	   *     $scope.data = MyService.getData(); }</pre>
+	   *
+	   * @param {function=} stateConfig.controllerProvider
+	   * <a id='controllerProvider'></a>
+	   *
+	   * Injectable provider function that returns the actual controller or string.
+	   * <pre>controllerProvider:
+	   *   function(MyResolveData) {
+	   *     if (MyResolveData.foo)
+	   *       return "FooCtrl"
+	   *     else if (MyResolveData.bar)
+	   *       return "BarCtrl";
+	   *     else return function($scope) {
+	   *       $scope.baz = "Qux";
+	   *     }
+	   *   }</pre>
+	   *
+	   * @param {string=} stateConfig.controllerAs
+	   * <a id='controllerAs'></a>
+	   * 
+	   * A controller alias name. If present the controller will be
+	   *   published to scope under the controllerAs name.
+	   * <pre>controllerAs: "myCtrl"</pre>
+	   *
+	   * @param {string|object=} stateConfig.parent
+	   * <a id='parent'></a>
+	   * Optionally specifies the parent state of this state.
+	   *
+	   * <pre>parent: 'parentState'</pre>
+	   * <pre>parent: parentState // JS variable</pre>
+	   *
+	   * @param {object=} stateConfig.resolve
+	   * <a id='resolve'></a>
+	   *
+	   * An optional map&lt;string, function&gt; of dependencies which
+	   *   should be injected into the controller. If any of these dependencies are promises, 
+	   *   the router will wait for them all to be resolved before the controller is instantiated.
+	   *   If all the promises are resolved successfully, the $stateChangeSuccess event is fired
+	   *   and the values of the resolved promises are injected into any controllers that reference them.
+	   *   If any  of the promises are rejected the $stateChangeError event is fired.
+	   *
+	   *   The map object is:
+	   *   
+	   *   - key - {string}: name of dependency to be injected into controller
+	   *   - factory - {string|function}: If string then it is alias for service. Otherwise if function, 
+	   *     it is injected and return value it treated as dependency. If result is a promise, it is 
+	   *     resolved before its value is injected into controller.
+	   *
+	   * <pre>resolve: {
+	   *     myResolve1:
+	   *       function($http, $stateParams) {
+	   *         return $http.get("/api/foos/"+stateParams.fooID);
+	   *       }
+	   *     }</pre>
+	   *
+	   * @param {string=} stateConfig.url
+	   * <a id='url'></a>
+	   *
+	   *   A url fragment with optional parameters. When a state is navigated or
+	   *   transitioned to, the `$stateParams` service will be populated with any 
+	   *   parameters that were passed.
+	   *
+	   *   (See {@link ui.router.util.type:UrlMatcher UrlMatcher} `UrlMatcher`} for
+	   *   more details on acceptable patterns )
+	   *
+	   * examples:
+	   * <pre>url: "/home"
+	   * url: "/users/:userid"
+	   * url: "/books/{bookid:[a-zA-Z_-]}"
+	   * url: "/books/{categoryid:int}"
+	   * url: "/books/{publishername:string}/{categoryid:int}"
+	   * url: "/messages?before&after"
+	   * url: "/messages?{before:date}&{after:date}"
+	   * url: "/messages/:mailboxid?{before:date}&{after:date}"
+	   * </pre>
+	   *
+	   * @param {object=} stateConfig.views
+	   * <a id='views'></a>
+	   * an optional map&lt;string, object&gt; which defined multiple views, or targets views
+	   * manually/explicitly.
+	   *
+	   * Examples:
+	   *
+	   * Targets three named `ui-view`s in the parent state's template
+	   * <pre>views: {
+	   *     header: {
+	   *       controller: "headerCtrl",
+	   *       templateUrl: "header.html"
+	   *     }, body: {
+	   *       controller: "bodyCtrl",
+	   *       templateUrl: "body.html"
+	   *     }, footer: {
+	   *       controller: "footCtrl",
+	   *       templateUrl: "footer.html"
+	   *     }
+	   *   }</pre>
+	   *
+	   * Targets named `ui-view="header"` from grandparent state 'top''s template, and named `ui-view="body" from parent state's template.
+	   * <pre>views: {
+	   *     'header@top': {
+	   *       controller: "msgHeaderCtrl",
+	   *       templateUrl: "msgHeader.html"
+	   *     }, 'body': {
+	   *       controller: "messagesCtrl",
+	   *       templateUrl: "messages.html"
+	   *     }
+	   *   }</pre>
+	   *
+	   * @param {boolean=} [stateConfig.abstract=false]
+	   * <a id='abstract'></a>
+	   * An abstract state will never be directly activated,
+	   *   but can provide inherited properties to its common children states.
+	   * <pre>abstract: true</pre>
+	   *
+	   * @param {function=} stateConfig.onEnter
+	   * <a id='onEnter'></a>
+	   *
+	   * Callback function for when a state is entered. Good way
+	   *   to trigger an action or dispatch an event, such as opening a dialog.
+	   * If minifying your scripts, make sure to explicitly annotate this function,
+	   * because it won't be automatically annotated by your build tools.
+	   *
+	   * <pre>onEnter: function(MyService, $stateParams) {
+	   *     MyService.foo($stateParams.myParam);
+	   * }</pre>
+	   *
+	   * @param {function=} stateConfig.onExit
+	   * <a id='onExit'></a>
+	   *
+	   * Callback function for when a state is exited. Good way to
+	   *   trigger an action or dispatch an event, such as opening a dialog.
+	   * If minifying your scripts, make sure to explicitly annotate this function,
+	   * because it won't be automatically annotated by your build tools.
+	   *
+	   * <pre>onExit: function(MyService, $stateParams) {
+	   *     MyService.cleanup($stateParams.myParam);
+	   * }</pre>
+	   *
+	   * @param {boolean=} [stateConfig.reloadOnSearch=true]
+	   * <a id='reloadOnSearch'></a>
+	   *
+	   * If `false`, will not retrigger the same state
+	   *   just because a search/query parameter has changed (via $location.search() or $location.hash()). 
+	   *   Useful for when you'd like to modify $location.search() without triggering a reload.
+	   * <pre>reloadOnSearch: false</pre>
+	   *
+	   * @param {object=} stateConfig.data
+	   * <a id='data'></a>
+	   *
+	   * Arbitrary data object, useful for custom configuration.  The parent state's `data` is
+	   *   prototypally inherited.  In other words, adding a data property to a state adds it to
+	   *   the entire subtree via prototypal inheritance.
+	   *
+	   * <pre>data: {
+	   *     requiredRole: 'foo'
+	   * } </pre>
+	   *
+	   * @param {object=} stateConfig.params
+	   * <a id='params'></a>
+	   *
+	   * A map which optionally configures parameters declared in the `url`, or
+	   *   defines additional non-url parameters.  For each parameter being
+	   *   configured, add a configuration object keyed to the name of the parameter.
+	   *
+	   *   Each parameter configuration object may contain the following properties:
+	   *
+	   *   - ** value ** - {object|function=}: specifies the default value for this
+	   *     parameter.  This implicitly sets this parameter as optional.
+	   *
+	   *     When UI-Router routes to a state and no value is
+	   *     specified for this parameter in the URL or transition, the
+	   *     default value will be used instead.  If `value` is a function,
+	   *     it will be injected and invoked, and the return value used.
+	   *
+	   *     *Note*: `undefined` is treated as "no default value" while `null`
+	   *     is treated as "the default value is `null`".
+	   *
+	   *     *Shorthand*: If you only need to configure the default value of the
+	   *     parameter, you may use a shorthand syntax.   In the **`params`**
+	   *     map, instead mapping the param name to a full parameter configuration
+	   *     object, simply set map it to the default parameter value, e.g.:
+	   *
+	   * <pre>// define a parameter's default value
+	   * params: {
+	   *     param1: { value: "defaultValue" }
+	   * }
+	   * // shorthand default values
+	   * params: {
+	   *     param1: "defaultValue",
+	   *     param2: "param2Default"
+	   * }</pre>
+	   *
+	   *   - ** array ** - {boolean=}: *(default: false)* If true, the param value will be
+	   *     treated as an array of values.  If you specified a Type, the value will be
+	   *     treated as an array of the specified Type.  Note: query parameter values
+	   *     default to a special `"auto"` mode.
+	   *
+	   *     For query parameters in `"auto"` mode, if multiple  values for a single parameter
+	   *     are present in the URL (e.g.: `/foo?bar=1&bar=2&bar=3`) then the values
+	   *     are mapped to an array (e.g.: `{ foo: [ '1', '2', '3' ] }`).  However, if
+	   *     only one value is present (e.g.: `/foo?bar=1`) then the value is treated as single
+	   *     value (e.g.: `{ foo: '1' }`).
+	   *
+	   * <pre>params: {
+	   *     param1: { array: true }
+	   * }</pre>
+	   *
+	   *   - ** squash ** - {bool|string=}: `squash` configures how a default parameter value is represented in the URL when
+	   *     the current parameter value is the same as the default value. If `squash` is not set, it uses the
+	   *     configured default squash policy.
+	   *     (See {@link ui.router.util.$urlMatcherFactory#methods_defaultSquashPolicy `defaultSquashPolicy()`})
+	   *
+	   *   There are three squash settings:
+	   *
+	   *     - false: The parameter's default value is not squashed.  It is encoded and included in the URL
+	   *     - true: The parameter's default value is omitted from the URL.  If the parameter is preceeded and followed
+	   *       by slashes in the state's `url` declaration, then one of those slashes are omitted.
+	   *       This can allow for cleaner looking URLs.
+	   *     - `"<arbitrary string>"`: The parameter's default value is replaced with an arbitrary placeholder of  your choice.
+	   *
+	   * <pre>params: {
+	   *     param1: {
+	   *       value: "defaultId",
+	   *       squash: true
+	   * } }
+	   * // squash "defaultValue" to "~"
+	   * params: {
+	   *     param1: {
+	   *       value: "defaultValue",
+	   *       squash: "~"
+	   * } }
+	   * </pre>
+	   *
+	   *
+	   * @example
+	   * <pre>
+	   * // Some state name examples
+	   *
+	   * // stateName can be a single top-level name (must be unique).
+	   * $stateProvider.state("home", {});
+	   *
+	   * // Or it can be a nested state name. This state is a child of the
+	   * // above "home" state.
+	   * $stateProvider.state("home.newest", {});
+	   *
+	   * // Nest states as deeply as needed.
+	   * $stateProvider.state("home.newest.abc.xyz.inception", {});
+	   *
+	   * // state() returns $stateProvider, so you can chain state declarations.
+	   * $stateProvider
+	   *   .state("home", {})
+	   *   .state("about", {})
+	   *   .state("contacts", {});
+	   * </pre>
+	   *
+	   */
+	  this.state = state;
+	  function state(name, definition) {
+	    /*jshint validthis: true */
+	    if (isObject(name)) definition = name;
+	    else definition.name = name;
+	    registerState(definition);
+	    return this;
+	  }
+
+	  /**
+	   * @ngdoc object
+	   * @name ui.router.state.$state
+	   *
+	   * @requires $rootScope
+	   * @requires $q
+	   * @requires ui.router.state.$view
+	   * @requires $injector
+	   * @requires ui.router.util.$resolve
+	   * @requires ui.router.state.$stateParams
+	   * @requires ui.router.router.$urlRouter
+	   *
+	   * @property {object} params A param object, e.g. {sectionId: section.id)}, that 
+	   * you'd like to test against the current active state.
+	   * @property {object} current A reference to the state's config object. However 
+	   * you passed it in. Useful for accessing custom data.
+	   * @property {object} transition Currently pending transition. A promise that'll 
+	   * resolve or reject.
+	   *
+	   * @description
+	   * `$state` service is responsible for representing states as well as transitioning
+	   * between them. It also provides interfaces to ask for current state or even states
+	   * you're coming from.
+	   */
+	  this.$get = $get;
+	  $get.$inject = ['$rootScope', '$q', '$view', '$injector', '$resolve', '$stateParams', '$urlRouter', '$location', '$urlMatcherFactory'];
+	  function $get(   $rootScope,   $q,   $view,   $injector,   $resolve,   $stateParams,   $urlRouter,   $location,   $urlMatcherFactory) {
+
+	    var TransitionSuperseded = $q.reject(new Error('transition superseded'));
+	    var TransitionPrevented = $q.reject(new Error('transition prevented'));
+	    var TransitionAborted = $q.reject(new Error('transition aborted'));
+	    var TransitionFailed = $q.reject(new Error('transition failed'));
+
+	    // Handles the case where a state which is the target of a transition is not found, and the user
+	    // can optionally retry or defer the transition
+	    function handleRedirect(redirect, state, params, options) {
+	      /**
+	       * @ngdoc event
+	       * @name ui.router.state.$state#$stateNotFound
+	       * @eventOf ui.router.state.$state
+	       * @eventType broadcast on root scope
+	       * @description
+	       * Fired when a requested state **cannot be found** using the provided state name during transition.
+	       * The event is broadcast allowing any handlers a single chance to deal with the error (usually by
+	       * lazy-loading the unfound state). A special `unfoundState` object is passed to the listener handler,
+	       * you can see its three properties in the example. You can use `event.preventDefault()` to abort the
+	       * transition and the promise returned from `go` will be rejected with a `'transition aborted'` value.
+	       *
+	       * @param {Object} event Event object.
+	       * @param {Object} unfoundState Unfound State information. Contains: `to, toParams, options` properties.
+	       * @param {State} fromState Current state object.
+	       * @param {Object} fromParams Current state params.
+	       *
+	       * @example
+	       *
+	       * <pre>
+	       * // somewhere, assume lazy.state has not been defined
+	       * $state.go("lazy.state", {a:1, b:2}, {inherit:false});
+	       *
+	       * // somewhere else
+	       * $scope.$on('$stateNotFound',
+	       * function(event, unfoundState, fromState, fromParams){
+	       *     console.log(unfoundState.to); // "lazy.state"
+	       *     console.log(unfoundState.toParams); // {a:1, b:2}
+	       *     console.log(unfoundState.options); // {inherit:false} + default options
+	       * })
+	       * </pre>
+	       */
+	      var evt = $rootScope.$broadcast('$stateNotFound', redirect, state, params);
+
+	      if (evt.defaultPrevented) {
+	        $urlRouter.update();
+	        return TransitionAborted;
+	      }
+
+	      if (!evt.retry) {
+	        return null;
+	      }
+
+	      // Allow the handler to return a promise to defer state lookup retry
+	      if (options.$retry) {
+	        $urlRouter.update();
+	        return TransitionFailed;
+	      }
+	      var retryTransition = $state.transition = $q.when(evt.retry);
+
+	      retryTransition.then(function() {
+	        if (retryTransition !== $state.transition) return TransitionSuperseded;
+	        redirect.options.$retry = true;
+	        return $state.transitionTo(redirect.to, redirect.toParams, redirect.options);
+	      }, function() {
+	        return TransitionAborted;
+	      });
+	      $urlRouter.update();
+
+	      return retryTransition;
+	    }
+
+	    root.locals = { resolve: null, globals: { $stateParams: {} } };
+
+	    $state = {
+	      params: {},
+	      current: root.self,
+	      $current: root,
+	      transition: null
+	    };
+
+	    /**
+	     * @ngdoc function
+	     * @name ui.router.state.$state#reload
+	     * @methodOf ui.router.state.$state
+	     *
+	     * @description
+	     * A method that force reloads the current state. All resolves are re-resolved,
+	     * controllers reinstantiated, and events re-fired.
+	     *
+	     * @example
+	     * <pre>
+	     * var app angular.module('app', ['ui.router']);
+	     *
+	     * app.controller('ctrl', function ($scope, $state) {
+	     *   $scope.reload = function(){
+	     *     $state.reload();
+	     *   }
+	     * });
+	     * </pre>
+	     *
+	     * `reload()` is just an alias for:
+	     * <pre>
+	     * $state.transitionTo($state.current, $stateParams, { 
+	     *   reload: true, inherit: false, notify: true
+	     * });
+	     * </pre>
+	     *
+	     * @param {string=|object=} state - A state name or a state object, which is the root of the resolves to be re-resolved.
+	     * @example
+	     * <pre>
+	     * //assuming app application consists of 3 states: 'contacts', 'contacts.detail', 'contacts.detail.item' 
+	     * //and current state is 'contacts.detail.item'
+	     * var app angular.module('app', ['ui.router']);
+	     *
+	     * app.controller('ctrl', function ($scope, $state) {
+	     *   $scope.reload = function(){
+	     *     //will reload 'contact.detail' and 'contact.detail.item' states
+	     *     $state.reload('contact.detail');
+	     *   }
+	     * });
+	     * </pre>
+	     *
+	     * `reload()` is just an alias for:
+	     * <pre>
+	     * $state.transitionTo($state.current, $stateParams, { 
+	     *   reload: true, inherit: false, notify: true
+	     * });
+	     * </pre>
+
+	     * @returns {promise} A promise representing the state of the new transition. See
+	     * {@link ui.router.state.$state#methods_go $state.go}.
+	     */
+	    $state.reload = function reload(state) {
+	      return $state.transitionTo($state.current, $stateParams, { reload: state || true, inherit: false, notify: true});
+	    };
+
+	    /**
+	     * @ngdoc function
+	     * @name ui.router.state.$state#go
+	     * @methodOf ui.router.state.$state
+	     *
+	     * @description
+	     * Convenience method for transitioning to a new state. `$state.go` calls 
+	     * `$state.transitionTo` internally but automatically sets options to 
+	     * `{ location: true, inherit: true, relative: $state.$current, notify: true }`. 
+	     * This allows you to easily use an absolute or relative to path and specify 
+	     * only the parameters you'd like to update (while letting unspecified parameters 
+	     * inherit from the currently active ancestor states).
+	     *
+	     * @example
+	     * <pre>
+	     * var app = angular.module('app', ['ui.router']);
+	     *
+	     * app.controller('ctrl', function ($scope, $state) {
+	     *   $scope.changeState = function () {
+	     *     $state.go('contact.detail');
+	     *   };
+	     * });
+	     * </pre>
+	     * <img src='../ngdoc_assets/StateGoExamples.png'/>
+	     *
+	     * @param {string} to Absolute state name or relative state path. Some examples:
+	     *
+	     * - `$state.go('contact.detail')` - will go to the `contact.detail` state
+	     * - `$state.go('^')` - will go to a parent state
+	     * - `$state.go('^.sibling')` - will go to a sibling state
+	     * - `$state.go('.child.grandchild')` - will go to grandchild state
+	     *
+	     * @param {object=} params A map of the parameters that will be sent to the state, 
+	     * will populate $stateParams. Any parameters that are not specified will be inherited from currently 
+	     * defined parameters. Only parameters specified in the state definition can be overridden, new 
+	     * parameters will be ignored. This allows, for example, going to a sibling state that shares parameters
+	     * specified in a parent state. Parameter inheritance only works between common ancestor states, I.e.
+	     * transitioning to a sibling will get you the parameters for all parents, transitioning to a child
+	     * will get you all current parameters, etc.
+	     * @param {object=} options Options object. The options are:
+	     *
+	     * - **`location`** - {boolean=true|string=} - If `true` will update the url in the location bar, if `false`
+	     *    will not. If string, must be `"replace"`, which will update url and also replace last history record.
+	     * - **`inherit`** - {boolean=true}, If `true` will inherit url parameters from current url.
+	     * - **`relative`** - {object=$state.$current}, When transitioning with relative path (e.g '^'), 
+	     *    defines which state to be relative from.
+	     * - **`notify`** - {boolean=true}, If `true` will broadcast $stateChangeStart and $stateChangeSuccess events.
+	     * - **`reload`** (v0.2.5) - {boolean=false|string|object}, If `true` will force transition even if no state or params
+	     *    have changed.  It will reload the resolves and views of the current state and parent states.
+	     *    If `reload` is a string (or state object), the state object is fetched (by name, or object reference); and \
+	     *    the transition reloads the resolves and views for that matched state, and all its children states.
+	     *
+	     * @returns {promise} A promise representing the state of the new transition.
+	     *
+	     * Possible success values:
+	     *
+	     * - $state.current
+	     *
+	     * <br/>Possible rejection values:
+	     *
+	     * - 'transition superseded' - when a newer transition has been started after this one
+	     * - 'transition prevented' - when `event.preventDefault()` has been called in a `$stateChangeStart` listener
+	     * - 'transition aborted' - when `event.preventDefault()` has been called in a `$stateNotFound` listener or
+	     *   when a `$stateNotFound` `event.retry` promise errors.
+	     * - 'transition failed' - when a state has been unsuccessfully found after 2 tries.
+	     * - *resolve error* - when an error has occurred with a `resolve`
+	     *
+	     */
+	    $state.go = function go(to, params, options) {
+	      return $state.transitionTo(to, params, extend({ inherit: true, relative: $state.$current }, options));
+	    };
+
+	    /**
+	     * @ngdoc function
+	     * @name ui.router.state.$state#transitionTo
+	     * @methodOf ui.router.state.$state
+	     *
+	     * @description
+	     * Low-level method for transitioning to a new state. {@link ui.router.state.$state#methods_go $state.go}
+	     * uses `transitionTo` internally. `$state.go` is recommended in most situations.
+	     *
+	     * @example
+	     * <pre>
+	     * var app = angular.module('app', ['ui.router']);
+	     *
+	     * app.controller('ctrl', function ($scope, $state) {
+	     *   $scope.changeState = function () {
+	     *     $state.transitionTo('contact.detail');
+	     *   };
+	     * });
+	     * </pre>
+	     *
+	     * @param {string} to State name.
+	     * @param {object=} toParams A map of the parameters that will be sent to the state,
+	     * will populate $stateParams.
+	     * @param {object=} options Options object. The options are:
+	     *
+	     * - **`location`** - {boolean=true|string=} - If `true` will update the url in the location bar, if `false`
+	     *    will not. If string, must be `"replace"`, which will update url and also replace last history record.
+	     * - **`inherit`** - {boolean=false}, If `true` will inherit url parameters from current url.
+	     * - **`relative`** - {object=}, When transitioning with relative path (e.g '^'), 
+	     *    defines which state to be relative from.
+	     * - **`notify`** - {boolean=true}, If `true` will broadcast $stateChangeStart and $stateChangeSuccess events.
+	     * - **`reload`** (v0.2.5) - {boolean=false|string=|object=}, If `true` will force transition even if the state or params 
+	     *    have not changed, aka a reload of the same state. It differs from reloadOnSearch because you'd
+	     *    use this when you want to force a reload when *everything* is the same, including search params.
+	     *    if String, then will reload the state with the name given in reload, and any children.
+	     *    if Object, then a stateObj is expected, will reload the state found in stateObj, and any children.
+	     *
+	     * @returns {promise} A promise representing the state of the new transition. See
+	     * {@link ui.router.state.$state#methods_go $state.go}.
+	     */
+	    $state.transitionTo = function transitionTo(to, toParams, options) {
+	      toParams = toParams || {};
+	      options = extend({
+	        location: true, inherit: false, relative: null, notify: true, reload: false, $retry: false
+	      }, options || {});
+
+	      var from = $state.$current, fromParams = $state.params, fromPath = from.path;
+	      var evt, toState = findState(to, options.relative);
+
+	      // Store the hash param for later (since it will be stripped out by various methods)
+	      var hash = toParams['#'];
+
+	      if (!isDefined(toState)) {
+	        var redirect = { to: to, toParams: toParams, options: options };
+	        var redirectResult = handleRedirect(redirect, from.self, fromParams, options);
+
+	        if (redirectResult) {
+	          return redirectResult;
+	        }
+
+	        // Always retry once if the $stateNotFound was not prevented
+	        // (handles either redirect changed or state lazy-definition)
+	        to = redirect.to;
+	        toParams = redirect.toParams;
+	        options = redirect.options;
+	        toState = findState(to, options.relative);
+
+	        if (!isDefined(toState)) {
+	          if (!options.relative) throw new Error("No such state '" + to + "'");
+	          throw new Error("Could not resolve '" + to + "' from state '" + options.relative + "'");
+	        }
+	      }
+	      if (toState[abstractKey]) throw new Error("Cannot transition to abstract state '" + to + "'");
+	      if (options.inherit) toParams = inheritParams($stateParams, toParams || {}, $state.$current, toState);
+	      if (!toState.params.$$validates(toParams)) return TransitionFailed;
+
+	      toParams = toState.params.$$values(toParams);
+	      to = toState;
+
+	      var toPath = to.path;
+
+	      // Starting from the root of the path, keep all levels that haven't changed
+	      var keep = 0, state = toPath[keep], locals = root.locals, toLocals = [];
+
+	      if (!options.reload) {
+	        while (state && state === fromPath[keep] && state.ownParams.$$equals(toParams, fromParams)) {
+	          locals = toLocals[keep] = state.locals;
+	          keep++;
+	          state = toPath[keep];
+	        }
+	      } else if (isString(options.reload) || isObject(options.reload)) {
+	        if (isObject(options.reload) && !options.reload.name) {
+	          throw new Error('Invalid reload state object');
+	        }
+	        
+	        var reloadState = options.reload === true ? fromPath[0] : findState(options.reload);
+	        if (options.reload && !reloadState) {
+	          throw new Error("No such reload state '" + (isString(options.reload) ? options.reload : options.reload.name) + "'");
+	        }
+
+	        while (state && state === fromPath[keep] && state !== reloadState) {
+	          locals = toLocals[keep] = state.locals;
+	          keep++;
+	          state = toPath[keep];
+	        }
+	      }
+
+	      // If we're going to the same state and all locals are kept, we've got nothing to do.
+	      // But clear 'transition', as we still want to cancel any other pending transitions.
+	      // TODO: We may not want to bump 'transition' if we're called from a location change
+	      // that we've initiated ourselves, because we might accidentally abort a legitimate
+	      // transition initiated from code?
+	      if (shouldSkipReload(to, toParams, from, fromParams, locals, options)) {
+	        if (hash) toParams['#'] = hash;
+	        $state.params = toParams;
+	        copy($state.params, $stateParams);
+	        copy(filterByKeys(to.params.$$keys(), $stateParams), to.locals.globals.$stateParams);
+	        if (options.location && to.navigable && to.navigable.url) {
+	          $urlRouter.push(to.navigable.url, toParams, {
+	            $$avoidResync: true, replace: options.location === 'replace'
+	          });
+	          $urlRouter.update(true);
+	        }
+	        $state.transition = null;
+	        return $q.when($state.current);
+	      }
+
+	      // Filter parameters before we pass them to event handlers etc.
+	      toParams = filterByKeys(to.params.$$keys(), toParams || {});
+	      
+	      // Re-add the saved hash before we start returning things or broadcasting $stateChangeStart
+	      if (hash) toParams['#'] = hash;
+	      
+	      // Broadcast start event and cancel the transition if requested
+	      if (options.notify) {
+	        /**
+	         * @ngdoc event
+	         * @name ui.router.state.$state#$stateChangeStart
+	         * @eventOf ui.router.state.$state
+	         * @eventType broadcast on root scope
+	         * @description
+	         * Fired when the state transition **begins**. You can use `event.preventDefault()`
+	         * to prevent the transition from happening and then the transition promise will be
+	         * rejected with a `'transition prevented'` value.
+	         *
+	         * @param {Object} event Event object.
+	         * @param {State} toState The state being transitioned to.
+	         * @param {Object} toParams The params supplied to the `toState`.
+	         * @param {State} fromState The current state, pre-transition.
+	         * @param {Object} fromParams The params supplied to the `fromState`.
+	         *
+	         * @example
+	         *
+	         * <pre>
+	         * $rootScope.$on('$stateChangeStart',
+	         * function(event, toState, toParams, fromState, fromParams){
+	         *     event.preventDefault();
+	         *     // transitionTo() promise will be rejected with
+	         *     // a 'transition prevented' error
+	         * })
+	         * </pre>
+	         */
+	        if ($rootScope.$broadcast('$stateChangeStart', to.self, toParams, from.self, fromParams, options).defaultPrevented) {
+	          $rootScope.$broadcast('$stateChangeCancel', to.self, toParams, from.self, fromParams);
+	          //Don't update and resync url if there's been a new transition started. see issue #2238, #600
+	          if ($state.transition == null) $urlRouter.update();
+	          return TransitionPrevented;
+	        }
+	      }
+
+	      // Resolve locals for the remaining states, but don't update any global state just
+	      // yet -- if anything fails to resolve the current state needs to remain untouched.
+	      // We also set up an inheritance chain for the locals here. This allows the view directive
+	      // to quickly look up the correct definition for each view in the current state. Even
+	      // though we create the locals object itself outside resolveState(), it is initially
+	      // empty and gets filled asynchronously. We need to keep track of the promise for the
+	      // (fully resolved) current locals, and pass this down the chain.
+	      var resolved = $q.when(locals);
+
+	      for (var l = keep; l < toPath.length; l++, state = toPath[l]) {
+	        locals = toLocals[l] = inherit(locals);
+	        resolved = resolveState(state, toParams, state === to, resolved, locals, options);
+	      }
+
+	      // Once everything is resolved, we are ready to perform the actual transition
+	      // and return a promise for the new state. We also keep track of what the
+	      // current promise is, so that we can detect overlapping transitions and
+	      // keep only the outcome of the last transition.
+	      var transition = $state.transition = resolved.then(function () {
+	        var l, entering, exiting;
+
+	        if ($state.transition !== transition) return TransitionSuperseded;
+
+	        // Exit 'from' states not kept
+	        for (l = fromPath.length - 1; l >= keep; l--) {
+	          exiting = fromPath[l];
+	          if (exiting.self.onExit) {
+	            $injector.invoke(exiting.self.onExit, exiting.self, exiting.locals.globals);
+	          }
+	          exiting.locals = null;
+	        }
+
+	        // Enter 'to' states not kept
+	        for (l = keep; l < toPath.length; l++) {
+	          entering = toPath[l];
+	          entering.locals = toLocals[l];
+	          if (entering.self.onEnter) {
+	            $injector.invoke(entering.self.onEnter, entering.self, entering.locals.globals);
+	          }
+	        }
+
+	        // Run it again, to catch any transitions in callbacks
+	        if ($state.transition !== transition) return TransitionSuperseded;
+
+	        // Update globals in $state
+	        $state.$current = to;
+	        $state.current = to.self;
+	        $state.params = toParams;
+	        copy($state.params, $stateParams);
+	        $state.transition = null;
+
+	        if (options.location && to.navigable) {
+	          $urlRouter.push(to.navigable.url, to.navigable.locals.globals.$stateParams, {
+	            $$avoidResync: true, replace: options.location === 'replace'
+	          });
+	        }
+
+	        if (options.notify) {
+	        /**
+	         * @ngdoc event
+	         * @name ui.router.state.$state#$stateChangeSuccess
+	         * @eventOf ui.router.state.$state
+	         * @eventType broadcast on root scope
+	         * @description
+	         * Fired once the state transition is **complete**.
+	         *
+	         * @param {Object} event Event object.
+	         * @param {State} toState The state being transitioned to.
+	         * @param {Object} toParams The params supplied to the `toState`.
+	         * @param {State} fromState The current state, pre-transition.
+	         * @param {Object} fromParams The params supplied to the `fromState`.
+	         */
+	          $rootScope.$broadcast('$stateChangeSuccess', to.self, toParams, from.self, fromParams);
+	        }
+	        $urlRouter.update(true);
+
+	        return $state.current;
+	      }, function (error) {
+	        if ($state.transition !== transition) return TransitionSuperseded;
+
+	        $state.transition = null;
+	        /**
+	         * @ngdoc event
+	         * @name ui.router.state.$state#$stateChangeError
+	         * @eventOf ui.router.state.$state
+	         * @eventType broadcast on root scope
+	         * @description
+	         * Fired when an **error occurs** during transition. It's important to note that if you
+	         * have any errors in your resolve functions (javascript errors, non-existent services, etc)
+	         * they will not throw traditionally. You must listen for this $stateChangeError event to
+	         * catch **ALL** errors.
+	         *
+	         * @param {Object} event Event object.
+	         * @param {State} toState The state being transitioned to.
+	         * @param {Object} toParams The params supplied to the `toState`.
+	         * @param {State} fromState The current state, pre-transition.
+	         * @param {Object} fromParams The params supplied to the `fromState`.
+	         * @param {Error} error The resolve error object.
+	         */
+	        evt = $rootScope.$broadcast('$stateChangeError', to.self, toParams, from.self, fromParams, error);
+
+	        if (!evt.defaultPrevented) {
+	            $urlRouter.update();
+	        }
+
+	        return $q.reject(error);
+	      });
+
+	      return transition;
+	    };
+
+	    /**
+	     * @ngdoc function
+	     * @name ui.router.state.$state#is
+	     * @methodOf ui.router.state.$state
+	     *
+	     * @description
+	     * Similar to {@link ui.router.state.$state#methods_includes $state.includes},
+	     * but only checks for the full state name. If params is supplied then it will be
+	     * tested for strict equality against the current active params object, so all params
+	     * must match with none missing and no extras.
+	     *
+	     * @example
+	     * <pre>
+	     * $state.$current.name = 'contacts.details.item';
+	     *
+	     * // absolute name
+	     * $state.is('contact.details.item'); // returns true
+	     * $state.is(contactDetailItemStateObject); // returns true
+	     *
+	     * // relative name (. and ^), typically from a template
+	     * // E.g. from the 'contacts.details' template
+	     * <div ng-class="{highlighted: $state.is('.item')}">Item</div>
+	     * </pre>
+	     *
+	     * @param {string|object} stateOrName The state name (absolute or relative) or state object you'd like to check.
+	     * @param {object=} params A param object, e.g. `{sectionId: section.id}`, that you'd like
+	     * to test against the current active state.
+	     * @param {object=} options An options object.  The options are:
+	     *
+	     * - **`relative`** - {string|object} -  If `stateOrName` is a relative state name and `options.relative` is set, .is will
+	     * test relative to `options.relative` state (or name).
+	     *
+	     * @returns {boolean} Returns true if it is the state.
+	     */
+	    $state.is = function is(stateOrName, params, options) {
+	      options = extend({ relative: $state.$current }, options || {});
+	      var state = findState(stateOrName, options.relative);
+
+	      if (!isDefined(state)) { return undefined; }
+	      if ($state.$current !== state) { return false; }
+	      return params ? equalForKeys(state.params.$$values(params), $stateParams) : true;
+	    };
+
+	    /**
+	     * @ngdoc function
+	     * @name ui.router.state.$state#includes
+	     * @methodOf ui.router.state.$state
+	     *
+	     * @description
+	     * A method to determine if the current active state is equal to or is the child of the
+	     * state stateName. If any params are passed then they will be tested for a match as well.
+	     * Not all the parameters need to be passed, just the ones you'd like to test for equality.
+	     *
+	     * @example
+	     * Partial and relative names
+	     * <pre>
+	     * $state.$current.name = 'contacts.details.item';
+	     *
+	     * // Using partial names
+	     * $state.includes("contacts"); // returns true
+	     * $state.includes("contacts.details"); // returns true
+	     * $state.includes("contacts.details.item"); // returns true
+	     * $state.includes("contacts.list"); // returns false
+	     * $state.includes("about"); // returns false
+	     *
+	     * // Using relative names (. and ^), typically from a template
+	     * // E.g. from the 'contacts.details' template
+	     * <div ng-class="{highlighted: $state.includes('.item')}">Item</div>
+	     * </pre>
+	     *
+	     * Basic globbing patterns
+	     * <pre>
+	     * $state.$current.name = 'contacts.details.item.url';
+	     *
+	     * $state.includes("*.details.*.*"); // returns true
+	     * $state.includes("*.details.**"); // returns true
+	     * $state.includes("**.item.**"); // returns true
+	     * $state.includes("*.details.item.url"); // returns true
+	     * $state.includes("*.details.*.url"); // returns true
+	     * $state.includes("*.details.*"); // returns false
+	     * $state.includes("item.**"); // returns false
+	     * </pre>
+	     *
+	     * @param {string} stateOrName A partial name, relative name, or glob pattern
+	     * to be searched for within the current state name.
+	     * @param {object=} params A param object, e.g. `{sectionId: section.id}`,
+	     * that you'd like to test against the current active state.
+	     * @param {object=} options An options object.  The options are:
+	     *
+	     * - **`relative`** - {string|object=} -  If `stateOrName` is a relative state reference and `options.relative` is set,
+	     * .includes will test relative to `options.relative` state (or name).
+	     *
+	     * @returns {boolean} Returns true if it does include the state
+	     */
+	    $state.includes = function includes(stateOrName, params, options) {
+	      options = extend({ relative: $state.$current }, options || {});
+	      if (isString(stateOrName) && isGlob(stateOrName)) {
+	        if (!doesStateMatchGlob(stateOrName)) {
+	          return false;
+	        }
+	        stateOrName = $state.$current.name;
+	      }
+
+	      var state = findState(stateOrName, options.relative);
+	      if (!isDefined(state)) { return undefined; }
+	      if (!isDefined($state.$current.includes[state.name])) { return false; }
+	      return params ? equalForKeys(state.params.$$values(params), $stateParams, objectKeys(params)) : true;
+	    };
+
+
+	    /**
+	     * @ngdoc function
+	     * @name ui.router.state.$state#href
+	     * @methodOf ui.router.state.$state
+	     *
+	     * @description
+	     * A url generation method that returns the compiled url for the given state populated with the given params.
+	     *
+	     * @example
+	     * <pre>
+	     * expect($state.href("about.person", { person: "bob" })).toEqual("/about/bob");
+	     * </pre>
+	     *
+	     * @param {string|object} stateOrName The state name or state object you'd like to generate a url from.
+	     * @param {object=} params An object of parameter values to fill the state's required parameters.
+	     * @param {object=} options Options object. The options are:
+	     *
+	     * - **`lossy`** - {boolean=true} -  If true, and if there is no url associated with the state provided in the
+	     *    first parameter, then the constructed href url will be built from the first navigable ancestor (aka
+	     *    ancestor with a valid url).
+	     * - **`inherit`** - {boolean=true}, If `true` will inherit url parameters from current url.
+	     * - **`relative`** - {object=$state.$current}, When transitioning with relative path (e.g '^'), 
+	     *    defines which state to be relative from.
+	     * - **`absolute`** - {boolean=false},  If true will generate an absolute url, e.g. "http://www.example.com/fullurl".
+	     * 
+	     * @returns {string} compiled state url
+	     */
+	    $state.href = function href(stateOrName, params, options) {
+	      options = extend({
+	        lossy:    true,
+	        inherit:  true,
+	        absolute: false,
+	        relative: $state.$current
+	      }, options || {});
+
+	      var state = findState(stateOrName, options.relative);
+
+	      if (!isDefined(state)) return null;
+	      if (options.inherit) params = inheritParams($stateParams, params || {}, $state.$current, state);
+	      
+	      var nav = (state && options.lossy) ? state.navigable : state;
+
+	      if (!nav || nav.url === undefined || nav.url === null) {
+	        return null;
+	      }
+	      return $urlRouter.href(nav.url, filterByKeys(state.params.$$keys().concat('#'), params || {}), {
+	        absolute: options.absolute
+	      });
+	    };
+
+	    /**
+	     * @ngdoc function
+	     * @name ui.router.state.$state#get
+	     * @methodOf ui.router.state.$state
+	     *
+	     * @description
+	     * Returns the state configuration object for any specific state or all states.
+	     *
+	     * @param {string|object=} stateOrName (absolute or relative) If provided, will only get the config for
+	     * the requested state. If not provided, returns an array of ALL state configs.
+	     * @param {string|object=} context When stateOrName is a relative state reference, the state will be retrieved relative to context.
+	     * @returns {Object|Array} State configuration object or array of all objects.
+	     */
+	    $state.get = function (stateOrName, context) {
+	      if (arguments.length === 0) return map(objectKeys(states), function(name) { return states[name].self; });
+	      var state = findState(stateOrName, context || $state.$current);
+	      return (state && state.self) ? state.self : null;
+	    };
+
+	    function resolveState(state, params, paramsAreFiltered, inherited, dst, options) {
+	      // Make a restricted $stateParams with only the parameters that apply to this state if
+	      // necessary. In addition to being available to the controller and onEnter/onExit callbacks,
+	      // we also need $stateParams to be available for any $injector calls we make during the
+	      // dependency resolution process.
+	      var $stateParams = (paramsAreFiltered) ? params : filterByKeys(state.params.$$keys(), params);
+	      var locals = { $stateParams: $stateParams };
+
+	      // Resolve 'global' dependencies for the state, i.e. those not specific to a view.
+	      // We're also including $stateParams in this; that way the parameters are restricted
+	      // to the set that should be visible to the state, and are independent of when we update
+	      // the global $state and $stateParams values.
+	      dst.resolve = $resolve.resolve(state.resolve, locals, dst.resolve, state);
+	      var promises = [dst.resolve.then(function (globals) {
+	        dst.globals = globals;
+	      })];
+	      if (inherited) promises.push(inherited);
+
+	      function resolveViews() {
+	        var viewsPromises = [];
+
+	        // Resolve template and dependencies for all views.
+	        forEach(state.views, function (view, name) {
+	          var injectables = (view.resolve && view.resolve !== state.resolve ? view.resolve : {});
+	          injectables.$template = [ function () {
+	            return $view.load(name, { view: view, locals: dst.globals, params: $stateParams, notify: options.notify }) || '';
+	          }];
+
+	          viewsPromises.push($resolve.resolve(injectables, dst.globals, dst.resolve, state).then(function (result) {
+	            // References to the controller (only instantiated at link time)
+	            if (isFunction(view.controllerProvider) || isArray(view.controllerProvider)) {
+	              var injectLocals = angular.extend({}, injectables, dst.globals);
+	              result.$$controller = $injector.invoke(view.controllerProvider, null, injectLocals);
+	            } else {
+	              result.$$controller = view.controller;
+	            }
+	            // Provide access to the state itself for internal use
+	            result.$$state = state;
+	            result.$$controllerAs = view.controllerAs;
+	            dst[name] = result;
+	          }));
+	        });
+
+	        return $q.all(viewsPromises).then(function(){
+	          return dst.globals;
+	        });
+	      }
+
+	      // Wait for all the promises and then return the activation object
+	      return $q.all(promises).then(resolveViews).then(function (values) {
+	        return dst;
+	      });
+	    }
+
+	    return $state;
+	  }
+
+	  function shouldSkipReload(to, toParams, from, fromParams, locals, options) {
+	    // Return true if there are no differences in non-search (path/object) params, false if there are differences
+	    function nonSearchParamsEqual(fromAndToState, fromParams, toParams) {
+	      // Identify whether all the parameters that differ between `fromParams` and `toParams` were search params.
+	      function notSearchParam(key) {
+	        return fromAndToState.params[key].location != "search";
+	      }
+	      var nonQueryParamKeys = fromAndToState.params.$$keys().filter(notSearchParam);
+	      var nonQueryParams = pick.apply({}, [fromAndToState.params].concat(nonQueryParamKeys));
+	      var nonQueryParamSet = new $$UMFP.ParamSet(nonQueryParams);
+	      return nonQueryParamSet.$$equals(fromParams, toParams);
+	    }
+
+	    // If reload was not explicitly requested
+	    // and we're transitioning to the same state we're already in
+	    // and    the locals didn't change
+	    //     or they changed in a way that doesn't merit reloading
+	    //        (reloadOnParams:false, or reloadOnSearch.false and only search params changed)
+	    // Then return true.
+	    if (!options.reload && to === from &&
+	      (locals === from.locals || (to.self.reloadOnSearch === false && nonSearchParamsEqual(from, fromParams, toParams)))) {
+	      return true;
+	    }
+	  }
+	}
+
+	angular.module('ui.router.state')
+	  .factory('$stateParams', function () { return {}; })
+	  .provider('$state', $StateProvider);
+
+
+	$ViewProvider.$inject = [];
+	function $ViewProvider() {
+
+	  this.$get = $get;
+	  /**
+	   * @ngdoc object
+	   * @name ui.router.state.$view
+	   *
+	   * @requires ui.router.util.$templateFactory
+	   * @requires $rootScope
+	   *
+	   * @description
+	   *
+	   */
+	  $get.$inject = ['$rootScope', '$templateFactory'];
+	  function $get(   $rootScope,   $templateFactory) {
+	    return {
+	      // $view.load('full.viewName', { template: ..., controller: ..., resolve: ..., async: false, params: ... })
+	      /**
+	       * @ngdoc function
+	       * @name ui.router.state.$view#load
+	       * @methodOf ui.router.state.$view
+	       *
+	       * @description
+	       *
+	       * @param {string} name name
+	       * @param {object} options option object.
+	       */
+	      load: function load(name, options) {
+	        var result, defaults = {
+	          template: null, controller: null, view: null, locals: null, notify: true, async: true, params: {}
+	        };
+	        options = extend(defaults, options);
+
+	        if (options.view) {
+	          result = $templateFactory.fromConfig(options.view, options.params, options.locals);
+	        }
+	        return result;
+	      }
+	    };
+	  }
+	}
+
+	angular.module('ui.router.state').provider('$view', $ViewProvider);
+
+	/**
+	 * @ngdoc object
+	 * @name ui.router.state.$uiViewScrollProvider
+	 *
+	 * @description
+	 * Provider that returns the {@link ui.router.state.$uiViewScroll} service function.
+	 */
+	function $ViewScrollProvider() {
+
+	  var useAnchorScroll = false;
+
+	  /**
+	   * @ngdoc function
+	   * @name ui.router.state.$uiViewScrollProvider#useAnchorScroll
+	   * @methodOf ui.router.state.$uiViewScrollProvider
+	   *
+	   * @description
+	   * Reverts back to using the core [`$anchorScroll`](http://docs.angularjs.org/api/ng.$anchorScroll) service for
+	   * scrolling based on the url anchor.
+	   */
+	  this.useAnchorScroll = function () {
+	    useAnchorScroll = true;
+	  };
+
+	  /**
+	   * @ngdoc object
+	   * @name ui.router.state.$uiViewScroll
+	   *
+	   * @requires $anchorScroll
+	   * @requires $timeout
+	   *
+	   * @description
+	   * When called with a jqLite element, it scrolls the element into view (after a
+	   * `$timeout` so the DOM has time to refresh).
+	   *
+	   * If you prefer to rely on `$anchorScroll` to scroll the view to the anchor,
+	   * this can be enabled by calling {@link ui.router.state.$uiViewScrollProvider#methods_useAnchorScroll `$uiViewScrollProvider.useAnchorScroll()`}.
+	   */
+	  this.$get = ['$anchorScroll', '$timeout', function ($anchorScroll, $timeout) {
+	    if (useAnchorScroll) {
+	      return $anchorScroll;
+	    }
+
+	    return function ($element) {
+	      return $timeout(function () {
+	        $element[0].scrollIntoView();
+	      }, 0, false);
+	    };
+	  }];
+	}
+
+	angular.module('ui.router.state').provider('$uiViewScroll', $ViewScrollProvider);
+
+	var ngMajorVer = angular.version.major;
+	var ngMinorVer = angular.version.minor;
+	/**
+	 * @ngdoc directive
+	 * @name ui.router.state.directive:ui-view
+	 *
+	 * @requires ui.router.state.$state
+	 * @requires $compile
+	 * @requires $controller
+	 * @requires $injector
+	 * @requires ui.router.state.$uiViewScroll
+	 * @requires $document
+	 *
+	 * @restrict ECA
+	 *
+	 * @description
+	 * The ui-view directive tells $state where to place your templates.
+	 *
+	 * @param {string=} name A view name. The name should be unique amongst the other views in the
+	 * same state. You can have views of the same name that live in different states.
+	 *
+	 * @param {string=} autoscroll It allows you to set the scroll behavior of the browser window
+	 * when a view is populated. By default, $anchorScroll is overridden by ui-router's custom scroll
+	 * service, {@link ui.router.state.$uiViewScroll}. This custom service let's you
+	 * scroll ui-view elements into view when they are populated during a state activation.
+	 *
+	 * @param {string=} noanimation If truthy, the non-animated renderer will be selected (no animations
+	 * will be applied to the ui-view)
+	 *
+	 * *Note: To revert back to old [`$anchorScroll`](http://docs.angularjs.org/api/ng.$anchorScroll)
+	 * functionality, call `$uiViewScrollProvider.useAnchorScroll()`.*
+	 *
+	 * @param {string=} onload Expression to evaluate whenever the view updates.
+	 * 
+	 * @example
+	 * A view can be unnamed or named. 
+	 * <pre>
+	 * <!-- Unnamed -->
+	 * <div ui-view></div> 
+	 * 
+	 * <!-- Named -->
+	 * <div ui-view="viewName"></div>
+	 * </pre>
+	 *
+	 * You can only have one unnamed view within any template (or root html). If you are only using a 
+	 * single view and it is unnamed then you can populate it like so:
+	 * <pre>
+	 * <div ui-view></div> 
+	 * $stateProvider.state("home", {
+	 *   template: "<h1>HELLO!</h1>"
+	 * })
+	 * </pre>
+	 * 
+	 * The above is a convenient shortcut equivalent to specifying your view explicitly with the {@link ui.router.state.$stateProvider#views `views`}
+	 * config property, by name, in this case an empty name:
+	 * <pre>
+	 * $stateProvider.state("home", {
+	 *   views: {
+	 *     "": {
+	 *       template: "<h1>HELLO!</h1>"
+	 *     }
+	 *   }    
+	 * })
+	 * </pre>
+	 * 
+	 * But typically you'll only use the views property if you name your view or have more than one view 
+	 * in the same template. There's not really a compelling reason to name a view if its the only one, 
+	 * but you could if you wanted, like so:
+	 * <pre>
+	 * <div ui-view="main"></div>
+	 * </pre> 
+	 * <pre>
+	 * $stateProvider.state("home", {
+	 *   views: {
+	 *     "main": {
+	 *       template: "<h1>HELLO!</h1>"
+	 *     }
+	 *   }    
+	 * })
+	 * </pre>
+	 * 
+	 * Really though, you'll use views to set up multiple views:
+	 * <pre>
+	 * <div ui-view></div>
+	 * <div ui-view="chart"></div> 
+	 * <div ui-view="data"></div> 
+	 * </pre>
+	 * 
+	 * <pre>
+	 * $stateProvider.state("home", {
+	 *   views: {
+	 *     "": {
+	 *       template: "<h1>HELLO!</h1>"
+	 *     },
+	 *     "chart": {
+	 *       template: "<chart_thing/>"
+	 *     },
+	 *     "data": {
+	 *       template: "<data_thing/>"
+	 *     }
+	 *   }    
+	 * })
+	 * </pre>
+	 *
+	 * Examples for `autoscroll`:
+	 *
+	 * <pre>
+	 * <!-- If autoscroll present with no expression,
+	 *      then scroll ui-view into view -->
+	 * <ui-view autoscroll/>
+	 *
+	 * <!-- If autoscroll present with valid expression,
+	 *      then scroll ui-view into view if expression evaluates to true -->
+	 * <ui-view autoscroll='true'/>
+	 * <ui-view autoscroll='false'/>
+	 * <ui-view autoscroll='scopeVariable'/>
+	 * </pre>
+	 */
+	$ViewDirective.$inject = ['$state', '$injector', '$uiViewScroll', '$interpolate'];
+	function $ViewDirective(   $state,   $injector,   $uiViewScroll,   $interpolate) {
+
+	  function getService() {
+	    return ($injector.has) ? function(service) {
+	      return $injector.has(service) ? $injector.get(service) : null;
+	    } : function(service) {
+	      try {
+	        return $injector.get(service);
+	      } catch (e) {
+	        return null;
+	      }
+	    };
+	  }
+
+	  var service = getService(),
+	      $animator = service('$animator'),
+	      $animate = service('$animate');
+
+	  // Returns a set of DOM manipulation functions based on which Angular version
+	  // it should use
+	  function getRenderer(attrs, scope) {
+	    var statics = {
+	      enter: function (element, target, cb) { target.after(element); cb(); },
+	      leave: function (element, cb) { element.remove(); cb(); }
+	    };
+
+	    if (!!attrs.noanimation) return statics;
+
+	    function animEnabled(element) {
+	      if (ngMajorVer === 1 && ngMinorVer >= 4) return !!$animate.enabled(element);
+	      if (ngMajorVer === 1 && ngMinorVer >= 2) return !!$animate.enabled();
+	      return (!!$animator);
+	    }
+
+	    // ng 1.2+
+	    if ($animate) {
+	      return {
+	        enter: function(element, target, cb) {
+	          if (!animEnabled(element)) {
+	            statics.enter(element, target, cb);
+	          } else if (angular.version.minor > 2) {
+	            $animate.enter(element, null, target).then(cb);
+	          } else {
+	            $animate.enter(element, null, target, cb);
+	          }
+	        },
+	        leave: function(element, cb) {
+	          if (!animEnabled(element)) {
+	            statics.leave(element, cb);
+	          } else if (angular.version.minor > 2) {
+	            $animate.leave(element).then(cb);
+	          } else {
+	            $animate.leave(element, cb);
+	          }
+	        }
+	      };
+	    }
+
+	    // ng 1.1.5
+	    if ($animator) {
+	      var animate = $animator && $animator(scope, attrs);
+
+	      return {
+	        enter: function(element, target, cb) {animate.enter(element, null, target); cb(); },
+	        leave: function(element, cb) { animate.leave(element); cb(); }
+	      };
+	    }
+
+	    return statics;
+	  }
+
+	  var directive = {
+	    restrict: 'ECA',
+	    terminal: true,
+	    priority: 400,
+	    transclude: 'element',
+	    compile: function (tElement, tAttrs, $transclude) {
+	      return function (scope, $element, attrs) {
+	        var previousEl, currentEl, currentScope, latestLocals,
+	            onloadExp     = attrs.onload || '',
+	            autoScrollExp = attrs.autoscroll,
+	            renderer      = getRenderer(attrs, scope);
+
+	        scope.$on('$stateChangeSuccess', function() {
+	          updateView(false);
+	        });
+
+	        updateView(true);
+
+	        function cleanupLastView() {
+	          var _previousEl = previousEl;
+	          var _currentScope = currentScope;
+
+	          if (_currentScope) {
+	            _currentScope._willBeDestroyed = true;
+	          }
+
+	          function cleanOld() {
+	            if (_previousEl) {
+	              _previousEl.remove();
+	            }
+
+	            if (_currentScope) {
+	              _currentScope.$destroy();
+	            }
+	          }
+
+	          if (currentEl) {
+	            renderer.leave(currentEl, function() {
+	              cleanOld();
+	              previousEl = null;
+	            });
+
+	            previousEl = currentEl;
+	          } else {
+	            cleanOld();
+	            previousEl = null;
+	          }
+
+	          currentEl = null;
+	          currentScope = null;
+	        }
+
+	        function updateView(firstTime) {
+	          var newScope,
+	              name            = getUiViewName(scope, attrs, $element, $interpolate),
+	              previousLocals  = name && $state.$current && $state.$current.locals[name];
+
+	          if (!firstTime && previousLocals === latestLocals || scope._willBeDestroyed) return; // nothing to do
+	          newScope = scope.$new();
+	          latestLocals = $state.$current.locals[name];
+
+	          /**
+	           * @ngdoc event
+	           * @name ui.router.state.directive:ui-view#$viewContentLoading
+	           * @eventOf ui.router.state.directive:ui-view
+	           * @eventType emits on ui-view directive scope
+	           * @description
+	           *
+	           * Fired once the view **begins loading**, *before* the DOM is rendered.
+	           *
+	           * @param {Object} event Event object.
+	           * @param {string} viewName Name of the view.
+	           */
+	          newScope.$emit('$viewContentLoading', name);
+
+	          var clone = $transclude(newScope, function(clone) {
+	            renderer.enter(clone, $element, function onUiViewEnter() {
+	              if(currentScope) {
+	                currentScope.$emit('$viewContentAnimationEnded');
+	              }
+
+	              if (angular.isDefined(autoScrollExp) && !autoScrollExp || scope.$eval(autoScrollExp)) {
+	                $uiViewScroll(clone);
+	              }
+	            });
+	            cleanupLastView();
+	          });
+
+	          currentEl = clone;
+	          currentScope = newScope;
+	          /**
+	           * @ngdoc event
+	           * @name ui.router.state.directive:ui-view#$viewContentLoaded
+	           * @eventOf ui.router.state.directive:ui-view
+	           * @eventType emits on ui-view directive scope
+	           * @description
+	           * Fired once the view is **loaded**, *after* the DOM is rendered.
+	           *
+	           * @param {Object} event Event object.
+	           * @param {string} viewName Name of the view.
+	           */
+	          currentScope.$emit('$viewContentLoaded', name);
+	          currentScope.$eval(onloadExp);
+	        }
+	      };
+	    }
+	  };
+
+	  return directive;
+	}
+
+	$ViewDirectiveFill.$inject = ['$compile', '$controller', '$state', '$interpolate'];
+	function $ViewDirectiveFill (  $compile,   $controller,   $state,   $interpolate) {
+	  return {
+	    restrict: 'ECA',
+	    priority: -400,
+	    compile: function (tElement) {
+	      var initial = tElement.html();
+	      return function (scope, $element, attrs) {
+	        var current = $state.$current,
+	            name = getUiViewName(scope, attrs, $element, $interpolate),
+	            locals  = current && current.locals[name];
+
+	        if (! locals) {
+	          return;
+	        }
+
+	        $element.data('$uiView', { name: name, state: locals.$$state });
+	        $element.html(locals.$template ? locals.$template : initial);
+
+	        var link = $compile($element.contents());
+
+	        if (locals.$$controller) {
+	          locals.$scope = scope;
+	          locals.$element = $element;
+	          var controller = $controller(locals.$$controller, locals);
+	          if (locals.$$controllerAs) {
+	            scope[locals.$$controllerAs] = controller;
+	          }
+	          $element.data('$ngControllerController', controller);
+	          $element.children().data('$ngControllerController', controller);
+	        }
+
+	        link(scope);
+	      };
+	    }
+	  };
+	}
+
+	/**
+	 * Shared ui-view code for both directives:
+	 * Given scope, element, and its attributes, return the view's name
+	 */
+	function getUiViewName(scope, attrs, element, $interpolate) {
+	  var name = $interpolate(attrs.uiView || attrs.name || '')(scope);
+	  var inherited = element.inheritedData('$uiView');
+	  return name.indexOf('@') >= 0 ?  name :  (name + '@' + (inherited ? inherited.state.name : ''));
+	}
+
+	angular.module('ui.router.state').directive('uiView', $ViewDirective);
+	angular.module('ui.router.state').directive('uiView', $ViewDirectiveFill);
+
+	function parseStateRef(ref, current) {
+	  var preparsed = ref.match(/^\s*({[^}]*})\s*$/), parsed;
+	  if (preparsed) ref = current + '(' + preparsed[1] + ')';
+	  parsed = ref.replace(/\n/g, " ").match(/^([^(]+?)\s*(\((.*)\))?$/);
+	  if (!parsed || parsed.length !== 4) throw new Error("Invalid state ref '" + ref + "'");
+	  return { state: parsed[1], paramExpr: parsed[3] || null };
+	}
+
+	function stateContext(el) {
+	  var stateData = el.parent().inheritedData('$uiView');
+
+	  if (stateData && stateData.state && stateData.state.name) {
+	    return stateData.state;
+	  }
+	}
+
+	function getTypeInfo(el) {
+	  // SVGAElement does not use the href attribute, but rather the 'xlinkHref' attribute.
+	  var isSvg = Object.prototype.toString.call(el.prop('href')) === '[object SVGAnimatedString]';
+	  var isForm = el[0].nodeName === "FORM";
+
+	  return {
+	    attr: isForm ? "action" : (isSvg ? 'xlink:href' : 'href'),
+	    isAnchor: el.prop("tagName").toUpperCase() === "A",
+	    clickable: !isForm
+	  };
+	}
+
+	function clickHook(el, $state, $timeout, type, current) {
+	  return function(e) {
+	    var button = e.which || e.button, target = current();
+
+	    if (!(button > 1 || e.ctrlKey || e.metaKey || e.shiftKey || el.attr('target'))) {
+	      // HACK: This is to allow ng-clicks to be processed before the transition is initiated:
+	      var transition = $timeout(function() {
+	        $state.go(target.state, target.params, target.options);
+	      });
+	      e.preventDefault();
+
+	      // if the state has no URL, ignore one preventDefault from the <a> directive.
+	      var ignorePreventDefaultCount = type.isAnchor && !target.href ? 1: 0;
+
+	      e.preventDefault = function() {
+	        if (ignorePreventDefaultCount-- <= 0) $timeout.cancel(transition);
+	      };
+	    }
+	  };
+	}
+
+	function defaultOpts(el, $state) {
+	  return { relative: stateContext(el) || $state.$current, inherit: true };
+	}
+
+	/**
+	 * @ngdoc directive
+	 * @name ui.router.state.directive:ui-sref
+	 *
+	 * @requires ui.router.state.$state
+	 * @requires $timeout
+	 *
+	 * @restrict A
+	 *
+	 * @description
+	 * A directive that binds a link (`<a>` tag) to a state. If the state has an associated
+	 * URL, the directive will automatically generate & update the `href` attribute via
+	 * the {@link ui.router.state.$state#methods_href $state.href()} method. Clicking
+	 * the link will trigger a state transition with optional parameters.
+	 *
+	 * Also middle-clicking, right-clicking, and ctrl-clicking on the link will be
+	 * handled natively by the browser.
+	 *
+	 * You can also use relative state paths within ui-sref, just like the relative
+	 * paths passed to `$state.go()`. You just need to be aware that the path is relative
+	 * to the state that the link lives in, in other words the state that loaded the
+	 * template containing the link.
+	 *
+	 * You can specify options to pass to {@link ui.router.state.$state#go $state.go()}
+	 * using the `ui-sref-opts` attribute. Options are restricted to `location`, `inherit`,
+	 * and `reload`.
+	 *
+	 * @example
+	 * Here's an example of how you'd use ui-sref and how it would compile. If you have the
+	 * following template:
+	 * <pre>
+	 * <a ui-sref="home">Home</a> | <a ui-sref="about">About</a> | <a ui-sref="{page: 2}">Next page</a>
+	 *
+	 * <ul>
+	 *     <li ng-repeat="contact in contacts">
+	 *         <a ui-sref="contacts.detail({ id: contact.id })">{{ contact.name }}</a>
+	 *     </li>
+	 * </ul>
+	 * </pre>
+	 *
+	 * Then the compiled html would be (assuming Html5Mode is off and current state is contacts):
+	 * <pre>
+	 * <a href="#/home" ui-sref="home">Home</a> | <a href="#/about" ui-sref="about">About</a> | <a href="#/contacts?page=2" ui-sref="{page: 2}">Next page</a>
+	 *
+	 * <ul>
+	 *     <li ng-repeat="contact in contacts">
+	 *         <a href="#/contacts/1" ui-sref="contacts.detail({ id: contact.id })">Joe</a>
+	 *     </li>
+	 *     <li ng-repeat="contact in contacts">
+	 *         <a href="#/contacts/2" ui-sref="contacts.detail({ id: contact.id })">Alice</a>
+	 *     </li>
+	 *     <li ng-repeat="contact in contacts">
+	 *         <a href="#/contacts/3" ui-sref="contacts.detail({ id: contact.id })">Bob</a>
+	 *     </li>
+	 * </ul>
+	 *
+	 * <a ui-sref="home" ui-sref-opts="{reload: true}">Home</a>
+	 * </pre>
+	 *
+	 * @param {string} ui-sref 'stateName' can be any valid absolute or relative state
+	 * @param {Object} ui-sref-opts options to pass to {@link ui.router.state.$state#go $state.go()}
+	 */
+	$StateRefDirective.$inject = ['$state', '$timeout'];
+	function $StateRefDirective($state, $timeout) {
+	  return {
+	    restrict: 'A',
+	    require: ['?^uiSrefActive', '?^uiSrefActiveEq'],
+	    link: function(scope, element, attrs, uiSrefActive) {
+	      var ref    = parseStateRef(attrs.uiSref, $state.current.name);
+	      var def    = { state: ref.state, href: null, params: null };
+	      var type   = getTypeInfo(element);
+	      var active = uiSrefActive[1] || uiSrefActive[0];
+
+	      def.options = extend(defaultOpts(element, $state), attrs.uiSrefOpts ? scope.$eval(attrs.uiSrefOpts) : {});
+
+	      var update = function(val) {
+	        if (val) def.params = angular.copy(val);
+	        def.href = $state.href(ref.state, def.params, def.options);
+
+	        if (active) active.$$addStateInfo(ref.state, def.params);
+	        if (def.href !== null) attrs.$set(type.attr, def.href);
+	      };
+
+	      if (ref.paramExpr) {
+	        scope.$watch(ref.paramExpr, function(val) { if (val !== def.params) update(val); }, true);
+	        def.params = angular.copy(scope.$eval(ref.paramExpr));
+	      }
+	      update();
+
+	      if (!type.clickable) return;
+	      element.bind("click", clickHook(element, $state, $timeout, type, function() { return def; }));
+	    }
+	  };
+	}
+
+	/**
+	 * @ngdoc directive
+	 * @name ui.router.state.directive:ui-state
+	 *
+	 * @requires ui.router.state.uiSref
+	 *
+	 * @restrict A
+	 *
+	 * @description
+	 * Much like ui-sref, but will accept named $scope properties to evaluate for a state definition,
+	 * params and override options.
+	 *
+	 * @param {string} ui-state 'stateName' can be any valid absolute or relative state
+	 * @param {Object} ui-state-params params to pass to {@link ui.router.state.$state#href $state.href()}
+	 * @param {Object} ui-state-opts options to pass to {@link ui.router.state.$state#go $state.go()}
+	 */
+	$StateRefDynamicDirective.$inject = ['$state', '$timeout'];
+	function $StateRefDynamicDirective($state, $timeout) {
+	  return {
+	    restrict: 'A',
+	    require: ['?^uiSrefActive', '?^uiSrefActiveEq'],
+	    link: function(scope, element, attrs, uiSrefActive) {
+	      var type   = getTypeInfo(element);
+	      var active = uiSrefActive[1] || uiSrefActive[0];
+	      var group  = [attrs.uiState, attrs.uiStateParams || null, attrs.uiStateOpts || null];
+	      var watch  = '[' + group.map(function(val) { return val || 'null'; }).join(', ') + ']';
+	      var def    = { state: null, params: null, options: null, href: null };
+
+	      function runStateRefLink (group) {
+	        def.state = group[0]; def.params = group[1]; def.options = group[2];
+	        def.href = $state.href(def.state, def.params, def.options);
+
+	        if (active) active.$$addStateInfo(def.state, def.params);
+	        if (def.href) attrs.$set(type.attr, def.href);
+	      }
+
+	      scope.$watch(watch, runStateRefLink, true);
+	      runStateRefLink(scope.$eval(watch));
+
+	      if (!type.clickable) return;
+	      element.bind("click", clickHook(element, $state, $timeout, type, function() { return def; }));
+	    }
+	  };
+	}
+
+
+	/**
+	 * @ngdoc directive
+	 * @name ui.router.state.directive:ui-sref-active
+	 *
+	 * @requires ui.router.state.$state
+	 * @requires ui.router.state.$stateParams
+	 * @requires $interpolate
+	 *
+	 * @restrict A
+	 *
+	 * @description
+	 * A directive working alongside ui-sref to add classes to an element when the
+	 * related ui-sref directive's state is active, and removing them when it is inactive.
+	 * The primary use-case is to simplify the special appearance of navigation menus
+	 * relying on `ui-sref`, by having the "active" state's menu button appear different,
+	 * distinguishing it from the inactive menu items.
+	 *
+	 * ui-sref-active can live on the same element as ui-sref or on a parent element. The first
+	 * ui-sref-active found at the same level or above the ui-sref will be used.
+	 *
+	 * Will activate when the ui-sref's target state or any child state is active. If you
+	 * need to activate only when the ui-sref target state is active and *not* any of
+	 * it's children, then you will use
+	 * {@link ui.router.state.directive:ui-sref-active-eq ui-sref-active-eq}
+	 *
+	 * @example
+	 * Given the following template:
+	 * <pre>
+	 * <ul>
+	 *   <li ui-sref-active="active" class="item">
+	 *     <a href ui-sref="app.user({user: 'bilbobaggins'})">@bilbobaggins</a>
+	 *   </li>
+	 * </ul>
+	 * </pre>
+	 *
+	 *
+	 * When the app state is "app.user" (or any children states), and contains the state parameter "user" with value "bilbobaggins",
+	 * the resulting HTML will appear as (note the 'active' class):
+	 * <pre>
+	 * <ul>
+	 *   <li ui-sref-active="active" class="item active">
+	 *     <a ui-sref="app.user({user: 'bilbobaggins'})" href="/users/bilbobaggins">@bilbobaggins</a>
+	 *   </li>
+	 * </ul>
+	 * </pre>
+	 *
+	 * The class name is interpolated **once** during the directives link time (any further changes to the
+	 * interpolated value are ignored).
+	 *
+	 * Multiple classes may be specified in a space-separated format:
+	 * <pre>
+	 * <ul>
+	 *   <li ui-sref-active='class1 class2 class3'>
+	 *     <a ui-sref="app.user">link</a>
+	 *   </li>
+	 * </ul>
+	 * </pre>
+	 *
+	 * It is also possible to pass ui-sref-active an expression that evaluates
+	 * to an object hash, whose keys represent active class names and whose
+	 * values represent the respective state names/globs.
+	 * ui-sref-active will match if the current active state **includes** any of
+	 * the specified state names/globs, even the abstract ones.
+	 *
+	 * @Example
+	 * Given the following template, with "admin" being an abstract state:
+	 * <pre>
+	 * <div ui-sref-active="{'active': 'admin.*'}">
+	 *   <a ui-sref-active="active" ui-sref="admin.roles">Roles</a>
+	 * </div>
+	 * </pre>
+	 *
+	 * When the current state is "admin.roles" the "active" class will be applied
+	 * to both the <div> and <a> elements. It is important to note that the state
+	 * names/globs passed to ui-sref-active shadow the state provided by ui-sref.
+	 */
+
+	/**
+	 * @ngdoc directive
+	 * @name ui.router.state.directive:ui-sref-active-eq
+	 *
+	 * @requires ui.router.state.$state
+	 * @requires ui.router.state.$stateParams
+	 * @requires $interpolate
+	 *
+	 * @restrict A
+	 *
+	 * @description
+	 * The same as {@link ui.router.state.directive:ui-sref-active ui-sref-active} but will only activate
+	 * when the exact target state used in the `ui-sref` is active; no child states.
+	 *
+	 */
+	$StateRefActiveDirective.$inject = ['$state', '$stateParams', '$interpolate'];
+	function $StateRefActiveDirective($state, $stateParams, $interpolate) {
+	  return  {
+	    restrict: "A",
+	    controller: ['$scope', '$element', '$attrs', '$timeout', function ($scope, $element, $attrs, $timeout) {
+	      var states = [], activeClasses = {}, activeEqClass, uiSrefActive;
+
+	      // There probably isn't much point in $observing this
+	      // uiSrefActive and uiSrefActiveEq share the same directive object with some
+	      // slight difference in logic routing
+	      activeEqClass = $interpolate($attrs.uiSrefActiveEq || '', false)($scope);
+
+	      try {
+	        uiSrefActive = $scope.$eval($attrs.uiSrefActive);
+	      } catch (e) {
+	        // Do nothing. uiSrefActive is not a valid expression.
+	        // Fall back to using $interpolate below
+	      }
+	      uiSrefActive = uiSrefActive || $interpolate($attrs.uiSrefActive || '', false)($scope);
+	      if (isObject(uiSrefActive)) {
+	        forEach(uiSrefActive, function(stateOrName, activeClass) {
+	          if (isString(stateOrName)) {
+	            var ref = parseStateRef(stateOrName, $state.current.name);
+	            addState(ref.state, $scope.$eval(ref.paramExpr), activeClass);
+	          }
+	        });
+	      }
+
+	      // Allow uiSref to communicate with uiSrefActive[Equals]
+	      this.$$addStateInfo = function (newState, newParams) {
+	        // we already got an explicit state provided by ui-sref-active, so we
+	        // shadow the one that comes from ui-sref
+	        if (isObject(uiSrefActive) && states.length > 0) {
+	          return;
+	        }
+	        addState(newState, newParams, uiSrefActive);
+	        update();
+	      };
+
+	      $scope.$on('$stateChangeSuccess', update);
+
+	      function addState(stateName, stateParams, activeClass) {
+	        var state = $state.get(stateName, stateContext($element));
+	        var stateHash = createStateHash(stateName, stateParams);
+
+	        states.push({
+	          state: state || { name: stateName },
+	          params: stateParams,
+	          hash: stateHash
+	        });
+
+	        activeClasses[stateHash] = activeClass;
+	      }
+
+	      /**
+	       * @param {string} state
+	       * @param {Object|string} [params]
+	       * @return {string}
+	       */
+	      function createStateHash(state, params) {
+	        if (!isString(state)) {
+	          throw new Error('state should be a string');
+	        }
+	        if (isObject(params)) {
+	          return state + toJson(params);
+	        }
+	        params = $scope.$eval(params);
+	        if (isObject(params)) {
+	          return state + toJson(params);
+	        }
+	        return state;
+	      }
+
+	      // Update route state
+	      function update() {
+	        for (var i = 0; i < states.length; i++) {
+	          if (anyMatch(states[i].state, states[i].params)) {
+	            addClass($element, activeClasses[states[i].hash]);
+	          } else {
+	            removeClass($element, activeClasses[states[i].hash]);
+	          }
+
+	          if (exactMatch(states[i].state, states[i].params)) {
+	            addClass($element, activeEqClass);
+	          } else {
+	            removeClass($element, activeEqClass);
+	          }
+	        }
+	      }
+
+	      function addClass(el, className) { $timeout(function () { el.addClass(className); }); }
+	      function removeClass(el, className) { el.removeClass(className); }
+	      function anyMatch(state, params) { return $state.includes(state.name, params); }
+	      function exactMatch(state, params) { return $state.is(state.name, params); }
+
+	      update();
+	    }]
+	  };
+	}
+
+	angular.module('ui.router.state')
+	  .directive('uiSref', $StateRefDirective)
+	  .directive('uiSrefActive', $StateRefActiveDirective)
+	  .directive('uiSrefActiveEq', $StateRefActiveDirective)
+	  .directive('uiState', $StateRefDynamicDirective);
+
+	/**
+	 * @ngdoc filter
+	 * @name ui.router.state.filter:isState
+	 *
+	 * @requires ui.router.state.$state
+	 *
+	 * @description
+	 * Translates to {@link ui.router.state.$state#methods_is $state.is("stateName")}.
+	 */
+	$IsStateFilter.$inject = ['$state'];
+	function $IsStateFilter($state) {
+	  var isFilter = function (state, params) {
+	    return $state.is(state, params);
+	  };
+	  isFilter.$stateful = true;
+	  return isFilter;
+	}
+
+	/**
+	 * @ngdoc filter
+	 * @name ui.router.state.filter:includedByState
+	 *
+	 * @requires ui.router.state.$state
+	 *
+	 * @description
+	 * Translates to {@link ui.router.state.$state#methods_includes $state.includes('fullOrPartialStateName')}.
+	 */
+	$IncludedByStateFilter.$inject = ['$state'];
+	function $IncludedByStateFilter($state) {
+	  var includesFilter = function (state, params, options) {
+	    return $state.includes(state, params, options);
+	  };
+	  includesFilter.$stateful = true;
+	  return  includesFilter;
+	}
+
+	angular.module('ui.router.state')
+	  .filter('isState', $IsStateFilter)
+	  .filter('includedByState', $IncludedByStateFilter);
+	})(window, window.angular);
+
+/***/ },
+/* 70 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = routing;
+	/**
+	 * @author Szczepan
+	 * Created on 21.05.2016.
+	 */
+	function routing($urlRouterProvider, $locationProvider) {
+	  $locationProvider.html5Mode(false);
+	  $urlRouterProvider.otherwise('/');
+	}
+
+/***/ },
+/* 71 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _angularUiRouter = __webpack_require__(69);
+
+	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
+
+	var _home = __webpack_require__(72);
+
+	var _home2 = _interopRequireDefault(_home);
+
+	var _home3 = __webpack_require__(74);
+
+	var _home4 = _interopRequireDefault(_home3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * @author Szczepan
+	 * Created on 21.05.2016.
+	 */
+	exports.default = _angular2.default.module('app.home', [_angularUiRouter2.default]).config(_home2.default).controller('HomeController', _home4.default).name;
+
+/***/ },
+/* 72 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = routes;
+	/**
+	 * @author Szczepan
+	 * Created on 21.05.2016.
+	 */
+	function routes($stateProvider) {
+	    $stateProvider.state('home', {
+	        url: '/',
+	        template: __webpack_require__(73),
+	        controller: 'HomeController',
+	        controllerAs: 'home'
+	    });
+	}
+
+/***/ },
+/* 73 */
+/***/ function(module, exports) {
+
+	module.exports = "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Real Estate Welcome</title>\r\n</head>\r\n<body>\r\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum\r\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum\r\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum\r\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum\r\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum\r\n\r\n</body>\r\n</html>";
+
+/***/ },
+/* 74 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * @author Szczepan
+	 * Created on 21.05.2016.
+	 */
+
+	var HomeController = function HomeController() {
+	    _classCallCheck(this, HomeController);
+
+	    this.name = 'Wow its working';
+	};
+
+	exports.default = HomeController;
 
 /***/ }
 /******/ ]);
