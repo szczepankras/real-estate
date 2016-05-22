@@ -9,10 +9,12 @@ export default class AddController {
     }
 
     addRecord() {
+        console.log(this.$scope.category);
         var record = {
             "title": this.$scope.title,
             "content": this.$scope.description,
-            "number": this.$scope.number
+            "number": this.$scope.number,
+            "category": this.$scope.category
         };
         this.setAdvertisementService.setAdvertisement(record);
         this.clearInputs();
@@ -22,9 +24,5 @@ export default class AddController {
         this.$scope.title = "";
         this.$scope.description = "";
         this.$scope.number = "";
-    }
-
-    onItemClick(option){
-        console.log(option);
     }
 }
