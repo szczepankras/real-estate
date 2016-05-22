@@ -26,8 +26,6 @@
     "bootstrap": "^3.3.6",
     "file-loader": "^0.8.5",
     "html-loader": "^0.4.3",
-    "jquery": "^2.2.4",
-    "min-jquery": "^1.6.1",
     "node-sass": "^3.7.0",
     "url-loader": "^0.5.7"
   }
