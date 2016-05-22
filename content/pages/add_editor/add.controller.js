@@ -3,7 +3,11 @@
  * Created on 21.05.2016.
  */
 export default class AddController {
-    constructor() {
-        this.name = 'Board';
+    constructor(SetAdvertisementsService) {
+        this.setAdvertisementService = SetAdvertisementsService;
+    }
+
+    saveRecord(){
+        this.setAdvertisementService.setAdvertisement({"content": "dupa", "date": "20-05-2016"});
     }
 }

@@ -9,10 +9,16 @@ export default class BoardController {
 
     expirationDate(arg){
         var expirationDate  = this.addDays(new Date(), 7);
-        return expirationDate.toDateString();
+        return this.convertDate(expirationDate);
     }
 
      addDays(theDate, days) {
         return new Date(theDate.getTime() + days*24*60*60*1000);
+    }
+
+    convertDate(inputFormat) {
+        function pad(s) { return (s < 10) ? '0' + s : s; }
+        var d = new Date(inputFormat);
+        return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('-');
     }
 }

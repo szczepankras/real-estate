@@ -10,9 +10,12 @@ import addController from './add.controller.js';
 
 import mainEditor from '../../directives/main_editor';
 
+import setAdvertisementsService from '../../services/set/SetAdvertisementsService';
+
 export default angular
     .module('app.add', [uirouter])
     .config(routing)
     .controller('AddController', addController)
     .directive('mainEditor', mainEditor)
+    .service('SetAdvertisementsService', setAdvertisementsService)
     .name;
