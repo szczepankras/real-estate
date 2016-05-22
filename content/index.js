@@ -15,5 +15,5 @@ import add from './pages/add_editor';
 import edit from './pages/edit';
 
 const ngModule = angular
-                        .module('app', [uirouter, home, board, my_board, add, edit])
-                        .config(routing);
+    .module('app', [uirouter, home, board, my_board, add, edit])
+    .config(routing);

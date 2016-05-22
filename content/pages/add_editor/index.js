@@ -8,8 +8,11 @@ import uirouter from 'angular-ui-router';
 import routing from './add.routes.js';
 import addController from './add.controller.js';
 
+import mainEditor from '../../directives/main_editor';
+
 export default angular
     .module('app.add', [uirouter])
     .config(routing)
     .controller('AddController', addController)
+    .directive('mainEditor', mainEditor)
     .name;
