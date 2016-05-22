@@ -15,6 +15,7 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
+                        <th>Title</th>
                         <th>Content</th>
                         <th>Date</th>
                         <th>Expires</th>
@@ -22,9 +23,10 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="advertisement in board.advertisements">
-                        <td width="80%">{{advertisement.content}}</td>
-                        <td>{{advertisement.date}}</td>
-                        <td>{{board.expirationDate(advertisement.date)}}</td>
+                        <td><i>{{advertisement.title}}</i></td>
+                        <td width="60%">{{advertisement.content}}</td>
+                        <td width="15%">{{advertisement.date}}</td>
+                        <td width="15%">{{board.expirationDate(advertisement.date)}}</td>
                     </tr>
                     </tbody>
                 </table>
