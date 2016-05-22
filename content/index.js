@@ -11,7 +11,8 @@ import routing from './config';
 import home from './pages/home';
 import board from './pages/board';
 import my_board from './pages/my_board';
+import add from './pages/add_editor';
 
 const ngModule = angular
-                        .module('app', [uirouter, home, board, my_board])
+                        .module('app', [uirouter, home, board, my_board, add])
                         .config(routing);

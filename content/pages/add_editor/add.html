@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real Estate Welcome</title>
+    <style type="text/css">
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h2>Add advertisement</h2>
+
+                <p>Please define below inputs</p>
+
+                <form role="form">
+                    <div class="form-group">
+                        <label for="user">Title:</label>
+                        <input type="text" class="form-control" id="user">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea class="form-control" rows="5" id="description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" id="category" data-toggle="dropdown">
+                                Select category
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">House for sale</a></li>
+                                <li><a href="#">Flat for sale</a></li>
+                                <li><a href="#">House for rent</a></li>
+                                <li><a href="#">Flat for rent</a></li>
+                                <li><a href="#">Room for rent</a></li>
+                                <li><a href="#">Garage/parking place for sale</a></li>
+                                <li><a href="#">Garage/parking place for rent</a></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact">Contact phone number:</label>
+                        <input type="number" class="form-control" id="contact">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
