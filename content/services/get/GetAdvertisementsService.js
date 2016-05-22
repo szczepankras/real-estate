@@ -4,8 +4,8 @@
  */
 export default class GetAdvertisementsService {
     getAllAdvertisements(firebaseArray) {
-        var ref = new Firebase("https://szczepix.firebaseio.com/items");
-        this.items = firebaseArray(ref);
-        return this.items;
+        var ref = new Firebase("https://szczepix.firebaseio.com/advertisements");
+        this.advertisements = firebaseArray(ref);
+        return this.advertisements;
     }
 }

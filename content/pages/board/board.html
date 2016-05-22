@@ -9,35 +9,25 @@
     <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-default">
             <div class="panel-body">
-                    <h2>Advertisements Board</h2>
-                    <p>Below you can find all occasions</p>
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>Content</th>
-                            <th>Date</th>
-                            <th>Expires</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td width="80%">John djksajd lj jsdlak jlkjd asla jdlja ldjadljj klj jldjas lasl</td>
-                            <td>Doe</td>
-                            <td>john@example.com</td>
-                        </tr>
-                        <tr>
-                            <td>Mary</td>
-                            <td>Moe</td>
-                            <td>mary@example.com</td>
-                        </tr>
-                        <tr>
-                            <td>July</td>
-                            <td>Dooley</td>
-                            <td>july@example.com</td>
-                        </tr>
+                <h2>Advertisements Board</h2>
 
-                        </tbody>
-                    </table>
+                <p>Below you can find all occasions</p>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Content</th>
+                        <th>Date</th>
+                        <th>Expires</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="advertisement in board.advertisements">
+                        <td width="80%">{{advertisement.content}}</td>
+                        <td>{{advertisement.date}}</td>
+                        <td>{{board.expirationDate(advertisement.date)}}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
