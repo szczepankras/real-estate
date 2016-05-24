@@ -24,12 +24,14 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="advertisement in my_board.advertisements | filter:my_board.activeUser">
-                        <td>{{my_board.activeUser}}</td>
-                        <td width="60%">{{advertisement.content}}</td>
+                        <td width="20%">{{advertisement.$id}}</td>
+                        <td width="50%">{{advertisement.content}}</td>
                         <td>{{my_board.convertDate(advertisement.date)}}</td>
                         <td>{{my_board.expirationDate(advertisement.date)}}</td>
-                        <td align="center"><span class="glyphicon glyphicon-remove" title="Remove"/>
-                        <span class="glyphicon glyphicon-time" title="Extend expiration date"/></td>
+                        <td align="center">
+                            <a href=""><span class="glyphicon glyphicon-remove" title="Remove" ng-click="my_board.remove(advertisement.$id)"/></a>
+                            <a href=""><span class="glyphicon glyphicon-time" title="Extend expiration date" ng-click="my_board.addTime()"/></a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

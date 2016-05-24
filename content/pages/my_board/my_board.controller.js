@@ -17,4 +17,11 @@ export default class MyBoardController {
         return this.dateConverter.convertDate(date);
     }
 
+    remove(advertisement_id) {
+        for (var i = 0; i < this.advertisements.length; i++) {
+            if (advertisement_id == this.advertisements[i].$id) {
+                this.advertisements.$remove(i);
+            }
+        }
+    }
 }
