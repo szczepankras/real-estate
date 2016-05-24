@@ -8,7 +8,7 @@ export default class AddController {
         this.$scope = $scope;
         this.setAdvertisementService = SetAdvertisementsService;
         this.userService = UserService;
-        console.log(new Date().toDateString()); }
+    }
 
     addRecord() {
         console.log(this.userService.getUser());
@@ -22,7 +22,7 @@ export default class AddController {
             "content": this.$scope.description,
             "number": this.$scope.number,
             "category": this.$scope.category,
-            "date" : new Date().toDateString()
+            "date": new Date().toDateString()
         };
         if (this.checkIfFilled()) {
             this.setAdvertisementService.setAdvertisement(record);

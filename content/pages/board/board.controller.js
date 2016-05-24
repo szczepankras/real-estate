@@ -12,10 +12,6 @@ export default class BoardController {
         return this.dateConverter.expirationDate(date);
     }
 
-    addDays(theDate, days) {
-        return new Date(theDate.getTime() + days * 24 * 60 * 60 * 1000);
-    }
-
     convertDate(date) {
         return this.dateConverter.convertDate(date);
     }

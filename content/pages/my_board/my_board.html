@@ -23,11 +23,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="advertisement in my_board.advertisements | filter: { user: 'szczepix@cos.com'}">
-                        <td></td>
+                    <tr ng-repeat="advertisement in my_board.advertisements | filter:my_board.activeUser">
+                        <td>{{my_board.activeUser}}</td>
                         <td width="60%">{{advertisement.content}}</td>
-                        <td>{{advertisement.date}}</td>
-                        <td>{{advertisement.date}}</td>
+                        <td>{{my_board.convertDate(advertisement.date)}}</td>
+                        <td>{{my_board.expirationDate(advertisement.date)}}</td>
                         <td align="center"><span class="glyphicon glyphicon-remove" title="Remove"/>
                         <span class="glyphicon glyphicon-time" title="Extend expiration date"/></td>
                     </tr>
