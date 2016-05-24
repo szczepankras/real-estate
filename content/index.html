@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
-<body ng-app="app">
+<body ng-app="app" ng-controller="MainController as controller">
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -31,11 +31,14 @@
             </ul>
             <search-input></search-input>
             <ul class="nav navbar-nav navbar-right">
+
+                <li><a data-toggle="modal" data-target="#myModal">Log in</a></li>
                 <li><a href="#">Log out</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+<login></login>
 <ui-view></ui-view>
 <script type="text/javascript" src="bundle.js" charset="utf-8"></script>
 </body>
