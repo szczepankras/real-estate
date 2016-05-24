@@ -3,32 +3,21 @@
  * Created on 21.05.2016.
  */
 export default class BoardController {
-    constructor(GetAdvertisementsService, $firebaseArray) {
+    constructor(GetAdvertisementsService, $firebaseArray, DateConverter) {
         this.advertisements = GetAdvertisementsService.getAllAdvertisements($firebaseArray);
+        this.dateConverter = DateConverter;
     }
 
     expirationDate(date) {
-        if (date != undefined) {
-            var dateArg = new Date(date);
-            var expirationDate = this.addDays(dateArg, 7);
-            return this.convertDate(expirationDate);
-        }
-        return "";
+        return this.dateConverter.expirationDate(date);
     }
 
     addDays(theDate, days) {
         return new Date(theDate.getTime() + days * 24 * 60 * 60 * 1000);
     }
 
-    convertDate(inputFormat) {
-        if (inputFormat != undefined) {
-            function pad(s) {
-                return (s < 10) ? '0' + s : s;
-            }
-
-            var d = new Date(inputFormat);
-            return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('-');
-        }
-        return "";
+    convertDate(date) {
+        return this.dateConverter.convertDate(date);
     }
+
 }

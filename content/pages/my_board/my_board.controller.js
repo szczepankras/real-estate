@@ -3,7 +3,7 @@
  * Created on 21.05.2016.
  */
 export default class MyBoardController {
-    constructor() {
-        this.name = 'Board';
+    constructor(GetAdvertisementsService, $firebaseArray) {
+        this.advertisements = GetAdvertisementsService.getAllAdvertisements($firebaseArray);
     }
 }

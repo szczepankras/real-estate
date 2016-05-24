@@ -11,10 +11,12 @@ import routing from './board.routes.js';
 import boardController from './board.controller.js';
 
 import getAdvertisementsService from '../../services/get/GetAdvertisementsService'
+import dateConverter from "../../utils/DateConverter";
 
 export default angular
     .module('app.board', [uirouter, angularFire])
     .config(routing)
     .controller('BoardController', boardController)
     .service('GetAdvertisementsService', getAdvertisementsService)
+    .service('DateConverter', dateConverter)
     .name;
