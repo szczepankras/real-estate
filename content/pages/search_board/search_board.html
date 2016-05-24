@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real Estate Welcome</title>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h2>Search Board</h2>
+
+                <p>Below you can find requested data</p>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Content</th>
+                        <th>Date</th>
+                        <th>Expires</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="advertisement in search_board.advertisements | filter:search_board.query">
+                        <td><i>{{advertisement.title}}</i></td>
+                        <td width="60%">{{advertisement.content}}</td>
+                        <td width="15%">{{board.convertDate(advertisement.date)}}</td>
+                        <td width="15%">{{board.expirationDate(advertisement.date)}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

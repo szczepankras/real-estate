@@ -8,11 +8,9 @@ import uirouter from 'angular-ui-router';
 import routing from './edit.routes.js';
 import editController from './edit.controller.js';
 
-import searchInput from '../../directives/searchInput';
 
 export default angular
     .module('edit.add', [uirouter])
     .config(routing)
     .controller('EditController', editController)
-    .directive('searchInput', searchInput)
     .name;
