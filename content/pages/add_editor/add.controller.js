@@ -8,29 +8,34 @@ export default class AddController {
         this.$scope = $scope;
         this.setAdvertisementService = SetAdvertisementsService;
         this.userService = UserService;
-    }
+        console.log(new Date().toDateString()); }
 
     addRecord() {
+        console.log(this.userService.getUser());
+        console.log(this.$scope.category);
+        console.log(this.$scope.number);
+        console.log(this.$scope.description);
+        console.log(this.$scope.title);
         var record = {
             "user": this.userService.getUser(),
             "title": this.$scope.title,
             "content": this.$scope.description,
             "number": this.$scope.number,
-            "category": this.$scope.category
+            "category": this.$scope.category,
+            "date" : new Date().toDateString()
         };
         if (this.checkIfFilled()) {
             this.setAdvertisementService.setAdvertisement(record);
+            this.clearInputs();
         } else {
             alert("You missed some date! Please review all inputs");
         }
-        this.clearInputs();
     }
 
     clearInputs() {
         this.$scope.title = undefined;
         this.$scope.description = undefined;
         this.$scope.number = undefined;
-        this.$scope.user = undefined;
         this.$scope.category = undefined;
     }
 
@@ -38,7 +43,7 @@ export default class AddController {
         if (this.$scope.title == undefined
             || this.$scope.description == undefined
             || this.$scope.number == undefined
-            || this.$scope.user == undefined
+            || this.userService.getUser() == undefined
             || this.$scope.category == undefined
         ) {
             return false;

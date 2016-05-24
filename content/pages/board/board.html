@@ -25,7 +25,7 @@
                     <tr ng-repeat="advertisement in board.advertisements">
                         <td><i>{{advertisement.title}}</i></td>
                         <td width="60%">{{advertisement.content}}</td>
-                        <td width="15%">{{advertisement.date}}</td>
+                        <td width="15%">{{board.convertDate(advertisement.date)}}</td>
                         <td width="15%">{{board.expirationDate(advertisement.date)}}</td>
                     </tr>
                     </tbody>
