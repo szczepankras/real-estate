@@ -8,4 +8,8 @@ export default class GetAdvertisementsService {
         var recordRef = ref.child("advertisements");
         recordRef.push(record);
     }
+
+    updateAdvertisement(advertisements, record) {
+        advertisements.$save(record);
+    }
 }

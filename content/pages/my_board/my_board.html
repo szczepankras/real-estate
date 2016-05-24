@@ -30,7 +30,7 @@
                         <td>{{my_board.expirationDate(advertisement.date)}}</td>
                         <td align="center">
                             <a href=""><span class="glyphicon glyphicon-remove" title="Remove" ng-click="my_board.remove(advertisement.$id)"/></a>
-                            <a href=""><span class="glyphicon glyphicon-time" title="Extend expiration date" ng-click="my_board.addTime()"/></a>
+                            <a href=""><span class="glyphicon glyphicon-time" title="Extend expiration date" ng-click="my_board.addTime(advertisement.$id)"/></a>
                         </td>
                     </tr>
                     </tbody>

@@ -11,6 +11,8 @@ import routing from './my_board.routes.js';
 import myBoardController from './my_board.controller.js';
 
 import getAdvertisementsService from '../../services/get/GetAdvertisementsService';
+import setAdvertisementsService from '../../services/set/SetAdvertisementsService';
+
 import dateConverter from "../../utils/DateConverter";
 
 import UserService from '../../services/user/UserService';
@@ -20,6 +22,7 @@ export default angular
     .config(routing)
     .controller('MyBoardController', myBoardController)
     .service('GetAdvertisementsService', getAdvertisementsService)
+    .service('SetAdvertisementsService', setAdvertisementsService)
     .service('DateConverter', dateConverter)
     .service('UserService', UserService)
     .name;
